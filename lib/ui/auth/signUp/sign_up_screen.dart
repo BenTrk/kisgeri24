@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/ui/auth/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/signUp/sign_up_bloc.dart';
+import 'package:flutter_login_screen/model/authentication_bloc.dart';
+import 'package:flutter_login_screen/model/sign_up_bloc.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,39 +38,8 @@ class _SignUpState extends State<SignUpScreen> {
           }
           return MultiBlocListener(
             listeners: [
-              BlocListener<AuthenticationBloc, AuthenticationState>(
-                listener: (context, state) {
-                  context.read<LoadingCubit>().hideLoading();
-                  if (state.authState == AuthState.authenticated) {
-                    pushAndRemoveUntil(
-                        context, HomeScreen(user: state.user!), false);
-                  } else {
-                    showSnackBar(
-                        context,
-                        state.message ??
-                            'Couldn\'t sign up, Please try again.');
-                  }
-                },
-              ),
-              BlocListener<SignUpBloc, SignUpState>(
-                listener: (context, state) async {
-                  if (state is ValidFields) {
-                    await context.read<LoadingCubit>().showLoading(
-                        context, 'Creating new account, Please wait...', false);
-                    if (!mounted) return;
-                    context.read<AuthenticationBloc>().add(
-                        SignupWithEmailAndPasswordEvent(
-                            emailAddress: email!,
-                            password: password!,
-                            teamName : teamName!,
-                            firstClimberName: firstClimberName!,
-                            secondClimberName: secondClimberName!,
-                            category: category!));
-                  } else if (state is SignUpFailureState) {
-                    showSnackBar(context, state.errorMessage);
-                  }
-                },
-              ),
+              loginUserAuthenticationListener(),
+              loginUserLoginListener(),
             ],
             child: Scaffold(
               appBar: AppBar(
@@ -89,233 +58,7 @@ class _SignUpState extends State<SignUpScreen> {
                     if (state is SignUpFailureState) {
                       _validate = AutovalidateMode.onUserInteraction;
                     }
-                    return Form(
-                      key: _key,
-                      autovalidateMode: _validate,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          
-                          Padding(
-                          padding: const EdgeInsets.only(
-                          right: 24.0, left: 24.0),
-                            child: Image.asset(
-                            'assets/images/welcome_image.png',
-                            alignment: Alignment.center,
-                            width: 150.0,
-                            height: 150.0,
-                            fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.words,
-                              validator: validateName,
-                              onSaved: (String? val) {
-                                firstClimberName = val;
-                              },
-                              textInputAction: TextInputAction.next,
-                              decoration: getInputDecoration(
-                                  hint: 'First Climber\'s Name',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.words,
-                              validator: validateName,
-                              onSaved: (String? val) {
-                                secondClimberName = val;
-                              },
-                              textInputAction: TextInputAction.next,
-                              decoration: getInputDecoration(
-                                  hint: 'Second Climber\'s Name',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              validator: validateEmail,
-                              onSaved: (String? val) {
-                                email = val;
-                              },
-                              decoration: getInputDecoration(
-                                  hint: 'Email',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              obscureText: true,
-                              textInputAction: TextInputAction.next,
-                              controller: _passwordController,
-                              validator: validatePassword,
-                              onSaved: (String? val) {
-                                password = val;
-                              },
-                              cursorColor: const Color(colorPrimary),
-                              decoration: getInputDecoration(
-                                  hint: 'Password',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) =>
-                                  context.read<SignUpBloc>().add(
-                                        ValidateFieldsEvent(_key,
-                                            acceptEula: acceptEULA),
-                                      ),
-                              obscureText: true,
-                              validator: (val) => validateConfirmPassword(
-                                  _passwordController.text, val),
-                              onSaved: (String? val) {
-                                confirmPassword = val;
-                              },
-                              cursorColor: const Color(colorPrimary),
-                              decoration: getInputDecoration(
-                                  hint: 'Confirm Password',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10.0, right: 8.0, left: 8.0),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.words,
-                              validator: validateName,
-                              onSaved: (String? val) {
-                                teamName = val;
-                              },
-                              textInputAction: TextInputAction.next,
-                              decoration: getInputDecoration(
-                                  hint: 'Team\'s Name',
-                                  darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).colorScheme.error),
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.only(
-                            top: 10.0, right: 8.0, left: 8.0),
-                            child: DropdownButton<String>(
-                              hint: const Text("Select a Category"),
-                              value: category,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  category = newValue;
-                                });
-                              },
-                            items: categories.map((String category) {
-                              return DropdownMenuItem<String>(
-                              value: category,
-                              child: Text(
-                                category,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                            ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                right: 40.0, left: 40.0, top: 40.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                fixedSize: Size.fromWidth(
-                                    MediaQuery.of(context).size.width / 1.5),
-                                backgroundColor: const Color(colorPrimary),
-                                padding:
-                                    const EdgeInsets.only(top: 16, bottom: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  side: const BorderSide(
-                                    color: Color(colorPrimary),
-                                  ),
-                                ),
-                              ),
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              onPressed: () => context.read<SignUpBloc>().add(
-                                    ValidateFieldsEvent(_key,
-                                        acceptEula: acceptEULA),
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          ListTile(
-                            trailing: BlocBuilder<SignUpBloc, SignUpState>(
-                              buildWhen: (old, current) =>
-                                  current is EulaToggleState && old != current,
-                              builder: (context, state) {
-                                if (state is EulaToggleState) {
-                                  acceptEULA = state.eulaAccepted;
-                                }
-                                return Checkbox(
-                                  onChanged: (value) =>
-                                      context.read<SignUpBloc>().add(
-                                            ToggleEulaCheckboxEvent(
-                                              eulaAccepted: value!,
-                                            ),
-                                          ),
-                                  activeColor: const Color(colorPrimary),
-                                  value: acceptEULA,
-                                );
-                              },
-                            ),
-                            title: RichText(
-                              textAlign: TextAlign.left,
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text:
-                                        'By creating an account you agree to our ',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  TextSpan(
-                                    style: const TextStyle(
-                                      color: Colors.blueAccent,
-                                    ),
-                                    text: 'Terms of Use',
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        if (await canLaunchUrl(
-                                            Uri.parse(eula))) {
-                                          await launchUrl(
-                                            Uri.parse(eula),
-                                          );
-                                        }
-                                      },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return createForm(context);
                   },
                 ),
               ),
@@ -326,9 +69,277 @@ class _SignUpState extends State<SignUpScreen> {
     );
   }
 
+  Form createForm(BuildContext context) {
+    return Form(
+                    key: _key,
+                    autovalidateMode: _validate,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        
+                        const ImageWidget(),
+                        
+                        textInput(context, firstClimberName, "First Climber's Name", validateName),
+                
+                        textInput(context, secondClimberName, "Second Climber's Name", validateName),
+
+                        textInput(context, email, "Email", validateEmail),
+                        
+                        getPassword(context),
+
+                        getConfirmPassword(context),
+
+                        textInput(context, teamName, "Team's name", validateName),
+
+                        getCategory(),
+
+                        getSignUpButton(context),
+                        
+                        const SizedBox(height: 24),
+                        getTermsOfUse(),
+                      ],
+                    ),
+                  );
+  }
+
+  ListTile getTermsOfUse() {
+    return ListTile(
+                        trailing: BlocBuilder<SignUpBloc, SignUpState>(
+                          buildWhen: (old, current) =>
+                              current is EulaToggleState && old != current,
+                          builder: (context, state) {
+                            if (state is EulaToggleState) {
+                              acceptEULA = state.eulaAccepted;
+                            }
+                            return Checkbox(
+                              onChanged: (value) =>
+                                  context.read<SignUpBloc>().add(
+                                        ToggleEulaCheckboxEvent(
+                                          eulaAccepted: value!,
+                                        ),
+                                      ),
+                              activeColor: const Color(colorPrimary),
+                              value: acceptEULA,
+                            );
+                          },
+                        ),
+                        title: RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text:
+                                    'By creating an account you agree to our ',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              TextSpan(
+                                style: const TextStyle(
+                                  color: Colors.blueAccent,
+                                ),
+                                text: 'Terms of Use',
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    if (await canLaunchUrl(
+                                        Uri.parse(eula))) {
+                                      await launchUrl(
+                                        Uri.parse(eula),
+                                      );
+                                    }
+                                  },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+  }
+
+  Padding getSignUpButton(BuildContext context) {
+    return Padding(
+                        padding: const EdgeInsets.only(
+                            right: 40.0, left: 40.0, top: 40.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: Size.fromWidth(
+                                MediaQuery.of(context).size.width / 1.5),
+                            backgroundColor: const Color(colorPrimary),
+                            padding:
+                                const EdgeInsets.only(top: 16, bottom: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              side: const BorderSide(
+                                color: Color(colorPrimary),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () => context.read<SignUpBloc>().add(
+                                ValidateFieldsEvent(_key,
+                                    acceptEula: acceptEULA),
+                              ),
+                        ),
+                      );
+  }
+
+  Padding getCategory() {
+    return Padding(padding: const EdgeInsets.only(
+                        top: 10.0, right: 8.0, left: 8.0),
+                        child: DropdownButton<String>(
+                          hint: const Text("Select a Category"),
+                          value: category,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              category = newValue;
+                            });
+                          },
+                        items: categories.map((String category) {
+                          return DropdownMenuItem<String>(
+                          value: category,
+                          child: Text(
+                            category,
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                        );
+  }
+
+  Padding getConfirmPassword(BuildContext context) {
+    return Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, right: 8.0, left: 8.0),
+                        child: TextFormField(
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              context.read<SignUpBloc>().add(
+                                    ValidateFieldsEvent(_key,
+                                        acceptEula: acceptEULA),
+                                  ),
+                          obscureText: true,
+                          validator: (val) => validateConfirmPassword(
+                              _passwordController.text, val),
+                          onSaved: (String? val) {
+                            confirmPassword = val;
+                          },
+                          cursorColor: const Color(colorPrimary),
+                          decoration: getInputDecoration(
+                              hint: 'Confirm Password',
+                              darkMode: isDarkMode(context),
+                              errorColor: Theme.of(context).colorScheme.error),
+                        ),
+                      );
+  }
+
+  Padding getPassword(BuildContext context) {
+    return Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, right: 8.0, left: 8.0),
+                        child: TextFormField(
+                          obscureText: true,
+                          textInputAction: TextInputAction.next,
+                          controller: _passwordController,
+                          validator: validatePassword,
+                          onSaved: (String? val) {
+                            password = val;
+                          },
+                          cursorColor: const Color(colorPrimary),
+                          decoration: getInputDecoration(
+                              hint: 'Password',
+                              darkMode: isDarkMode(context),
+                              errorColor: Theme.of(context).colorScheme.error),
+                        ),
+                      );
+  }
+
+  Padding textInput(BuildContext context, String? variable, String hint, String? Function(String?)? validatorProvided) {
+    return Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, right: 8.0, left: 8.0),
+                        child: TextFormField(
+                          textCapitalization: TextCapitalization.words,
+                          validator: validatorProvided,
+                          onSaved: (String? val) {
+                            variable = val;
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: getInputDecoration(
+                              hint: hint,
+                              darkMode: isDarkMode(context),
+                              errorColor: Theme.of(context).colorScheme.error),
+                        ),
+                      );
+  }
+
+  BlocListener<SignUpBloc, SignUpState> loginUserLoginListener() {
+    return BlocListener<SignUpBloc, SignUpState>(
+              listener: (context, state) async {
+                if (state is ValidFields) {
+                  await context.read<LoadingCubit>().showLoading(
+                      context, 'Creating new account, Please wait...', false);
+                  if (!mounted) return;
+                  context.read<AuthenticationBloc>().add(
+                      SignupWithEmailAndPasswordEvent(
+                          emailAddress: email!,
+                          password: password!,
+                          teamName : teamName!,
+                          firstClimberName: firstClimberName!,
+                          secondClimberName: secondClimberName!,
+                          category: category!));
+                } else if (state is SignUpFailureState) {
+                  showSnackBar(context, state.errorMessage);
+                }
+              },
+            );
+  }
+
+  BlocListener<AuthenticationBloc, AuthenticationState> loginUserAuthenticationListener() {
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                context.read<LoadingCubit>().hideLoading();
+                if (state.authState == AuthState.authenticated) {
+                  pushAndRemoveUntil(
+                      context, HomeScreen(user: state.user!), false);
+                } else {
+                  showSnackBar(
+                      context,
+                      state.message ??
+                          'Couldn\'t sign up, Please try again.');
+                }
+              },
+            );
+  }
+
   @override
   void dispose() {
     _passwordController.dispose();
     super.dispose();
+  }
+}
+
+class ImageWidget extends StatelessWidget {
+  const ImageWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+    padding: const EdgeInsets.only(
+    right: 24.0, left: 24.0),
+      child: Image.asset(
+      'assets/images/welcome_image.png',
+      alignment: Alignment.center,
+      width: 150.0,
+      height: 150.0,
+      fit: BoxFit.cover,
+      ),
+    );
   }
 }

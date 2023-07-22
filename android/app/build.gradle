@@ -44,7 +44,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.instaflutter.free_login_screen"
+        applicationId "com.kisgeri24.flutter_kisgeri24"
         minSdkVersion 23
         targetSdkVersion 33
         multiDexEnabled true
@@ -60,7 +60,7 @@ android {
         }
     }
 
-        namespace 'com.instaflutter.free_login_screen'
+        namespace 'com.kisgeri24.flutter_kisgeri24'
 
 }
 

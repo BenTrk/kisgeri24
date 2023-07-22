@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/ui/auth/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/onBoarding/on_boarding_cubit.dart';
+import 'package:flutter_login_screen/model/authentication_bloc.dart';
+import 'package:flutter_login_screen/model/on_boarding_cubit.dart';
 import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

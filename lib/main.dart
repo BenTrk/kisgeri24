@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/firebase_options.dart';
-import 'package:flutter_login_screen/ui/auth/authentication_bloc.dart';
+import 'package:flutter_login_screen/model/authentication_bloc.dart';
 import 'package:flutter_login_screen/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
 

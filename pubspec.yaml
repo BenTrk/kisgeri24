@@ -36,11 +36,29 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
 
+flutter_launcher_icons:
+  android: "ic_launcher_icon"
+  ios: true
+  image_path: "assets/images/ic_launcher_round"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/ic_launcher_round"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/ic_launcher_round"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/ic_launcher_round"
+
 flutter_icons:
-  android: false
+  android: true
   ios: true
   remove_alpha_ios: true
-  image_path: android/app/src/main/ic_launcher-playstore.png
+  image_path: "assets/images/ic_launcher_round.png"
 
 flutter:
   uses-material-design: true

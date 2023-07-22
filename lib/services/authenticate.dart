@@ -7,9 +7,6 @@ import 'package:flutter_login_screen/model/user.dart';
 
 class FireStoreUtils {
 
-
-
-
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static Reference storage = FirebaseStorage.instance.ref();
 

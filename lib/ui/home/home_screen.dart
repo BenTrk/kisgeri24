@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/ui/auth/authentication_bloc.dart';
+import 'package:flutter_login_screen/model/authentication_bloc.dart';
 import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
 
 class HomeScreen extends StatefulWidget {

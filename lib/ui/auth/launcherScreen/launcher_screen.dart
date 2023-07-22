@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/ui/auth/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/onBoarding/data.dart';
+import 'package:flutter_login_screen/model/authentication_bloc.dart';
+import 'package:flutter_login_screen/services/data.dart';
 import 'package:flutter_login_screen/ui/auth/onBoarding/on_boarding_screen.dart';
 import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
@@ -22,6 +22,10 @@ class _LauncherScreenState extends State<LauncherScreen> {
     context.read<AuthenticationBloc>().add(CheckFirstRunEvent());
   }
 
+  //Create the necessary screen as follows:
+  // In case first run of application: OnBoarding Screen
+  // In case user is authenticated: Home Screen
+  // In case user is unauthenticated: Welcome Screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(

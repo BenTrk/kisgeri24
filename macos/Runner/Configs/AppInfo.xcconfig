@@ -11,4 +11,4 @@ PRODUCT_NAME = free_login
 PRODUCT_BUNDLE_IDENTIFIER = com.instaflutter.freeloginscreen.freeLogin
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.instaflutter.free_login_screen. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 com.kisgeri24.flutter_kisgeri24. All rights reserved.
