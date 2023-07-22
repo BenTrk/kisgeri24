@@ -5,43 +5,55 @@ import 'package:flutter/foundation.dart';
 class User {
   String email;
 
-  String firstName;
+  String firstClimberName;
 
-  String lastName;
+  String secondClimberName;
 
   String userID;
 
-  String profilePictureURL;
+  String teamName;
+
+  String category;
+
+  bool isPaid;
 
   String appIdentifier;
 
   User(
       {this.email = '',
-      this.firstName = '',
-      this.lastName = '',
+      this.firstClimberName = '',
+      this.secondClimberName = '',
       this.userID = '',
-      this.profilePictureURL = ''})
+      this.teamName = '',
+      this.category = '',
+      this.isPaid = false
+      })
       : appIdentifier =
             'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
 
-  String fullName() => '$firstName $lastName';
+  String getTeamName() => teamName;
+  
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
         email: parsedJson['email'] ?? '',
-        firstName: parsedJson['firstName'] ?? '',
-        lastName: parsedJson['lastName'] ?? '',
+        firstClimberName: parsedJson['firstClimberName'] ?? '',
+        secondClimberName: parsedJson['secondClimberName'] ?? '',
         userID: parsedJson['id'] ?? parsedJson['userID'] ?? '',
-        profilePictureURL: parsedJson['profilePictureURL'] ?? '');
+        teamName: parsedJson['teamName'] ?? '',
+        category: parsedJson['category'] ?? '',
+        isPaid: parsedJson['isPaid'] ?? false);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
+      'firstClimberName': firstClimberName,
+      'secondClimberName': secondClimberName,
       'id': userID,
-      'profilePictureURL': profilePictureURL,
+      'teamName': teamName,
+      'category': category,
+      'isPaid': isPaid,
       'appIdentifier': appIdentifier
     };
   }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +20,10 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUpScreen> {
-  Uint8List? _imageData;
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey();
-  String? firstName, lastName, email, password, confirmPassword;
+  String? firstClimberName, secondClimberName, email, password, confirmPassword, teamName, category;
+  bool isPaid = false;
   AutovalidateMode _validate = AutovalidateMode.disabled;
   bool acceptEULA = false;
 
@@ -63,9 +62,10 @@ class _SignUpState extends State<SignUpScreen> {
                         SignupWithEmailAndPasswordEvent(
                             emailAddress: email!,
                             password: password!,
-                            imageData: _imageData,
-                            lastName: lastName,
-                            firstName: firstName));
+                            teamName : teamName!,
+                            firstClimberName: firstClimberName!,
+                            secondClimberName: secondClimberName!,
+                            category: category!));
                   } else if (state is SignUpFailureState) {
                     showSnackBar(context, state.errorMessage);
                   }
@@ -95,113 +95,53 @@ class _SignUpState extends State<SignUpScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Create new account',
-                              style: TextStyle(
-                                  color: Color(colorPrimary),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25.0),
+                          
+                          Padding(
+                          padding: const EdgeInsets.only(
+                          right: 24.0, left: 24.0),
+                            child: Image.asset(
+                            'assets/images/welcome_image.png',
+                            alignment: Alignment.center,
+                            width: 150.0,
+                            height: 150.0,
+                            fit: BoxFit.cover,
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 8.0, top: 32, right: 8, bottom: 8),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                BlocBuilder<SignUpBloc, SignUpState>(
-                                  buildWhen: (old, current) =>
-                                      current is PictureSelectedState &&
-                                      old != current,
-                                  builder: (context, state) {
-                                    if (state is PictureSelectedState) {
-                                      _imageData = state.imageData;
-                                    }
-                                    return state is PictureSelectedState
-                                        ? SizedBox(
-                                            height: 130,
-                                            width: 130,
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(65),
-                                                child: state.imageData == null
-                                                    ? Image.asset(
-                                                        'assets/images/placeholder.jpg',
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Image.memory(
-                                                        state.imageData!,
-                                                        fit: BoxFit.cover,
-                                                      )),
-                                          )
-                                        : SizedBox(
-                                            height: 130,
-                                            width: 130,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(65),
-                                              child: Image.asset(
-                                                'assets/images/placeholder.jpg',
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          );
-                                  },
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  child: FloatingActionButton(
-                                    backgroundColor: const Color(colorPrimary),
-                                    mini: true,
-                                    onPressed: () => _onCameraClick(context),
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: isDarkMode(context)
-                                          ? Colors.black
-                                          : Colors.white,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 16.0, right: 8.0, left: 8.0),
+                                top: 10.0, right: 8.0, left: 8.0),
                             child: TextFormField(
                               textCapitalization: TextCapitalization.words,
                               validator: validateName,
                               onSaved: (String? val) {
-                                firstName = val;
+                                firstClimberName = val;
                               },
                               textInputAction: TextInputAction.next,
                               decoration: getInputDecoration(
-                                  hint: 'First Name',
+                                  hint: 'First Climber\'s Name',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).colorScheme.error),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 16.0, right: 8.0, left: 8.0),
+                                top: 10.0, right: 8.0, left: 8.0),
                             child: TextFormField(
                               textCapitalization: TextCapitalization.words,
                               validator: validateName,
                               onSaved: (String? val) {
-                                lastName = val;
+                                secondClimberName = val;
                               },
                               textInputAction: TextInputAction.next,
                               decoration: getInputDecoration(
-                                  hint: 'Last Name',
+                                  hint: 'Second Climber\'s Name',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).colorScheme.error),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 16.0, right: 8.0, left: 8.0),
+                                top: 10.0, right: 8.0, left: 8.0),
                             child: TextFormField(
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
@@ -212,12 +152,12 @@ class _SignUpState extends State<SignUpScreen> {
                               decoration: getInputDecoration(
                                   hint: 'Email',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).colorScheme.error),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 16.0, right: 8.0, left: 8.0),
+                                top: 10.0, right: 8.0, left: 8.0),
                             child: TextFormField(
                               obscureText: true,
                               textInputAction: TextInputAction.next,
@@ -226,18 +166,16 @@ class _SignUpState extends State<SignUpScreen> {
                               onSaved: (String? val) {
                                 password = val;
                               },
-                              style:
-                                  const TextStyle(height: 0.8, fontSize: 18.0),
                               cursorColor: const Color(colorPrimary),
                               decoration: getInputDecoration(
                                   hint: 'Password',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).colorScheme.error),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                top: 16.0, right: 8.0, left: 8.0),
+                                top: 10.0, right: 8.0, left: 8.0),
                             child: TextFormField(
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) =>
@@ -251,15 +189,50 @@ class _SignUpState extends State<SignUpScreen> {
                               onSaved: (String? val) {
                                 confirmPassword = val;
                               },
-                              style:
-                                  const TextStyle(height: 0.8, fontSize: 18.0),
                               cursorColor: const Color(colorPrimary),
                               decoration: getInputDecoration(
                                   hint: 'Confirm Password',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).colorScheme.error),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              onSaved: (String? val) {
+                                teamName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'Team\'s Name',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(padding: const EdgeInsets.only(
+                            top: 10.0, right: 8.0, left: 8.0),
+                            child: DropdownButton<String>(
+                              hint: const Text("Select a Category"),
+                              value: category,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  category = newValue;
+                                });
+                              },
+                            items: categories.map((String category) {
+                              return DropdownMenuItem<String>(
+                              value: category,
+                              child: Text(
+                                category,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(
                                 right: 40.0, left: 40.0, top: 40.0),
@@ -353,45 +326,9 @@ class _SignUpState extends State<SignUpScreen> {
     );
   }
 
-  _onCameraClick(BuildContext context) {
-    if (kIsWeb || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-      context.read<SignUpBloc>().add(ChooseImageFromGalleryEvent());
-    } else {
-      final action = CupertinoActionSheet(
-        title: const Text(
-          'Add Profile Picture',
-          style: TextStyle(fontSize: 15.0),
-        ),
-        actions: [
-          CupertinoActionSheetAction(
-            isDefaultAction: false,
-            onPressed: () async {
-              Navigator.pop(context);
-              context.read<SignUpBloc>().add(ChooseImageFromGalleryEvent());
-            },
-            child: const Text('Choose from gallery'),
-          ),
-          CupertinoActionSheetAction(
-            isDestructiveAction: false,
-            onPressed: () async {
-              Navigator.pop(context);
-              context.read<SignUpBloc>().add(CaptureImageByCameraEvent());
-            },
-            child: const Text('Take a picture'),
-          )
-        ],
-        cancelButton: CupertinoActionSheetAction(
-            child: const Text('Cancel'),
-            onPressed: () => Navigator.pop(context)),
-      );
-      showCupertinoModalPopup(context: context, builder: (context) => action);
-    }
-  }
-
   @override
   void dispose() {
     _passwordController.dispose();
-    _imageData = null;
     super.dispose();
   }
 }

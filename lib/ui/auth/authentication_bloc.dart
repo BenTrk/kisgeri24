@@ -1,7 +1,5 @@
-import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
@@ -50,53 +48,15 @@ class AuthenticationBloc
             message: 'Login failed, Please try again.'));
       }
     });
-    on<LoginWithFacebookEvent>((event, emit) async {
-      dynamic result = await FireStoreUtils.loginWithFacebook();
-      if (result != null && result is User) {
-        user = result;
-        emit(AuthenticationState.authenticated(user!));
-      } else if (result != null && result is String) {
-        emit(AuthenticationState.unauthenticated(message: result));
-      } else {
-        emit(const AuthenticationState.unauthenticated(
-            message: 'Facebook login failed, Please try again.'));
-      }
-    });
-    on<LoginWithAppleEvent>((event, emit) async {
-      dynamic result = await FireStoreUtils.loginWithApple();
-      if (result != null && result is User) {
-        user = result;
-        emit(AuthenticationState.authenticated(user!));
-      } else if (result != null && result is String) {
-        emit(AuthenticationState.unauthenticated(message: result));
-      } else {
-        emit(const AuthenticationState.unauthenticated(
-            message: 'Apple login failed, Please try again.'));
-      }
-    });
 
-    on<LoginWithPhoneNumberEvent>((event, emit) async {
-      dynamic result =
-          await FireStoreUtils.loginOrCreateUserWithPhoneNumberCredential(
-              credential: event.credential,
-              phoneNumber: event.phoneNumber,
-              firstName: event.firstName,
-              lastName: event.lastName,
-              imageData: event.imageData);
-      if (result is User) {
-        user = result;
-        emit(AuthenticationState.authenticated(result));
-      } else if (result is String) {
-        emit(AuthenticationState.unauthenticated(message: result));
-      }
-    });
     on<SignupWithEmailAndPasswordEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.signUpWithEmailAndPassword(
           emailAddress: event.emailAddress,
           password: event.password,
-          imageData: event.imageData,
-          firstName: event.firstName,
-          lastName: event.lastName);
+          teamName: event.teamName,
+          firstClimberName: event.firstClimberName,
+          secondClimberName: event.secondClimberName,
+          category: event.category,);
       if (result != null && result is User) {
         user = result;
         emit(AuthenticationState.authenticated(user!));

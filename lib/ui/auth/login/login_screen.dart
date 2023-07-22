@@ -7,7 +7,6 @@ import 'package:flutter_login_screen/ui/auth/login/login_bloc.dart';
 import 'package:flutter_login_screen/ui/auth/resetPasswordScreen/reset_password_screen.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
-import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -81,20 +80,18 @@ class _LoginScreen extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 32.0, right: 16.0, left: 16.0),
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                  color: Color(colorPrimary),
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.bold),
+                        
+                        Padding(
+                          padding: const EdgeInsets.only(
+                          top: 10.0, right: 24.0, left: 24.0),
+                            child: Image.asset(
+                            'assets/images/welcome_image.png',
+                            alignment: Alignment.center,
+                            width: 150.0,
+                            height: 150.0,
+                            fit: BoxFit.cover,
                             ),
                           ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                               top: 32.0, right: 24.0, left: 24.0),
@@ -111,7 +108,7 @@ class _LoginScreen extends State<LoginScreen> {
                               decoration: getInputDecoration(
                                   hint: 'Email Address',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor)),
+                                  errorColor: Theme.of(context).colorScheme.error)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -132,7 +129,7 @@ class _LoginScreen extends State<LoginScreen> {
                               decoration: getInputDecoration(
                                   hint: 'Password',
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor)),
+                                  errorColor: Theme.of(context).colorScheme.error)),
                         ),
 
                         /// forgot password text, navigates user to ResetPasswordScreen
@@ -150,7 +147,7 @@ class _LoginScreen extends State<LoginScreen> {
                                 child: const Text(
                                   'Forgot password?',
                                   style: TextStyle(
-                                      color: Colors.lightBlue,
+                                      color: Color(colorPrimary),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       letterSpacing: 1),
@@ -189,99 +186,7 @@ class _LoginScreen extends State<LoginScreen> {
                                 .add(ValidateLoginFieldsEvent(_key)),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: Center(
-                            child: Text(
-                              'OR',
-                              style: TextStyle(
-                                  color: isDarkMode(context)
-                                      ? Colors.white
-                                      : Colors.black),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 40.0, left: 40.0, bottom: 20),
-                          child: ElevatedButton.icon(
-                            label: const Text(
-                              'Facebook Login',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            icon: Image.asset(
-                              'assets/images/facebook_logo.png',
-                              color: Colors.white,
-                              height: 24,
-                              width: 24,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: Size.fromWidth(
-                                  MediaQuery.of(context).size.width / 1.5),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              backgroundColor: const Color(facebookButtonColor),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                side: const BorderSide(
-                                  color: Color(facebookButtonColor),
-                                ),
-                              ),
-                            ),
-                            onPressed: () async {
-                              await context.read<LoadingCubit>().showLoading(
-                                  context, 'Logging in, Please wait...', false);
-                              if (!mounted) return;
-                              context
-                                  .read<AuthenticationBloc>()
-                                  .add(LoginWithFacebookEvent());
-                            },
-                          ),
-                        ),
-                        FutureBuilder<bool>(
-                          future: apple.TheAppleSignIn.isAvailable(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator.adaptive();
-                            }
-                            if (!snapshot.hasData || (snapshot.data != true)) {
-                              return Container();
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 40.0, left: 40.0, bottom: 20),
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width /
-                                              1.5),
-                                  child: apple.AppleSignInButton(
-                                      cornerRadius: 25.0,
-                                      type: apple.ButtonType.signIn,
-                                      style: isDarkMode(context)
-                                          ? apple.ButtonStyle.white
-                                          : apple.ButtonStyle.black,
-                                      onPressed: () async {
-                                        await context
-                                            .read<LoadingCubit>()
-                                            .showLoading(
-                                                context,
-                                                'Logging in, Please wait...',
-                                                false);
-                                        if (!mounted) return;
-                                        context
-                                            .read<AuthenticationBloc>()
-                                            .add(LoginWithAppleEvent());
-                                      }),
-                                ),
-                              );
-                            }
-                          },
-                        ),
+                        
                       ],
                     ),
                   ),

@@ -15,9 +15,9 @@ dependencies:
   progress_dialog:
     git:
       url: https://github.com/mostafaAbdelazim/progress_dialog.git
-  flutter_facebook_auth: ^5.0.6
-  http: ^0.13.5
-  image_picker: ^0.8.6
+  flutter_facebook_auth: ^6.0.0
+  http: ^1.1.0
+  image_picker: ^1.0.1
   cached_network_image: ^3.2.2
   smooth_page_indicator: ^1.0.0+2
   the_apple_sign_in: ^1.1.1
@@ -30,9 +30,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
+  firebase_database: ^10.2.4
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.1
 
 flutter_icons:

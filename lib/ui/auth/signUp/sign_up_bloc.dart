@@ -1,7 +1,5 @@
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,29 +20,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       }
     });
 
-    on<ChooseImageFromGalleryEvent>((event, emit) async {
-      if (!kIsWeb &&
-          (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
-        FilePickerResult? result = await FilePicker.platform.pickFiles();
-        if (result != null) {
-          emit(PictureSelectedState(
-              imageData: await File(result.files.single.path!).readAsBytes()));
-        }
-      } else {
-        XFile? xImage =
-            await imagePicker.pickImage(source: ImageSource.gallery);
-        if (xImage != null) {
-          emit(PictureSelectedState(imageData: await xImage.readAsBytes()));
-        }
-      }
-    });
-
-    on<CaptureImageByCameraEvent>((event, emit) async {
-      XFile? xImage = await imagePicker.pickImage(source: ImageSource.camera);
-      if (xImage != null) {
-        emit(PictureSelectedState(imageData: await xImage.readAsBytes()));
-      }
-    });
+  
 
     on<ValidateFieldsEvent>((event, emit) async {
       if (event.key.currentState?.validate() ?? false) {

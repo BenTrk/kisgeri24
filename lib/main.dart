@@ -68,9 +68,9 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
           home: Scaffold(
         body: Container(
           color: Colors.white,
-          child: Center(
+          child: const Center(
               child: Column(
-            children: const [
+            children: [
               Icon(
                 Icons.error_outline,
                 color: Colors.red,
@@ -100,7 +100,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
-          scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          scaffoldBackgroundColor: Colors.white,
           appBarTheme:
               const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
           snackBarTheme: const SnackBarThemeData(

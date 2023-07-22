@@ -9,38 +9,22 @@ class LoginWithEmailAndPasswordEvent extends AuthenticationEvent {
   LoginWithEmailAndPasswordEvent({required this.email, required this.password});
 }
 
-class LoginWithFacebookEvent extends AuthenticationEvent {}
-
-class LoginWithAppleEvent extends AuthenticationEvent {}
-
-class LoginWithPhoneNumberEvent extends AuthenticationEvent {
-  auth.PhoneAuthCredential credential;
-  String phoneNumber;
-  String? firstName, lastName;
-  Uint8List? imageData;
-
-  LoginWithPhoneNumberEvent({
-    required this.credential,
-    required this.phoneNumber,
-    this.firstName,
-    this.lastName,
-    this.imageData,
-  });
-}
-
 class SignupWithEmailAndPasswordEvent extends AuthenticationEvent {
   String emailAddress;
   String password;
-  Uint8List? imageData;
-  String? firstName;
-  String? lastName;
+  String teamName;
+  String firstClimberName;
+  String secondClimberName;
+  String category;
 
   SignupWithEmailAndPasswordEvent(
       {required this.emailAddress,
       required this.password,
-      this.imageData,
-      this.firstName = 'Anonymous',
-      this.lastName = 'User'});
+      required this.teamName,
+      required this.firstClimberName,
+      required this.secondClimberName,
+      required this.category
+      });
 }
 
 class LogoutEvent extends AuthenticationEvent {

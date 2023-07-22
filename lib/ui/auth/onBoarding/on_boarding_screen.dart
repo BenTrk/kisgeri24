@@ -99,7 +99,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       count: widget.titles.length,
                       effect: ScrollingDotsEffect(
                           activeDotColor: Colors.white,
-                          dotColor: Colors.grey.shade400,
+                          dotColor: Colors.grey.shade900,
                           dotWidth: 8,
                           dotHeight: 8,
                           fixedCenter: true),

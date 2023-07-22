@@ -45,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
                     padding: EdgeInsets.only(
                         left: 16, top: 32, right: 16, bottom: 8),
                     child: Text(
-                      'Say Hello To Your New App!',
+                      'Hello there, fellow climbers!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Color(colorPrimary),
@@ -56,7 +56,7 @@ class WelcomeScreen extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                     child: Text(
-                      'You\'ve just saved a week of development and headaches.',
+                      'Sign in, if you have an account. Register, if not.',
                       style: TextStyle(fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
