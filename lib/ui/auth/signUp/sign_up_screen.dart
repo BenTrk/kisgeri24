@@ -10,7 +10,10 @@ import 'package:flutter_login_screen/model/authentication_bloc.dart';
 import 'package:flutter_login_screen/model/sign_up_bloc.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
+import 'package:flutter_login_screen/misc/toggleButtons.dart'; 
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../publics.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -22,7 +25,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey();
-  String? firstClimberName, secondClimberName, email, password, confirmPassword, teamName, category;
+  String? firstClimberName, secondClimberName, email, password, confirmPassword, teamName;
   bool isPaid = false;
   AutovalidateMode _validate = AutovalidateMode.disabled;
   bool acceptEULA = false;
@@ -79,17 +82,111 @@ class _SignUpState extends State<SignUpScreen> {
                         
                         const ImageWidget(),
                         
-                        textInput(context, firstClimberName, "First Climber's Name", validateName),
-                
-                        textInput(context, secondClimberName, "Second Climber's Name", validateName),
-
-                        textInput(context, email, "Email", validateEmail),
-                        
-                        getPassword(context),
-
-                        getConfirmPassword(context),
-
-                        textInput(context, teamName, "Team's name", validateName),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              onSaved: (String? val) {
+                                firstClimberName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'First Climber\'s Name',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              onSaved: (String? val) {
+                                secondClimberName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'Second Climber\'s Name',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              validator: validateEmail,
+                              onSaved: (String? val) {
+                                email = val;
+                              },
+                              decoration: getInputDecoration(
+                                  hint: 'Email',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              onSaved: (String? val) {
+                                teamName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'Team\'s Name',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              obscureText: true,
+                              textInputAction: TextInputAction.next,
+                              controller: _passwordController,
+                              validator: validatePassword,
+                              onSaved: (String? val) {
+                                password = val;
+                              },
+                              cursorColor: const Color(colorPrimary),
+                              decoration: getInputDecoration(
+                                  hint: 'Password',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, right: 8.0, left: 8.0),
+                            child: TextFormField(
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) =>
+                                  context.read<SignUpBloc>().add(
+                                        ValidateFieldsEvent(_key,
+                                            acceptEula: acceptEULA),
+                                      ),
+                              obscureText: true,
+                              validator: (val) => validateConfirmPassword(
+                                  _passwordController.text, val),
+                              onSaved: (String? val) {
+                                confirmPassword = val;
+                              },
+                              cursorColor: const Color(colorPrimary),
+                              decoration: getInputDecoration(
+                                  hint: 'Confirm Password',
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).colorScheme.error),
+                            ),
+                          ),
 
                         getCategory(),
 
@@ -190,91 +287,8 @@ class _SignUpState extends State<SignUpScreen> {
   Padding getCategory() {
     return Padding(padding: const EdgeInsets.only(
                         top: 10.0, right: 8.0, left: 8.0),
-                        child: DropdownButton<String>(
-                          hint: const Text("Select a Category"),
-                          value: category,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              category = newValue;
-                            });
-                          },
-                        items: categories.map((String category) {
-                          return DropdownMenuItem<String>(
-                          value: category,
-                          child: Text(
-                            category,
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                        child: (CustomToggleButtons())
                         );
-  }
-
-  Padding getConfirmPassword(BuildContext context) {
-    return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10.0, right: 8.0, left: 8.0),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) =>
-                              context.read<SignUpBloc>().add(
-                                    ValidateFieldsEvent(_key,
-                                        acceptEula: acceptEULA),
-                                  ),
-                          obscureText: true,
-                          validator: (val) => validateConfirmPassword(
-                              _passwordController.text, val),
-                          onSaved: (String? val) {
-                            confirmPassword = val;
-                          },
-                          cursorColor: const Color(colorPrimary),
-                          decoration: getInputDecoration(
-                              hint: 'Confirm Password',
-                              darkMode: isDarkMode(context),
-                              errorColor: Theme.of(context).colorScheme.error),
-                        ),
-                      );
-  }
-
-  Padding getPassword(BuildContext context) {
-    return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10.0, right: 8.0, left: 8.0),
-                        child: TextFormField(
-                          obscureText: true,
-                          textInputAction: TextInputAction.next,
-                          controller: _passwordController,
-                          validator: validatePassword,
-                          onSaved: (String? val) {
-                            password = val;
-                          },
-                          cursorColor: const Color(colorPrimary),
-                          decoration: getInputDecoration(
-                              hint: 'Password',
-                              darkMode: isDarkMode(context),
-                              errorColor: Theme.of(context).colorScheme.error),
-                        ),
-                      );
-  }
-
-  Padding textInput(BuildContext context, String? variable, String hint, String? Function(String?)? validatorProvided) {
-    return Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10.0, right: 8.0, left: 8.0),
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.words,
-                          validator: validatorProvided,
-                          onSaved: (String? val) {
-                            variable = val;
-                          },
-                          textInputAction: TextInputAction.next,
-                          decoration: getInputDecoration(
-                              hint: hint,
-                              darkMode: isDarkMode(context),
-                              errorColor: Theme.of(context).colorScheme.error),
-                        ),
-                      );
   }
 
   BlocListener<SignUpBloc, SignUpState> loginUserLoginListener() {
@@ -291,7 +305,7 @@ class _SignUpState extends State<SignUpScreen> {
                           teamName : teamName!,
                           firstClimberName: firstClimberName!,
                           secondClimberName: secondClimberName!,
-                          category: category!));
+                          category: category));
                 } else if (state is SignUpFailureState) {
                   showSnackBar(context, state.errorMessage);
                 }

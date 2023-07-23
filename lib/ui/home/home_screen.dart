@@ -24,6 +24,10 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
+    if (!user.isPaid){
+      //Create an event for this.
+      context.read<AuthenticationBloc>().add(LogoutEvent());
+    }
   }
 
   @override

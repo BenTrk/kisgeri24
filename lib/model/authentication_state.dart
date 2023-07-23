@@ -16,5 +16,10 @@ class AuthenticationState {
       : this._(AuthState.unauthenticated,
             message: message ?? 'Unauthenticated');
 
+  //Create an event for this.
+  const AuthenticationState.didNotPay({String? message})
+      : this._(AuthState.unauthenticated,
+            message: message ?? 'You did not pay the entry fee yet.');
+
   const AuthenticationState.onboarding() : this._(AuthState.firstRun);
 }

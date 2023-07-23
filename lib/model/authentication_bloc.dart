@@ -24,9 +24,11 @@ class AuthenticationBloc
         emit(const AuthenticationState.onboarding());
       } else {
         user = await FireStoreUtils.getAuthUser();
-        if (user == null) {
+        //Here insert isPaid check!
+        if (user == null || !user!.isPaid) {
           emit(const AuthenticationState.unauthenticated());
-        } else {
+        }
+        else {
           emit(AuthenticationState.authenticated(user!));
         }
       }
