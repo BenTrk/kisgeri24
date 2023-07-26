@@ -12,6 +12,8 @@ class AuthenticationState {
   const AuthenticationState.authenticated(User user)
       : this._(AuthState.authenticated, user: user);
 
+      
+
   const AuthenticationState.unauthenticated({String? message})
       : this._(AuthState.unauthenticated,
             message: message ?? 'Unauthenticated');

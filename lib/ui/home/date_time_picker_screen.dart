@@ -30,6 +30,8 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
     user = widget.user;
   }
 
+  ValueNotifier<String> dateTime = ValueNotifier(defaultDateTime.toString());
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
@@ -111,14 +113,39 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                 child: 
                 ElevatedButton(
                   onPressed: () {
-                    dateTimePickerWidget(context);
+                    DatePicker.showDatePicker(
+                      context,
+                      dateFormat: 'dd MMMM yyyy HH:mm',
+                      initialDateTime: DateTime.now(),
+                      minDateTime: DateTime(2023, 05, 01, 00, 00),
+                      maxDateTime: DateTime(2023, 05, 03, 00, 00),
+                      onMonthChangeStartWithFirstDate: true,
+                      onConfirm: (dateTimeSelected, List<int> index) {
+                        DateTime selectdate = dateTimeSelected;
+                        dateTime.value = DateFormat('dd-MMM-yyyy - HH:mm').format(selectdate);
+                      },
+                    );
                   },
                   child: const Text('Pick Date-Time'),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(dateTime),
+                child: 
+                ValueListenableBuilder<String>(
+                  builder: (BuildContext context, String value, Widget? child) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        //call write to database here
+                        Text('Time selected: $value'),
+                        child!,
+                      ],
+                    );
+                  },
+                valueListenable: dateTime,
+                child: const Text('Yuhey'),
+                ),
               ),
             ],
           ),
@@ -127,18 +154,3 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
     );
   }
 }
-
-dateTimePickerWidget(BuildContext context) {
-    return DatePicker.showDatePicker(
-      context,
-      dateFormat: 'dd MMMM yyyy HH:mm',
-      initialDateTime: DateTime.now(),
-      minDateTime: DateTime(2023, 05, 01, 00, 00),
-      maxDateTime: DateTime(2023, 05, 03, 00, 00),
-      onMonthChangeStartWithFirstDate: true,
-      onConfirm: (dateTimeSelected, List<int> index) {
-        DateTime selectdate = dateTimeSelected;
-        dateTime = DateFormat('dd-MMM-yyyy - HH:mm').format(selectdate);
-      },
-    );
-  }

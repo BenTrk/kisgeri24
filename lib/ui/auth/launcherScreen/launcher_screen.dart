@@ -8,6 +8,8 @@ import 'package:flutter_login_screen/ui/auth/onBoarding/on_boarding_screen.dart'
 import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 
+import '../../home/date_time_picker_screen.dart';
+
 class LauncherScreen extends StatefulWidget {
   const LauncherScreen({Key? key}) : super(key: key);
 
@@ -43,8 +45,13 @@ class _LauncherScreenState extends State<LauncherScreen> {
                   ));
               break;
             case AuthState.authenticated:
-              pushReplacement(context, HomeScreen(user: state.user!));
-              break;
+              if (state.user!.startDate == defaultDateTime){
+                pushReplacement(context, DateTimePickerScreen(user : state.user!));
+                break;
+              } else {
+                pushReplacement(context, HomeScreen(user: state.user!));
+                break;
+              }
             case AuthState.unauthenticated:
               pushReplacement(context, const WelcomeScreen());
               break;
