@@ -2,32 +2,32 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/model/user.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/model/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
+import '../../constants.dart';
+import '../../model/authentication_bloc.dart';
+import '../../model/user.dart';
+import '../../publics.dart';
+import '../../services/helper.dart';
+import '../auth/welcome/welcome_screen.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
-class HomeScreen extends StatefulWidget {
+
+class DateTimePickerScreen extends StatefulWidget {
   final User user;
 
-  const HomeScreen({Key? key, required this.user}) : super(key: key);
+  const DateTimePickerScreen({Key? key, required this.user}) : super(key: key);
 
   @override
-  State createState() => _HomeState();
+  State createState() => _DateTimePickerState();
 }
 
-class _HomeState extends State<HomeScreen> {
+class _DateTimePickerState extends State<DateTimePickerScreen> {
   late User user;
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
-    if (!user.isPaid){
-      //Create an event for this.
-      context.read<AuthenticationBloc>().add(LogoutEvent());
-    } 
   }
 
   @override
@@ -78,7 +78,7 @@ class _HomeState extends State<HomeScreen> {
         ),
         appBar: AppBar(
           title: Text(
-            'Home',
+            'Pick your start date!',
             style: TextStyle(
                 color: isDarkMode(context)
                     ? Colors.grey.shade50
@@ -98,17 +98,27 @@ class _HomeState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(user.getTeamName()),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Select your start date and time!'),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(user.email),
+                child: Text(user.teamName),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(user.userID),
+                child: 
+                ElevatedButton(
+                  onPressed: () {
+                    dateTimePickerWidget(context);
+                  },
+                  child: const Text('Pick Date-Time'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(dateTime),
               ),
             ],
           ),
@@ -117,3 +127,18 @@ class _HomeState extends State<HomeScreen> {
     );
   }
 }
+
+dateTimePickerWidget(BuildContext context) {
+    return DatePicker.showDatePicker(
+      context,
+      dateFormat: 'dd MMMM yyyy HH:mm',
+      initialDateTime: DateTime.now(),
+      minDateTime: DateTime(2023, 05, 01, 00, 00),
+      maxDateTime: DateTime(2023, 05, 03, 00, 00),
+      onMonthChangeStartWithFirstDate: true,
+      onConfirm: (dateTimeSelected, List<int> index) {
+        DateTime selectdate = dateTimeSelected;
+        dateTime = DateFormat('dd-MMM-yyyy - HH:mm').format(selectdate);
+      },
+    );
+  }

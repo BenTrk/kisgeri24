@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
@@ -19,6 +20,8 @@ class User {
 
   String appIdentifier;
 
+  DateTime startDate;
+
   User(
       {this.email = '',
       this.firstClimberName = '',
@@ -26,12 +29,17 @@ class User {
       this.userID = '',
       this.teamName = '',
       this.category = '',
-      this.isPaid = false
+      this.isPaid = false,
+      Timestamp? startDate,
       })
       : appIdentifier =
-            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
+            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}',
+        startDate = DateTime.utc(1969, 7, 20, 20, 18);    
+        
 
   String getTeamName() => teamName;
+
+  DateTime getStartDate() => startDate;
   
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
@@ -42,7 +50,8 @@ class User {
         userID: parsedJson['id'] ?? parsedJson['userID'] ?? '',
         teamName: parsedJson['teamName'] ?? '',
         category: parsedJson['category'] ?? '',
-        isPaid: parsedJson['isPaid'] ?? false);
+        isPaid: parsedJson['isPaid'] ?? false,
+        startDate: parsedJson['startDate'] ?? DateTime.utc(1969, 7, 20, 20, 18));
   }
 
   Map<String, dynamic> toJson() {
@@ -54,7 +63,8 @@ class User {
       'teamName': teamName,
       'category': category,
       'isPaid': isPaid,
-      'appIdentifier': appIdentifier
+      'appIdentifier': appIdentifier,
+      'startDate' : startDate
     };
   }
 }

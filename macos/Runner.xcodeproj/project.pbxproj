@@ -432,7 +432,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12;
-				PRODUCT_BUNDLE_IDENTIFIER = com.instaflutter.freeloginscreen.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kisgeri24.flutterkisgeri24.mac;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -562,7 +562,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12;
-				PRODUCT_BUNDLE_IDENTIFIER = com.instaflutter.freeloginscreen.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kisgeri24.flutterkisgeri24.mac;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -586,7 +586,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12;
-				PRODUCT_BUNDLE_IDENTIFIER = com.instaflutter.freeloginscreen.mac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kisgeri24.flutterkisgeri24.mac;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};

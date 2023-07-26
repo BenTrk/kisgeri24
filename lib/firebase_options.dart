@@ -45,39 +45,43 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyCR_t9WU8ADjyVoJpgCAqvEi-3-JSOt-0U',
-    appId: '1:661526883314:web:bb597e61dcf3e5684bd96b',
+    appId: '1:661526883314:web:c72a724217a4999a4bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
     authDomain: 'kisgeri24-4d598.firebaseapp.com',
+    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
-    measurementId: 'G-DZHJF5RNR2',
+    measurementId: 'G-PHXG0FBWEK',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBCsJKXsTQ9mPKkXOM6WdCoxUerblk3ooc',
-    appId: '1:661526883314:android:429850e88d5c10a24bd96b',
+    appId: '1:661526883314:android:4453b2e55edb94974bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
+    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC4VOZGgvGBXPpPFnkf1edyAfkcx7hMGNA',
-    appId: '1:661526883314:ios:2ab62fcd86b887c44bd96b',
+    appId: '1:661526883314:ios:e1ee42bce6b349334bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
+    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
-    iosClientId: '661526883314-ptaf3oqjf0ppc6cpinv8tviu8alophqs.apps.googleusercontent.com',
-    iosBundleId: 'com.instaflutter.freeloginscreen',
+    iosClientId: '661526883314-1qhavrgp9sbjr7n57jrq4dmeqqo141kg.apps.googleusercontent.com',
+    iosBundleId: 'com.kisgeri24.flutterkisgeri24',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyC4VOZGgvGBXPpPFnkf1edyAfkcx7hMGNA',
-    appId: '1:661526883314:ios:0598734a8c78c5ff4bd96b',
+    appId: '1:661526883314:ios:e6bbde8ec4b5e4d24bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
+    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
-    iosClientId: '661526883314-d4uildhr48a04qieghpdu0gcatd1f80a.apps.googleusercontent.com',
-    iosBundleId: 'com.instaflutter.freeloginscreen.mac',
+    iosClientId: '661526883314-beu7v1ejtu6rqcvje09n77ve366cp0kd.apps.googleusercontent.com',
+    iosBundleId: 'com.kisgeri24.flutterkisgeri24.mac',
   );
 }

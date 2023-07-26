@@ -5,6 +5,7 @@ import 'package:flutter_login_screen/services/helper.dart';
 import 'package:flutter_login_screen/model/authentication_bloc.dart';
 import 'package:flutter_login_screen/model/login_bloc.dart';
 import 'package:flutter_login_screen/ui/auth/resetPasswordScreen/reset_password_screen.dart';
+import 'package:flutter_login_screen/ui/home/date_time_picker_screen.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
 
@@ -131,7 +132,7 @@ class _LoginScreen extends State<LoginScreen> {
                       );
                 }
               },
-            );
+            ); //@
   }
 
   BlocListener<AuthenticationBloc, AuthenticationState> loginUserAuthenticateListener() {
@@ -140,8 +141,22 @@ class _LoginScreen extends State<LoginScreen> {
                 await context.read<LoadingCubit>().hideLoading();
                 if (state.authState == AuthState.authenticated) {
                   if (!mounted) return;
-                  pushAndRemoveUntil(
+
+                  if (!state.user!.isPaid){
+                    showSnackBar(context, 'You did not pay the entry fee yet.');
+                    return;
+                  } else if (state.user!.getStartDate() == defaultDateTime) {
+                      //finish this and go to DateTime picker screen
+                      //push should be used   
+                      pushAndRemoveUntil(
+                      context, DateTimePickerScreen(user: state.user!), false);
+                      //also add check if the current time is in between the given timeframe.
+                      //ToDo - Stop for 1 hour.           
+                  } else {
+                    pushAndRemoveUntil(
                       context, HomeScreen(user: state.user!), false);
+                  }
+
                 } else {
                   if (!mounted) return;
                   showSnackBar(context,
