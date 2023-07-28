@@ -2,19 +2,22 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login_screen/publics.dart';
+import 'package:numberpicker/numberpicker.dart';
 import '../../constants.dart';
 import '../../model/authentication_bloc.dart';
 import '../../model/user.dart';
-import '../../publics.dart';
 import '../../services/helper.dart';
 import '../auth/welcome/welcome_screen.dart';
+import '../home/model/date_time_picker_model.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import '/misc/toggleButtonsDateSelector.dart';
+import 'package:date_time_picker_widget/date_time_picker_widget.dart';
 
 
 class DateTimePickerScreen extends StatefulWidget {
   final User user;
-
   const DateTimePickerScreen({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -23,17 +26,24 @@ class DateTimePickerScreen extends StatefulWidget {
 
 class _DateTimePickerState extends State<DateTimePickerScreen> {
   late User user;
+  //ValueNotifier<String> dateTime = ValueNotifier<String>(defaultDateTime.toString());
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  var teamHours = 7;
+  var teamMinutes = 15;
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
-  }
+    //dateTime.addListener(() => DateTimePickerModel().writeDateToDatabase(context, dateTime.value, user));
 
-  ValueNotifier<String> dateTime = ValueNotifier(defaultDateTime.toString());
+    teamHours = 7;
+    teamMinutes = 15;
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.authState == AuthState.unauthenticated) {
@@ -50,25 +60,21 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                   color: Color(colorPrimary),
                 ),
                 child: Text(
-                  'Drawer Header',
+                  'Kisgeri24 Menu',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               ListTile(
-                title: Text(
+                title: const Text(
                   'Logout',
                   style: TextStyle(
-                      color: isDarkMode(context)
-                          ? Colors.grey.shade50
-                          : Colors.grey.shade900),
+                      color: Colors.black),
                 ),
                 leading: Transform.rotate(
                   angle: pi / 1,
-                  child: Icon(
+                  child: const Icon(
                     Icons.exit_to_app,
-                    color: isDarkMode(context)
-                        ? Colors.grey.shade50
-                        : Colors.grey.shade900,
+                    color: Colors.white,
                   ),
                 ),
                 onTap: () {
@@ -78,79 +84,230 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
             ],
           ),
         ),
-        appBar: AppBar(
-          title: Text(
-            'Pick your start date!',
-            style: TextStyle(
-                color: isDarkMode(context)
-                    ? Colors.grey.shade50
-                    : Colors.grey.shade900),
-          ),
-          iconTheme: IconThemeData(
-              color: isDarkMode(context)
-                  ? Colors.grey.shade50
-                  : Colors.grey.shade900),
-          backgroundColor:
-              const Color(colorPrimary),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Select your start date and time!'),
+        
+        body: Stack(
+          children: <Widget>[
+            const Center(
+                child: Column(
+              children: <Widget>[],
+            )),
+            Positioned(
+              left: 10,
+              top: 20,
+              child: IconButton(
+                icon: const Icon(Icons.menu, color: Color(colorPrimary),),
+                iconSize: 40,
+                onPressed: () => scaffoldKey.currentState?.openDrawer(),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(user.teamName),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const LogoImageWidget(),
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      'Select your start date and time!',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Color(colorPrimary),
+                        fontWeight: FontWeight.w500,
+                      ),),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left:16, right: 16, top: 16, bottom: 48),
+                    child: Text(
+                      'Looks like your team did not pick a start date yet. Let\'s solve this problem!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(colorPrimary),
+                        fontWeight: FontWeight.w400,
+                      ),),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CustomToggleDateButtons(),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Hours:',
+                                style: TextStyle(color: Color(colorPrimary), fontSize: 16)
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child:
+                                NumberPicker(
+                                  textStyle: TextStyle(color: Color(colorPrimary)),
+                                  value: teamHours,
+                                  axis: Axis.vertical,
+                                  minValue: 0,
+                                  maxValue: 24,
+                                  itemHeight: 40,
+                                  onChanged: (value) => setState(() => teamHours = value),
+                                  decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: Color.fromRGBO(255, 186, 0, 1), width: 2),
+                                  ),
+                                ),
+                                
+                                /**ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color(colorPrimary),
+                                    minimumSize: const Size(150, 40)
+                                  ),
+                                  onPressed: () {
+                                    getDateTimePicker();
+                                    },
+                                  child: const Text('Pick Date-Time'),**/
+                              ),
+                            ],
+                          ),
+                          
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Minutes:',
+                                style: TextStyle(color: Color(colorPrimary), fontSize: 16)
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child:
+                                NumberPicker(
+                                  textStyle: TextStyle(color: Color(colorPrimary)),
+                                  value: teamMinutes,
+                                  axis: Axis.vertical,
+                                  minValue: 0,
+                                  maxValue: 60,
+                                  itemHeight: 40,
+                                  step: 15,
+                                  onChanged: (value) => setState(() => teamMinutes = value),
+                                  decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: Color.fromRGBO(255, 186, 0, 1), width: 2),
+                                  ),
+                                ),
+                                /**ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color(colorPrimary),
+                                    minimumSize: const Size(150, 40)
+                                  ),
+                                  onPressed: () {
+                                    getDateTimePicker();
+                                    },
+                                  child: const Text('Pick Date-Time'),**/
+                              ),
+                            ],
+                          ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color(colorPrimary),
+                                    minimumSize: const Size(150, 40)
+                                  ),
+                              onPressed: 
+                                _showAlertDialog,
+                              child: const Text(
+                                'All Set!',
+                                style: TextStyle(fontSize: 24),
+                              ),
+                            ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: 
-                ElevatedButton(
-                  onPressed: () {
-                    DatePicker.showDatePicker(
-                      context,
-                      dateFormat: 'dd MMMM yyyy HH:mm',
-                      initialDateTime: DateTime.now(),
-                      minDateTime: DateTime(2023, 05, 01, 00, 00),
-                      maxDateTime: DateTime(2023, 05, 03, 00, 00),
-                      onMonthChangeStartWithFirstDate: true,
-                      onConfirm: (dateTimeSelected, List<int> index) {
-                        DateTime selectdate = dateTimeSelected;
-                        dateTime.value = DateFormat('dd-MMM-yyyy - HH:mm').format(selectdate);
-                      },
-                    );
-                  },
-                  child: const Text('Pick Date-Time'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: 
-                ValueListenableBuilder<String>(
-                  builder: (BuildContext context, String value, Widget? child) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        //call write to database here
-                        Text('Time selected: $value'),
-                        child!,
-                      ],
-                    );
-                  },
-                valueListenable: dateTime,
-                child: const Text('Yuhey'),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Future<void> _showAlertDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+
+        teamStartTime = teamHours.toString() + ':' + teamMinutes.toString();
+        if (teamDate == dates[0]) {
+          teamDate = '2023-07-01';
+        } else {
+          teamDate = '2023-07-02';
+        }
+        dateTime = teamDate + ' - ' + teamStartTime;
+
+        return AlertDialog( 
+          title: Text('Are you sure?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Is $dateTime really your start time?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
+                //Move to the HomePage! Disable database writes while not in competition
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
+class LogoImageWidget extends StatelessWidget {
+  const LogoImageWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+      top: 10.0, right: 24.0, left: 24.0),
+        child: Image.asset(
+        'assets/images/welcome_image.png',
+        alignment: Alignment.center,
+        width: 150.0,
+        height: 150.0,
+        fit: BoxFit.cover,
+        ),
+      );
+  }
+}
+

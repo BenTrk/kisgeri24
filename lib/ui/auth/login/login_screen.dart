@@ -64,7 +64,6 @@ class _LoginScreen extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      
                       const LogoImageWidget(),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -145,7 +144,7 @@ class _LoginScreen extends State<LoginScreen> {
                   if (!state.user!.isPaid){
                     showSnackBar(context, 'You did not pay the entry fee yet.');
                     return;
-                  } else if (state.user!.getStartDate() == defaultDateTime) {
+                  } else if (state.user!.getStartDate() == defaultDateTime.toString()) {
                       //finish this and go to DateTime picker screen
                       //push should be used   
                       pushAndRemoveUntil(

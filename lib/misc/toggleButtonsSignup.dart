@@ -3,8 +3,10 @@ import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/publics.dart';
 
 class CustomToggleButtons extends StatefulWidget {
+  const CustomToggleButtons({super.key});
+
     @override
-    CustomToggleButtonsState createState() => new CustomToggleButtonsState();
+    CustomToggleButtonsState createState() => CustomToggleButtonsState();
   }
   
   class CustomToggleButtonsState extends State<CustomToggleButtons> {
@@ -41,7 +43,7 @@ class CustomToggleButtons extends StatefulWidget {
                 // region example 2
                 borderColor: Colors.grey.shade200,
                 selectedBorderColor: const Color(colorPrimary),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
 
                 children: <Widget>[
                   Text(categories[0]),

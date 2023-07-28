@@ -45,9 +45,11 @@ class _LauncherScreenState extends State<LauncherScreen> {
                   ));
               break;
             case AuthState.authenticated:
-              if (state.user!.startDate == defaultDateTime){
+              if (state.user!.startDate == defaultDateTime.toString()){
                 pushReplacement(context, DateTimePickerScreen(user : state.user!));
                 break;
+                //TODO: else if startTime isBefore(compStartTime) || startTime isAfter(compEndTime)
+                //For that: get compStartTime and compEndTime from realtime DB (/BasicData/)
               } else {
                 pushReplacement(context, HomeScreen(user: state.user!));
                 break;

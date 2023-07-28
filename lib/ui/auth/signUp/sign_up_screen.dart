@@ -10,7 +10,7 @@ import 'package:flutter_login_screen/model/authentication_bloc.dart';
 import 'package:flutter_login_screen/model/sign_up_bloc.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
-import 'package:flutter_login_screen/misc/toggleButtons.dart'; 
+import 'package:flutter_login_screen/misc/toggleButtonsSignup.dart'; 
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../publics.dart';
@@ -285,7 +285,7 @@ class _SignUpState extends State<SignUpScreen> {
   }
 
   Padding getCategory() {
-    return Padding(padding: const EdgeInsets.only(
+    return const Padding(padding: EdgeInsets.only(
                         top: 10.0, right: 8.0, left: 8.0),
                         child: (CustomToggleButtons())
                         );

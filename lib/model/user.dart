@@ -20,7 +20,7 @@ class User {
 
   String appIdentifier;
 
-  DateTime startDate;
+  String startDate;
 
   User(
       {this.email = '',
@@ -30,16 +30,16 @@ class User {
       this.teamName = '',
       this.category = '',
       this.isPaid = false,
-      Timestamp? startDate,
+      String? startDate,
       })
       : appIdentifier =
             'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}',
-        startDate = DateTime.utc(1969, 7, 20, 20, 18);    
+        startDate = DateTime.utc(1969, 7, 20, 20, 18).toString();    
         
 
   String getTeamName() => teamName;
 
-  DateTime getStartDate() => startDate;
+  String getStartDate() => startDate;
   
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
