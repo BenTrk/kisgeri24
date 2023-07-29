@@ -10,10 +10,8 @@ import '../../model/user.dart';
 import '../../services/helper.dart';
 import '../auth/welcome/welcome_screen.dart';
 import '../home/model/date_time_picker_model.dart';
-import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
-import 'package:intl/intl.dart';
 import '/misc/toggleButtonsDateSelector.dart';
-import 'package:date_time_picker_widget/date_time_picker_widget.dart';
+import 'home_screen.dart';
 
 
 class DateTimePickerScreen extends StatefulWidget {
@@ -28,7 +26,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
   late User user;
   //ValueNotifier<String> dateTime = ValueNotifier<String>(defaultDateTime.toString());
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  var teamHours = 7;
+  var teamHours = 07;
   var teamMinutes = 15;
 
   @override
@@ -37,7 +35,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
     user = widget.user;
     //dateTime.addListener(() => DateTimePickerModel().writeDateToDatabase(context, dateTime.value, user));
 
-    teamHours = 7;
+    teamHours = 07;
     teamMinutes = 15;
   }
 
@@ -51,6 +49,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
         }
       },
       child: Scaffold(
+        key: scaffoldKey,
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -146,7 +145,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                 padding: const EdgeInsets.all(2.0),
                                 child:
                                 NumberPicker(
-                                  textStyle: TextStyle(color: Color(colorPrimary)),
+                                  textStyle: const TextStyle(color: Color(colorPrimary)),
                                   value: teamHours,
                                   axis: Axis.vertical,
                                   minValue: 0,
@@ -155,20 +154,9 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   onChanged: (value) => setState(() => teamHours = value),
                                   decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: Color.fromRGBO(255, 186, 0, 1), width: 2),
+                                  border: Border.all(color: const Color.fromRGBO(255, 186, 0, 1), width: 2),
                                   ),
                                 ),
-                                
-                                /**ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: const Color(colorPrimary),
-                                    minimumSize: const Size(150, 40)
-                                  ),
-                                  onPressed: () {
-                                    getDateTimePicker();
-                                    },
-                                  child: const Text('Pick Date-Time'),**/
                               ),
                             ],
                           ),
@@ -186,7 +174,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                 padding: const EdgeInsets.all(2.0),
                                 child:
                                 NumberPicker(
-                                  textStyle: TextStyle(color: Color(colorPrimary)),
+                                  textStyle: const TextStyle(color: Color(colorPrimary)),
                                   value: teamMinutes,
                                   axis: Axis.vertical,
                                   minValue: 0,
@@ -196,19 +184,9 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   onChanged: (value) => setState(() => teamMinutes = value),
                                   decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: Color.fromRGBO(255, 186, 0, 1), width: 2),
+                                  border: Border.all(color: const Color.fromRGBO(255, 186, 0, 1), width: 2),
                                   ),
                                 ),
-                                /**ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: const Color(colorPrimary),
-                                    minimumSize: const Size(150, 40)
-                                  ),
-                                  onPressed: () {
-                                    getDateTimePicker();
-                                    },
-                                  child: const Text('Pick Date-Time'),**/
                               ),
                             ],
                           ),
@@ -249,18 +227,12 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (dialogContext) {
 
-        teamStartTime = teamHours.toString() + ':' + teamMinutes.toString();
-        if (teamDate == dates[0]) {
-          teamDate = '2023-07-01';
-        } else {
-          teamDate = '2023-07-02';
-        }
-        dateTime = teamDate + ' - ' + teamStartTime;
+        dateTime = DateTimePickerModel().setDateTime(teamHours, teamMinutes, teamDate);
 
         return AlertDialog( 
-          title: Text('Are you sure?'),
+          title: const Text('Are you sure?'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -272,15 +244,17 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
             TextButton(
               child: const Text('No'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
               },
             ),
             TextButton(
               child: const Text('Yes'),
               onPressed: () {
-                DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
                 //Move to the HomePage! Disable database writes while not in competition
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
+                DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
+                pushAndRemoveUntil(
+                      context, HomeScreen(user: user), false);
               },
             ),
           ],

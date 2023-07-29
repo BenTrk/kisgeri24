@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
@@ -30,11 +28,10 @@ class User {
       this.teamName = '',
       this.category = '',
       this.isPaid = false,
-      String? startDate,
+      this.startDate = ('1969-07-20 - 20:18'),
       })
       : appIdentifier =
-            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}',
-        startDate = DateTime.utc(1969, 7, 20, 20, 18).toString();    
+            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';   
         
 
   String getTeamName() => teamName;
@@ -51,7 +48,7 @@ class User {
         teamName: parsedJson['teamName'] ?? '',
         category: parsedJson['category'] ?? '',
         isPaid: parsedJson['isPaid'] ?? false,
-        startDate: parsedJson['startDate'] ?? DateTime.utc(1969, 7, 20, 20, 18));
+        startDate: parsedJson['startDate']);
   }
 
   Map<String, dynamic> toJson() {

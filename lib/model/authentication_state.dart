@@ -1,6 +1,6 @@
 part of 'authentication_bloc.dart';
 
-enum AuthState { firstRun, authenticated, unauthenticated }
+enum AuthState { firstRun, authenticated, unauthenticated, outOfDateTimeRange, didNotPayYet }
 
 class AuthenticationState {
   final AuthState authState;
@@ -12,16 +12,17 @@ class AuthenticationState {
   const AuthenticationState.authenticated(User user)
       : this._(AuthState.authenticated, user: user);
 
-      
-
   const AuthenticationState.unauthenticated({String? message})
       : this._(AuthState.unauthenticated,
             message: message ?? 'Unauthenticated');
 
-  //Create an event for this.
-  const AuthenticationState.didNotPay({String? message})
-      : this._(AuthState.unauthenticated,
-            message: message ?? 'You did not pay the entry fee yet.');
-
   const AuthenticationState.onboarding() : this._(AuthState.firstRun);
+
+  const AuthenticationState.outOfDateTimeRange({required User user, String? message})
+      : this._(AuthState.outOfDateTimeRange, user: user,
+            message: message ?? 'This is not the time to climb yet.');
+
+  const AuthenticationState.didNotPayYet({required User user, message})
+      : this._(AuthState.didNotPayYet, user: user,
+            message: message ?? 'You did not pay the entry fee yet.');
 }

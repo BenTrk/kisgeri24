@@ -10,7 +10,7 @@ class CustomToggleButtons extends StatefulWidget {
   }
   
   class CustomToggleButtonsState extends State<CustomToggleButtons> {
-    List<bool> _isSelected = [false, true, false];
+    final List<bool> _isSelected = [false, true, false];
   
     @override
     Widget build(BuildContext context) {

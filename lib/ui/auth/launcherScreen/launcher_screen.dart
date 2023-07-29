@@ -48,13 +48,18 @@ class _LauncherScreenState extends State<LauncherScreen> {
               if (state.user!.startDate == defaultDateTime.toString()){
                 pushReplacement(context, DateTimePickerScreen(user : state.user!));
                 break;
-                //TODO: else if startTime isBefore(compStartTime) || startTime isAfter(compEndTime)
-                //For that: get compStartTime and compEndTime from realtime DB (/BasicData/)
               } else {
                 pushReplacement(context, HomeScreen(user: state.user!));
                 break;
               }
             case AuthState.unauthenticated:
+              pushReplacement(context, const WelcomeScreen());
+              break;
+            case AuthState.outOfDateTimeRange:
+              //Maybe a copy with no database saves and a mock screen?
+              pushReplacement(context, HomeScreen(user: state.user!));
+              break;
+            case AuthState.didNotPayYet:
               pushReplacement(context, const WelcomeScreen());
               break;
           }

@@ -41,10 +41,10 @@ class WelcomeScreen extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  WelcomeWidget(),
-                  SubTitleWelcomeWidget(),
-                  LogInButtonWidget(),
-                  SignUpButtonWidget()
+                  const WelcomeWidget(),
+                  const SubTitleWelcomeWidget(),
+                  const LogInButtonWidget(),
+                  const SignUpButtonWidget()
                 ],
               ),
             ),

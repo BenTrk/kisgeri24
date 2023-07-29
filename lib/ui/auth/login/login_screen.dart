@@ -141,22 +141,21 @@ class _LoginScreen extends State<LoginScreen> {
                 if (state.authState == AuthState.authenticated) {
                   if (!mounted) return;
 
-                  if (!state.user!.isPaid){
-                    showSnackBar(context, 'You did not pay the entry fee yet.');
-                    return;
-                  } else if (state.user!.getStartDate() == defaultDateTime.toString()) {
-                      //finish this and go to DateTime picker screen
-                      //push should be used   
+                  //In case the user is authenticated BUT did not pick a start date yet.
+                  //Maybe again a new state? Wouldn't it be too much from states? :)
+                  if (state.user!.getStartDate() == defaultDateTime.toString()) {
                       pushAndRemoveUntil(
                       context, DateTimePickerScreen(user: state.user!), false);
-                      //also add check if the current time is in between the given timeframe.
                       //ToDo - Stop for 1 hour.           
                   } else {
                     pushAndRemoveUntil(
                       context, HomeScreen(user: state.user!), false);
                   }
-
-                } else {
+                } 
+                else if (state.authState == AuthState.didNotPayYet) {
+                  showSnackBar(context, state.message ?? 'You did not pay the entry fee yet.');
+                }
+                else {
                   if (!mounted) return;
                   showSnackBar(context,
                       state.message ?? 'Couldn\'t login, Please try again.');

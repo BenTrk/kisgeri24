@@ -10,7 +10,7 @@ class CustomToggleDateButtons extends StatefulWidget {
   }
   
   class CustomToggleDateButtonsState extends State<CustomToggleDateButtons> {
-    List<bool> _isSelected = [false, true];
+    final List<bool> _isSelected = [false, true];
   
     @override
     Widget build(BuildContext context) {

@@ -24,11 +24,6 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
-    //move it to launcherscreen
-    if (!user.isPaid){
-      //Create an event for this.
-      context.read<AuthenticationBloc>().add(LogoutEvent());
-    }
   }
 
   @override
@@ -37,7 +32,7 @@ class _HomeState extends State<HomeScreen> {
       listener: (context, state) {
         if (state.authState == AuthState.unauthenticated) {
           pushAndRemoveUntil(context, const WelcomeScreen(), false);
-        }
+        } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
       child: Scaffold(
         drawer: Drawer(

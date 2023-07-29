@@ -4,6 +4,7 @@ import 'package:flutter_login_screen/constants.dart';
 import 'package:flutter_login_screen/model/user.dart';
 import 'package:flutter_login_screen/services/authenticate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_login_screen/model/init.dart';
 
 part 'authentication_event.dart';
 
@@ -26,8 +27,13 @@ class AuthenticationBloc
         user = await FireStoreUtils.getAuthUser();
         if (user == null) {
           emit(const AuthenticationState.unauthenticated());
+        } 
+        else if (user!.isPaid == false){
+          emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
+        } 
+        else if (! await init.checkDateTime(user!)){
+          emit(AuthenticationState.outOfDateTimeRange(user: user!));
         }
-        //Add check for the dates!
         else {
           emit(AuthenticationState.authenticated(user!));
         }
@@ -40,12 +46,22 @@ class AuthenticationBloc
     on<LoginWithEmailAndPasswordEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.loginWithEmailAndPassword(
           event.email, event.password);
-      if (result != null && result is User) {
+      if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
         user = result;
         emit(AuthenticationState.authenticated(user!));
-      } else if (result != null && result is String) {
+      } 
+      else if (result != null && result is String) {
         emit(AuthenticationState.unauthenticated(message: result));
-      } else {
+      } 
+      else if (result != null && result is User && result.isPaid == false) {
+        user = result;
+        emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
+      } 
+      else if (result != null && result is User && await init.checkDateTime(result!) == false){
+        user = result;
+        emit(AuthenticationState.outOfDateTimeRange(user: user!));
+      }
+      else {
         emit(const AuthenticationState.unauthenticated(
             message: 'Login failed, Please try again.'));
       }
