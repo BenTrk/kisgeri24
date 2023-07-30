@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/model/reset_password_cubit.dart';
-import 'package:flutter_login_screen/ui/loading_cubit.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/model/reset_password_cubit.dart';
+import 'package:kisgeri24/ui/loading_cubit.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);

@@ -1,8 +1,10 @@
-import 'dart:math';
+import 'dart:developer';
 
+import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/publics.dart';
+import 'package:kisgeri24/misc/customMenu.dart';
+import 'package:kisgeri24/publics.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../../constants.dart';
 import '../../model/authentication_bloc.dart';
@@ -50,81 +52,31 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
       },
       child: Scaffold(
         key: scaffoldKey,
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color(colorPrimary),
-                ),
-                child: Text(
-                  'Kisgeri24 Menu',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              ListTile(
-                title: const Text(
-                  'Logout',
-                  style: TextStyle(
-                      color: Colors.black),
-                ),
-                leading: Transform.rotate(
-                  angle: pi / 1,
-                  child: const Icon(
-                    Icons.exit_to_app,
-                    color: Colors.white,
-                  ),
-                ),
-                onTap: () {
-                  context.read<AuthenticationBloc>().add(LogoutEvent());
-                },
-              ),
-            ],
-          ),
-        ),
-        
-        body: Stack(
+        body: ListView(
           children: <Widget>[
-            const Center(
-                child: Column(
-              children: <Widget>[],
-            )),
-            Positioned(
-              left: 10,
-              top: 20,
-              child: IconButton(
-                icon: const Icon(Icons.menu, color: Color(colorPrimary),),
-                iconSize: 40,
-                onPressed: () => scaffoldKey.currentState?.openDrawer(),
-              ),
-            ),
+            
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const LogoImageWidget(),
+                  //Menu inside :)
+                  LogoImageWidget(user: user,),
                   const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      'Select your start date and time!',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Color(colorPrimary),
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left:16, right: 16, top: 16, bottom: 48),
+                    padding: EdgeInsets.all(16),
                     child: Text(
                       'Looks like your team did not pick a start date yet. Let\'s solve this problem!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Color(colorPrimary),
-                        fontWeight: FontWeight.w400,
-                      ),),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: const Divider( color: Color(colorPrimary),),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +180,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
-
         dateTime = DateTimePickerModel().setDateTime(teamHours, teamMinutes, teamDate);
 
         return AlertDialog( 
@@ -265,23 +216,41 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
 }
 
 class LogoImageWidget extends StatelessWidget {
+  final User user;
+
   const LogoImageWidget({
     super.key,
+    required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-      top: 10.0, right: 24.0, left: 24.0),
-        child: Image.asset(
-        'assets/images/welcome_image.png',
-        alignment: Alignment.center,
-        width: 150.0,
-        height: 150.0,
-        fit: BoxFit.cover,
-        ),
-      );
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [ 
+          Expanded(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10.0, right: 24.0, left: 24.0),
+                        child: Image.asset(
+                          'assets/images/welcome_image.png',
+                        alignment: Alignment.center,
+                        width: 150.0,
+                        height: 150.0,
+                        fit: BoxFit.cover,
+                        ),
+                      ),
+                      CustomMenu.getCustomMenu(context, user),
+                    ],
+                  ),
+                ),
+        ],
+      ),
+    );
   }
 }
 

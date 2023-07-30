@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/constants.dart';
+import 'package:kisgeri24/constants.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 String? validateName(String? value) {

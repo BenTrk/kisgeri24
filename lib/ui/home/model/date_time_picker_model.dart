@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/services/helper.dart';
+import 'package:kisgeri24/services/helper.dart';
 
 import '../../../constants.dart';
 import '../../../model/user.dart';

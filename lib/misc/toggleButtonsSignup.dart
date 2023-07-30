@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/publics.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/publics.dart';
 
 class CustomToggleButtons extends StatefulWidget {
   const CustomToggleButtons({super.key});

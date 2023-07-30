@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_login_screen/classes/user_details.dart';
+import 'package:kisgeri24/classes/user_details.dart';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/model/user.dart';
-import 'package:flutter_login_screen/misc/exceptions.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/misc/exceptions.dart';
 
 class init{
 

@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/model/user.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/model/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
+
+import '../../misc/customMenu.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -19,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   late User user;
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -35,80 +38,87 @@ class _HomeState extends State<HomeScreen> {
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
       child: Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color(colorPrimary),
-                ),
-                child: Text(
-                  'Drawer Header',
-                  style: TextStyle(color: Colors.white),
-                ),
+        key: scaffoldKey,
+        body: ListView(
+          children: <Widget>[
+            
+            SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //Menu inside :)
+                  HomeScreenTitleWidget(user: user,),
+                  
+                  const Padding(
+                    padding: EdgeInsets.only(left:25.0, right: 25.0, bottom: 10),
+                    child: Divider( color: Color.fromRGBO(255, 186, 0, 1),),
+                  ),
+                  
+                ],
               ),
-              ListTile(
-                title: Text(
-                  'Logout',
-                  style: TextStyle(
-                      color: isDarkMode(context)
-                          ? Colors.grey.shade50
-                          : Colors.grey.shade900),
-                ),
-                leading: Transform.rotate(
-                  angle: pi / 1,
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: isDarkMode(context)
-                        ? Colors.grey.shade50
-                        : Colors.grey.shade900,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeScreenTitleWidget extends StatelessWidget {
+  final User user;
+
+  const HomeScreenTitleWidget({
+    super.key,
+    required this.user,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
+      child: Row(
+        children: [ 
+          Expanded(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 48.0, right: 24.0, left: 24.0),
+                        child: 
+                        Row(
+                          children: [
+                            
+                            Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Image.asset(
+                                'assets/images/welcome_image.png',
+                              alignment: Alignment.center,
+                              width: 75.0,
+                              height: 75.0,
+                              fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            const Expanded(
+                              child: Text(
+                                "We did some climbing. Let's document it!",
+                                style: TextStyle(
+                                  color: Color.fromRGBO(255, 186, 0, 1),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),),
+                            ),
+
+                          ]
+                        )
+                      ),
+                      CustomMenu.getCustomMenu(context, user),
+                    ],
                   ),
                 ),
-                onTap: () {
-                  context.read<AuthenticationBloc>().add(LogoutEvent());
-                },
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: Text(
-            'Home',
-            style: TextStyle(
-                color: isDarkMode(context)
-                    ? Colors.grey.shade50
-                    : Colors.grey.shade900),
-          ),
-          iconTheme: IconThemeData(
-              color: isDarkMode(context)
-                  ? Colors.grey.shade50
-                  : Colors.grey.shade900),
-          backgroundColor:
-              const Color(colorPrimary),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(user.getTeamName()),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(user.email),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(user.userID),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

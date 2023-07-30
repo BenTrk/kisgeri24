@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/model/authentication_bloc.dart';
-import 'package:flutter_login_screen/model/on_boarding_cubit.dart';
-import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/model/on_boarding_cubit.dart';
+import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {

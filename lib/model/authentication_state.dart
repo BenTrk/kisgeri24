@@ -22,6 +22,7 @@ class AuthenticationState {
       : this._(AuthState.outOfDateTimeRange, user: user,
             message: message ?? 'This is not the time to climb yet.');
 
+//This is not set currently
   const AuthenticationState.didNotPayYet({required User user, message})
       : this._(AuthState.didNotPayYet, user: user,
             message: message ?? 'You did not pay the entry fee yet.');

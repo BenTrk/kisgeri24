@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/firebase_options.dart';
-import 'package:flutter_login_screen/model/authentication_bloc.dart';
-import 'package:flutter_login_screen/ui/auth/launcherScreen/launcher_screen.dart';
-import 'package:flutter_login_screen/ui/loading_cubit.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/firebase_options.dart';
+import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
+import 'package:kisgeri24/ui/loading_cubit.dart';
 
 void main() async {
   if (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS) {

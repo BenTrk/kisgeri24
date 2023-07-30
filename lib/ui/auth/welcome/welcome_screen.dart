@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/ui/auth/login/login_screen.dart';
-import 'package:flutter_login_screen/ui/auth/signUp/sign_up_screen.dart';
-import 'package:flutter_login_screen/model/welcome_bloc.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/ui/auth/login/login_screen.dart';
+import 'package:kisgeri24/ui/auth/signUp/sign_up_screen.dart';
+import 'package:kisgeri24/model/welcome_bloc.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

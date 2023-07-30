@@ -1,10 +1,10 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/model/user.dart';
-import 'package:flutter_login_screen/services/authenticate.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/authenticate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_login_screen/model/init.dart';
+import 'package:kisgeri24/model/init.dart';
 
 part 'authentication_event.dart';
 

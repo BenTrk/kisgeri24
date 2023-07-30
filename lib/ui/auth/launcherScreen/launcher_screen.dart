@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_screen/constants.dart';
-import 'package:flutter_login_screen/services/helper.dart';
-import 'package:flutter_login_screen/model/authentication_bloc.dart';
-import 'package:flutter_login_screen/services/data.dart';
-import 'package:flutter_login_screen/ui/auth/onBoarding/on_boarding_screen.dart';
-import 'package:flutter_login_screen/ui/auth/welcome/welcome_screen.dart';
-import 'package:flutter_login_screen/ui/home/home_screen.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/services/data.dart';
+import 'package:kisgeri24/ui/auth/onBoarding/on_boarding_screen.dart';
+import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
+import 'package:kisgeri24/ui/home/home_screen.dart';
 
 import '../../home/date_time_picker_screen.dart';
 
