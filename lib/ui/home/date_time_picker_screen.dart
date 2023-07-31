@@ -61,7 +61,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //Menu inside :)
-                  LogoImageWidget(user: user,),
+                  LogoImageWidget(user: user),
                   const Padding(
                     padding: EdgeInsets.all(16),
                     child: Text(
@@ -243,8 +243,9 @@ class LogoImageWidget extends StatelessWidget {
                         height: 150.0,
                         fit: BoxFit.cover,
                         ),
-                      ),
-                      CustomMenu.getCustomMenu(context, user),
+                      ), //Only settings menu should be available from here!
+                      //CustomMenu.getCustomMenu(context, user, state),
+                      CustomMenu(user: user,),
                     ],
                   ),
                 ),

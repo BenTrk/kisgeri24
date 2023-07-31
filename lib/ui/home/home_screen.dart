@@ -3,17 +3,22 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/misc/customMenu.dart';
+import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-
-import '../../misc/customMenu.dart';
+import 'package:kisgeri24/ui/home/model/home_model.dart';
+import '../../classes/places.dart';
+import 'date_time_picker_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
 
-  const HomeScreen({Key? key, required this.user}) : super(key: key);
+  const HomeScreen(
+    {Key? key, required this.user}
+    ) : super(key: key);
 
   @override
   State createState() => _HomeState();
@@ -22,6 +27,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeState extends State<HomeScreen> {
   late User user;
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  Place? selectedPlace;
+  bool isPlaceSelected = false;
+
+  void handleBackButtonPressed() {
+    setState(() {
+      selectedPlace = null;
+      isPlaceSelected = false;
+    });
+  }
 
   @override
   void initState() {
@@ -35,6 +49,8 @@ class _HomeState extends State<HomeScreen> {
       listener: (context, state) {
         if (state.authState == AuthState.unauthenticated) {
           pushAndRemoveUntil(context, const WelcomeScreen(), false);
+        } else if (state.authState == AuthState.didNotSetTime) {
+          pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
       child: Scaffold(
@@ -48,13 +64,36 @@ class _HomeState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //Menu inside :)
-                  HomeScreenTitleWidget(user: user,),
+                  HomeScreenTitleWidget(user: user),
                   
                   const Padding(
                     padding: EdgeInsets.only(left:25.0, right: 25.0, bottom: 10),
                     child: Divider( color: Color.fromRGBO(255, 186, 0, 1),),
                   ),
-                  
+
+                  isPlaceSelected
+                    ? IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: handleBackButtonPressed,
+                      )
+                    : SizedBox(),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: DisplayPlacesAndRoutesWidget(selectedPlace: selectedPlace,
+                      isPlaceSelected: isPlaceSelected,
+                      onPlaceSelected: (Place place) {
+                        setState(() {
+                          selectedPlace = place;
+                          isPlaceSelected = true;
+                        });
+                      },
+                      onBackButtonPressed: () {
+                        setState(() {
+                          selectedPlace = null;
+                          isPlaceSelected = false;
+                        });}),
+                  ),
                 ],
               ),
             ),
@@ -64,6 +103,66 @@ class _HomeState extends State<HomeScreen> {
     );
   }
 }
+
+class DisplayPlacesAndRoutesWidget extends StatelessWidget {
+  final Place? selectedPlace;
+  final bool isPlaceSelected;
+  final Function(Place) onPlaceSelected;
+  final VoidCallback onBackButtonPressed;
+
+  DisplayPlacesAndRoutesWidget({
+    required this.selectedPlace,
+    required this.isPlaceSelected,
+    required this.onPlaceSelected,
+    required this.onBackButtonPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (selectedPlace == null) {
+      return FutureBuilder<Places>(
+        future: HomeModel.getPlaces(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.placeList.length,
+              itemBuilder: (context, index) {
+                Place place = snapshot.data!.placeList[index];
+                return GestureDetector(
+                  onTap: () => onPlaceSelected(place),
+                  child: Card(
+                    // Your Card UI for each Place here
+                    child: Text(place.name),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      );
+    } else {
+      // Display the list of routes for the selected Place here
+      // You can access the selectedPlace and its routeList to build the UI
+      return ListView.builder(
+        itemCount: selectedPlace!.routeList.length,
+        itemBuilder: (context, index) {
+          RockRoute route = selectedPlace!.routeList[index];
+          return Card(
+            // Your Card UI for each Route here
+            child: Text(route.name),
+          );
+        },
+      );
+    }
+  }
+}
+
 
 class HomeScreenTitleWidget extends StatelessWidget {
   final User user;
@@ -114,7 +213,8 @@ class HomeScreenTitleWidget extends StatelessWidget {
                           ]
                         )
                       ),
-                      CustomMenu.getCustomMenu(context, user),
+                      //CustomMenu.getCustomMenu(context, user, state),
+                      CustomMenu(user: user),
                     ],
                   ),
                 ),

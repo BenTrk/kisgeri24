@@ -1,18 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kisgeri24/classes/user_details.dart';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
+import '../classes/places.dart';
+
 class init{
-
-  static UserDetails getUserDetails(){
-    UserDetails userDetails = UserDetails();
-    return userDetails;
-  } 
-
   //Compare starttime and starttime + category to start and end times
   //return true if in range, false, if out of range
   //Take extra care when adding dates for testing manually - the format is important
@@ -54,6 +47,7 @@ class init{
 
       DateTime userEndDateTime = userStartDateTime.add(duration);
 
+      //Just for testing!
       if (DateTime.now().isBefore(compStartDateTime) || DateTime.now().isAfter(userEndDateTime)){
         isInRange = false;
       } else { isInRange = true; }
@@ -64,4 +58,30 @@ class init{
 
   return isInRange;
   }
+
+//ToDo
+  static Future<Places> getPlacesWithRoutes() async {
+  List<Place> placesList = [];
+  DatabaseReference routesRef = FirebaseDatabase.instance.ref('Routes');
+
+  try {
+    DatabaseEvent event = await routesRef.once();
+    DataSnapshot snapshot = event.snapshot;
+    final Map data = snapshot.value as Map<dynamic, dynamic>;
+
+    data.forEach((key, value) {
+      final Place place = Place.fromSnapshot(key as String, value);
+      placesList.add(place);
+    });
+  } catch (error) {
+    // Handle any potential errors here
+    print("Error fetching data: $error");
+  }
+
+  return Places(placeList: placesList);
+  }
+
+
+
+
 }

@@ -45,7 +45,8 @@ class _LauncherScreenState extends State<LauncherScreen> {
                   ));
               break;
             case AuthState.authenticated:
-              if (state.user!.startDate == defaultDateTime.toString()){
+            //might not necessary
+              if (state.user!.startDate == defaultDateTime){
                 pushReplacement(context, DateTimePickerScreen(user : state.user!));
                 break;
               } else {
@@ -54,6 +55,9 @@ class _LauncherScreenState extends State<LauncherScreen> {
               }
             case AuthState.unauthenticated:
               pushReplacement(context, const WelcomeScreen());
+              break;
+            case AuthState.didNotSetTime:
+              pushReplacement(context, DateTimePickerScreen(user: state.user!));
               break;
             case AuthState.outOfDateTimeRange:
               //Maybe a copy with no database saves and a mock screen?
