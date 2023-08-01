@@ -30,20 +30,15 @@ class CustomMenu extends StatefulWidget {
     void initState() {
       user = widget.user;
       isStartTimeSet = false;
+      if (user.startDate != defaultDateTime){
+        isStartTimeSet = true;
+      }
       super.initState();
     }
 
     @override
     Widget build(BuildContext context){
-      return BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state.authState != AuthState.didNotSetTime) {
-            isStartTimeSet = true;
-          } else if (state.authState == AuthState.unauthenticated){
-            pushAndRemoveUntil(context, const WelcomeScreen(), false);
-          }
-        },
-          child: Positioned(
+      return Positioned(
           top: 0.0,
           left: 0.0,
           right: 0.0,
@@ -132,9 +127,19 @@ class CustomMenu extends StatefulWidget {
                   },
                 ),
               ),
+              Center(
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.exit_to_app),
+                  color: Colors.white,
+                  onPressed: () {
+                    log('Logout');
+                    context.read<AuthenticationBloc>().add(LogoutEvent());
+                  },
+                ),
+              ),
             ],
-          ),
-        ),
+          )
       );
     }
 }

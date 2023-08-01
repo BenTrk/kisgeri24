@@ -6,15 +6,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
+import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/home/model/home_model.dart';
+import '../../classes/place.dart';
 import '../../classes/places.dart';
+import '../../classes/results.dart';
+import '../../classes/rockroute.dart';
 import '../../misc/cards/card.dart';
 import 'date_time_picker_screen.dart';
 
+
+//User is not refreshed!
 class HomeScreen extends StatefulWidget {
   final User user;
 
@@ -30,6 +36,7 @@ enum SelectedItem { places, activities }
 
 class _HomeState extends State<HomeScreen> {
   late User user;
+  late Results results;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   //Places state vars
   Place? selectedPlace;
@@ -94,6 +101,8 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
+    results = Results(points: 0);
+    init.getResults(user, results);
   }
 
   @override
@@ -175,13 +184,14 @@ class _HomeState extends State<HomeScreen> {
                           child: Column(
                             children: [
                               Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                              Text(
+                              
                                 !isPaused
-                                ? 'Start: ${user.startDate}'
-                                : "On Pause"
+                                ? Text(user.startDate)
+                                : Text( 
+                                  "On Pause!"
                                 , style: TextStyle(color: Colors.grey.shade700, fontSize: 14)
                                 ),
-                              const Text("Points will be here", style: TextStyle(color: Color(colorPrimary), fontSize: 14, fontWeight: FontWeight.w500))
+                              Text(results.points.toString(), style: TextStyle(color: Color(colorPrimary), fontSize: 14, fontWeight: FontWeight.w500))
                             ]
                           ),
                         ),
@@ -236,6 +246,88 @@ class _HomeState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CountdownTimerWidget extends StatefulWidget {
+  final DateTime targetDateTime;
+
+  CountdownTimerWidget({required this.targetDateTime});
+
+  @override
+  _CountdownTimerWidgetState createState() => _CountdownTimerWidgetState();
+}
+
+class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
+  late Timer _timer;
+  Duration _timeLeft = Duration.zero;
+  bool _isPaused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Calculate the initial time left until the targetDateTime
+    _updateTimeLeft();
+    // Start the timer to update the countdown every second
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    _stopTimer();
+    super.dispose();
+  }
+
+  void _updateTimeLeft() {
+    // Calculate the time left until the targetDateTime
+    Duration difference = widget.targetDateTime.difference(DateTime.now());
+    if (difference.isNegative) {
+      difference = Duration.zero;
+      // Timer is complete, you can choose to perform any action here
+    }
+    setState(() {
+      _timeLeft = difference;
+    });
+  }
+
+  void _startTimer() {
+    // Start the timer only if it is not paused
+    if (!_isPaused) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _updateTimeLeft();
+      });
+    }
+  }
+
+  void _stopTimer() {
+    // Stop the timer and set paused state to true
+    _timer.cancel();
+    _isPaused = true;
+  }
+
+  void _resumeTimer() {
+    // Resume the timer and set paused state to false
+    _isPaused = false;
+    _startTimer();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Build the countdown timer UI here
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "${_timeLeft.inHours}:${_timeLeft.inMinutes.remainder(60)}:${_timeLeft.inSeconds.remainder(60)}",
+          style: TextStyle(fontSize: 24),
+        ),
+        ElevatedButton(
+          onPressed: _isPaused ? _resumeTimer : _stopTimer,
+          child: Text(_isPaused ? 'Resume' : 'Pause'),
+        ),
+      ],
     );
   }
 }

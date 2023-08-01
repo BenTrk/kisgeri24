@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
 import 'package:kisgeri24/publics.dart';
+import 'package:kisgeri24/services/authenticate.dart';
 import 'package:numberpicker/numberpicker.dart';
 import '../../constants.dart';
 import '../../model/authentication_bloc.dart';
@@ -33,7 +34,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
   void initState() {
     super.initState();
     user = widget.user;
-    //dateTime.addListener(() => DateTimePickerModel().writeDateToDatabase(context, dateTime.value, user));
 
     teamHours = 07;
     teamMinutes = 15;
@@ -211,6 +211,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
       },
     );
   }
+
 }
 
 class LogoImageWidget extends StatelessWidget {
@@ -241,8 +242,7 @@ class LogoImageWidget extends StatelessWidget {
                         height: 150.0,
                         fit: BoxFit.cover,
                         ),
-                      ), //Only settings menu should be available from here!
-                      //CustomMenu.getCustomMenu(context, user, state),
+                      ), 
                       CustomMenu(user: user,),
                     ],
                   ),

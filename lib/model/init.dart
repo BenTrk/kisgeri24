@@ -1,10 +1,15 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
 import '../classes/acivities.dart';
+import '../classes/place.dart';
 import '../classes/places.dart';
+import '../classes/results.dart';
 
 class init{
   //Compare starttime and starttime + category to start and end times
@@ -48,7 +53,6 @@ class init{
 
       DateTime userEndDateTime = userStartDateTime.add(duration);
 
-      //Just for testing!
       if (DateTime.now().isBefore(compStartDateTime) || DateTime.now().isAfter(userEndDateTime)){
         isInRange = false;
       } else { isInRange = true; }
@@ -58,6 +62,67 @@ class init{
     }
 
   return isInRange;
+  }
+
+  static Future<DateTime> getEndDateTime(User user) async {
+      String userStartTime = user.startDate.replaceFirst(RegExp(' - '), 'T');
+      String userCategory = user.category;
+
+      DateTime userStartDateTime = DateTime.parse(userStartTime);
+      Duration duration = const Duration(hours: 0);
+      
+      switch(userCategory) {
+        case ('6H'): {
+          duration = const Duration(hours: 6);
+          break;
+        }
+        case ('12H'): {
+          duration = const Duration(hours: 12);
+          break;
+        }
+        case ('24H'): {
+          duration = const Duration(hours: 24);
+          break;
+        }
+      }
+
+      return userStartDateTime.add(duration);
+  }
+
+  static getResults(User user, Results results) async {
+    double points = 0;
+    List<ClimbedPlace> firstClimberList = [];
+    List<ClimbedPlace> secondClimberList = []; 
+    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+
+    try{
+      resultsRef.onValue.listen((DatabaseEvent event) {
+        DataSnapshot snapshot = event.snapshot;
+        final Map data = snapshot.value as Map<dynamic, dynamic>;
+        data.forEach((key, value) {
+          if(key == 'points'){
+            points = value;
+          } else if (key == "Climbs") {
+            Map climbersMap = value as Map<dynamic, dynamic>;
+            climbersMap.forEach((key, value) {
+              final ClimbedPlace climbedPlace = ClimbedPlace.fromSnapshot(key as String, value);
+              if (key == user.firstClimberName){
+                firstClimberList.add(climbedPlace);
+              } else {
+                secondClimberList.add(climbedPlace);
+              }
+            });
+          } else if (key == "Activities") {
+            //ToDo
+          } 
+        });
+        results = Results(points: points);
+        //TODO: updateResults();
+       });
+    } catch (error) {
+      // Handle any potential errors here
+      print("Error fetching data: $error");
+    }
   }
 
   static Future<Places> getPlacesWithRoutes() async {
@@ -101,4 +166,23 @@ class init{
   return Activities(categoryList: categoryList);
   }
 
+  //Use this: https://firebase.google.com/docs/firestore/query-data/listen (this describes the afterlife too, how to use the data in a widget).
+  static StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>
+      listenToUserData(String userId, User userInstance) {
+    // Return the StreamSubscription from the snapshots() method
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        // If the document exists, update the user instance with the new data
+        var userData = snapshot.data();
+        userInstance.updateFromMap(userData!);
+      } else {
+        // Handle the case when the document doesn't exist
+        // You can choose to reset the user instance or take other actions
+      }
+    });
+  }
 }

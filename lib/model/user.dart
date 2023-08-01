@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:kisgeri24/constants.dart';
 
 class User {
   String email;
@@ -63,5 +64,34 @@ class User {
       'appIdentifier': appIdentifier,
       'startDate' : startDate
     };
+  }
+
+  void updateFromMap(Map<String, dynamic> userData) {
+    // Update the user instance with the new data from the userData map
+    // If the keys exist in the userData map, update the corresponding properties in the user instance
+    if (userData.containsKey('email')) {
+      email = userData['email'];
+    }
+    if (userData.containsKey('firstClimberName')) {
+      firstClimberName = userData['firstClimberName'];
+    }
+    if (userData.containsKey('secondClimberName')) {
+      secondClimberName = userData['secondClimberName'];
+    }
+    if (userData.containsKey('id') || userData.containsKey('userID')) {
+      userID = userData['id'] ?? userData['userID'];
+    }
+    if (userData.containsKey('teamName')) {
+      teamName = userData['teamName'];
+    }
+    if (userData.containsKey('category')) {
+      category = userData['category'];
+    }
+    if (userData.containsKey('isPaid')) {
+      isPaid = userData['isPaid'];
+    }
+    if (userData.containsKey('startDate')) {
+      startDate = userData['startDate'] ?? defaultDateTime;
+    }
   }
 }

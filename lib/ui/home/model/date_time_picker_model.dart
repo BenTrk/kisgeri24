@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kisgeri24/services/helper.dart';
 
@@ -7,14 +8,19 @@ import '../../../model/user.dart';
 
 class DateTimePickerModel{
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
+  DatabaseReference ref = FirebaseDatabase.instance.ref('Results');
 
   writeDateToDatabase(BuildContext context, dateTime, User user) async {
     //Some error, investigate!
-    return await firestore
+    await firestore
       .collection(usersCollection)
       .doc(user.userID)
       .update({'startDate' : dateTime})
       .then((document) => showSnackBar(context, 'Start date is set!'));
+    
+    await ref.child(user.userID).set({
+      "points": 0,
+    });
   }
 
   setDateTime(int teamHours, int teamMinutes, String teamDate){
