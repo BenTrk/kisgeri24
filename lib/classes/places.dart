@@ -1,17 +1,12 @@
-//ToDo
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 class Places {
   List<Place> placeList;
 
   Places({
     List<Place>? placeList,
-  }) : this.placeList = placeList ?? [];
+  }) : placeList = placeList ?? [];
 
-  // Rest of the class remains the same
 
   @override
   bool operator ==(Object other) {

@@ -48,14 +48,14 @@ class CustomMenu extends StatefulWidget {
           left: 0.0,
           right: 0.0,
           child: ExpandableMenu(
-            backgroundColor: Color(colorPrimary),
+            backgroundColor: const Color(colorPrimary),
             width: 40.0,
             height: 40.0,
             items: [
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.home),
+                  icon: const Icon(Icons.home),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Home');
@@ -71,7 +71,7 @@ class CustomMenu extends StatefulWidget {
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.query_stats),
+                  icon: const Icon(Icons.query_stats),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Stats');
@@ -87,7 +87,7 @@ class CustomMenu extends StatefulWidget {
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.manage_accounts),
+                  icon: const Icon(Icons.manage_accounts),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed ManageAccounts');
@@ -99,7 +99,7 @@ class CustomMenu extends StatefulWidget {
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.paid),
+                  icon: const Icon(Icons.paid),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');
@@ -111,7 +111,7 @@ class CustomMenu extends StatefulWidget {
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.paid),
+                  icon: const Icon(Icons.paid),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');
@@ -123,7 +123,7 @@ class CustomMenu extends StatefulWidget {
               Center(
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: Icon(Icons.paid),
+                  icon: const Icon(Icons.paid),
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');

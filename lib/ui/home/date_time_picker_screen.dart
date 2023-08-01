@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
@@ -74,9 +72,9 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: const Divider( color: Color(colorPrimary),),
+                  const Padding(
+                    padding: EdgeInsets.all(25.0),
+                    child: Divider( color: Color(colorPrimary),),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

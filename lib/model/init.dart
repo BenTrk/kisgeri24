@@ -3,6 +3,7 @@ import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
+import '../classes/acivities.dart';
 import '../classes/places.dart';
 
 class init{
@@ -59,7 +60,6 @@ class init{
   return isInRange;
   }
 
-//ToDo
   static Future<Places> getPlacesWithRoutes() async {
   List<Place> placesList = [];
   DatabaseReference routesRef = FirebaseDatabase.instance.ref('Routes');
@@ -81,7 +81,24 @@ class init{
   return Places(placeList: placesList);
   }
 
+  static Future<Activities> getActivities() async{
+    List<Category> categoryList = [];
+    DatabaseReference activitiesRef = FirebaseDatabase.instance.ref('Activities');
+    try {
+      DatabaseEvent event = await activitiesRef.once();
+      DataSnapshot snapshot = event.snapshot;
+      final Map data = snapshot.value as Map<dynamic, dynamic>;
 
+      data.forEach((key, value) {
+        final Category category = Category.fromSnapshot(key as String, value);
+        categoryList.add(category);
+      });
+    } catch (error) {
+      // Handle any potential errors here
+      print("Error fetching data: $error");
+    }
 
+  return Activities(categoryList: categoryList);
+  }
 
 }
