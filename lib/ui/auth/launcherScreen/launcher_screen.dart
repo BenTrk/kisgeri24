@@ -44,14 +44,8 @@ class _LauncherScreenState extends State<LauncherScreen> {
                   ));
               break;
             case AuthState.authenticated:
-            //might not necessary
-              if (state.user!.startDate == defaultDateTime){
-                pushReplacement(context, DateTimePickerScreen(user : state.user!));
-                break;
-              } else {
-                pushReplacement(context, HomeScreen(user: state.user!));
-                break;
-              }
+              pushReplacement(context, HomeScreen(user: state.user!));
+              break;
             case AuthState.unauthenticated:
               pushReplacement(context, const WelcomeScreen());
               break;

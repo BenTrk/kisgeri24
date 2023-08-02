@@ -10,7 +10,6 @@ import '../constants.dart';
 import '../model/authentication_bloc.dart';
 import '../model/user.dart';
 import '../services/helper.dart';
-import '../ui/auth/welcome/welcome_screen.dart';
 import '../ui/climbs & more/climbs_and_more.dart';
 import '../ui/home/home_screen.dart';
 
@@ -29,10 +28,7 @@ class CustomMenu extends StatefulWidget {
     @override
     void initState() {
       user = widget.user;
-      isStartTimeSet = false;
-      if (user.startDate != defaultDateTime){
-        isStartTimeSet = true;
-      }
+      isStartTimeSet = user.isStartDateSet;
       super.initState();
     }
 
@@ -55,7 +51,6 @@ class CustomMenu extends StatefulWidget {
                   onPressed: () {
                     log('Pressed Home');
                     if (!isStartTimeSet) {
-                      log('Boyaa');
                       showSnackBar(context, 'You did not set the start time yet.');
                     } else {
                       pushAndRemoveUntil( context, HomeScreen(user: user), false);

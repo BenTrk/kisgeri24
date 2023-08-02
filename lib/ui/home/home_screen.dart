@@ -36,7 +36,7 @@ enum SelectedItem { places, activities }
 
 class _HomeState extends State<HomeScreen> {
   late User user;
-  late Results results;
+  Results results = Results(points: 0.0, start: '');
   var scaffoldKey = GlobalKey<ScaffoldState>();
   //Places state vars
   Place? selectedPlace;
@@ -101,8 +101,15 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
-    results = Results(points: 0);
-    init.getResults(user, results);
+    updateResult();
+  }
+
+  //Update results - check later, maybe wrong.
+  Future<void> updateResult() async {
+    Results newResults = await init.getResults(user, results);
+    setState(() {
+      results = newResults; // Set your modified value here
+    });
   }
 
   @override
@@ -186,7 +193,7 @@ class _HomeState extends State<HomeScreen> {
                               Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
                               
                                 !isPaused
-                                ? Text(user.startDate)
+                                ? Text('Started: ${results.start}', style: TextStyle(color: Colors.grey.shade700, fontSize: 14))
                                 : Text( 
                                   "On Pause!"
                                 , style: TextStyle(color: Colors.grey.shade700, fontSize: 14)

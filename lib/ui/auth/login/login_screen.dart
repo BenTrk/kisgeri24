@@ -142,11 +142,9 @@ class _LoginScreen extends State<LoginScreen> {
                   if (!mounted) return;
 
                   //In case the user is authenticated BUT did not pick a start date yet.
-                  //Maybe again a new state? Wouldn't it be too much from states? :)
-                  if (state.user!.getStartDate() == defaultDateTime.toString()) {
+                  if (!state.user!.isStartDateSet) {
                       pushAndRemoveUntil(
-                      context, DateTimePickerScreen(user: state.user!), false);
-                      //ToDo - Stop for 1 hour.           
+                      context, DateTimePickerScreen(user: state.user!), false);         
                   } else {
                     pushAndRemoveUntil(
                       context, HomeScreen(user: state.user!), false);

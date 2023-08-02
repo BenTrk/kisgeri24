@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
 
 class Results{
-  double points;
+  num points;
+  String start;
   ClimbedPlaces climberOneResults;
   ClimbedPlaces climberTwoResults;
   TeamResults teamResults;
 
   Results({
     required this.points,
+    required this.start,
     ClimbedPlaces? climberOneResults,
     ClimbedPlaces? climberTwoResults,
     TeamResults? teamResults, 
@@ -15,6 +17,15 @@ class Results{
     climberOneResults = climberOneResults ?? ClimbedPlaces(),
     climberTwoResults = climberTwoResults ?? ClimbedPlaces(),
     teamResults = teamResults ?? TeamResults();
+
+    updatePointsAndStart(num points, String start){
+      this.points = points;
+      this.start = start;
+    }
+
+    getStart(){
+      return this.start;
+    }
 }
 
 class TeamResults {

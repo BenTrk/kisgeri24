@@ -19,7 +19,7 @@ class User {
 
   String appIdentifier;
 
-  String startDate;
+  bool isStartDateSet;
 
   User(
       {this.email = '',
@@ -29,7 +29,7 @@ class User {
       this.teamName = '',
       this.category = '',
       this.isPaid = false,
-      this.startDate = ('1969-07-20 - 20:18'),
+      this.isStartDateSet = false,
       })
       : appIdentifier =
             'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';   
@@ -37,7 +37,7 @@ class User {
 
   String getTeamName() => teamName;
 
-  String getStartDate() => startDate;
+  bool getStartDate() => isStartDateSet;
   
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
@@ -49,7 +49,7 @@ class User {
         teamName: parsedJson['teamName'] ?? '',
         category: parsedJson['category'] ?? '',
         isPaid: parsedJson['isPaid'] ?? false,
-        startDate: parsedJson['startDate']);
+        isStartDateSet: parsedJson['isStartDateSet'] ?? false);
   }
 
   Map<String, dynamic> toJson() {
@@ -62,7 +62,7 @@ class User {
       'category': category,
       'isPaid': isPaid,
       'appIdentifier': appIdentifier,
-      'startDate' : startDate
+      'isStartDateSet' : isStartDateSet
     };
   }
 
@@ -91,7 +91,7 @@ class User {
       isPaid = userData['isPaid'];
     }
     if (userData.containsKey('startDate')) {
-      startDate = userData['startDate'] ?? defaultDateTime;
+      isStartDateSet = userData['isStartDateSet'] ?? false;
     }
   }
 }

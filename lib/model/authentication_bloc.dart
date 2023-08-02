@@ -31,7 +31,7 @@ class AuthenticationBloc
         else if (user!.isPaid == false){
           emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
         } 
-        else if (user!.startDate == defaultDateTime){
+        else if (!user!.isStartDateSet){
           emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
         }
         else if (! await init.checkDateTime(user!)){
@@ -60,11 +60,12 @@ class AuthenticationBloc
         user = result;
         emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
       }
-      else if (result != null && result is User && result.startDate == defaultDateTime){
+      else if (result != null && result is User && !result.isStartDateSet){
           user = result;
           emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
       } 
-      else if (result != null && result is User && await init.checkDateTime(result) == false){
+      else if (result != null && result is User && result.isStartDateSet){
+        
         user = result;
         emit(AuthenticationState.outOfDateTimeRange(user: user!));
       }
