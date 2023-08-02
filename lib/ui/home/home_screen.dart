@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/misc/cards/activities_card.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
 import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
@@ -245,6 +246,7 @@ class _HomeState extends State<HomeScreen> {
                       isCategorySelected: isCategorySelected,
                       onCategorySelected: handleCategorySelected,
                       onBackButtonPressed: handleBackButtonPressed,
+                      user: user,
                     ),
                   ),
                 ],
@@ -257,94 +259,12 @@ class _HomeState extends State<HomeScreen> {
   }
 }
 
-class CountdownTimerWidget extends StatefulWidget {
-  final DateTime targetDateTime;
-
-  CountdownTimerWidget({required this.targetDateTime});
-
-  @override
-  _CountdownTimerWidgetState createState() => _CountdownTimerWidgetState();
-}
-
-class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
-  late Timer _timer;
-  Duration _timeLeft = Duration.zero;
-  bool _isPaused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Calculate the initial time left until the targetDateTime
-    _updateTimeLeft();
-    // Start the timer to update the countdown every second
-    _startTimer();
-  }
-
-  @override
-  void dispose() {
-    // Cancel the timer when the widget is disposed
-    _stopTimer();
-    super.dispose();
-  }
-
-  void _updateTimeLeft() {
-    // Calculate the time left until the targetDateTime
-    Duration difference = widget.targetDateTime.difference(DateTime.now());
-    if (difference.isNegative) {
-      difference = Duration.zero;
-      // Timer is complete, you can choose to perform any action here
-    }
-    setState(() {
-      _timeLeft = difference;
-    });
-  }
-
-  void _startTimer() {
-    // Start the timer only if it is not paused
-    if (!_isPaused) {
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        _updateTimeLeft();
-      });
-    }
-  }
-
-  void _stopTimer() {
-    // Stop the timer and set paused state to true
-    _timer.cancel();
-    _isPaused = true;
-  }
-
-  void _resumeTimer() {
-    // Resume the timer and set paused state to false
-    _isPaused = false;
-    _startTimer();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Build the countdown timer UI here
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "${_timeLeft.inHours}:${_timeLeft.inMinutes.remainder(60)}:${_timeLeft.inSeconds.remainder(60)}",
-          style: TextStyle(fontSize: 24),
-        ),
-        ElevatedButton(
-          onPressed: _isPaused ? _resumeTimer : _stopTimer,
-          child: Text(_isPaused ? 'Resume' : 'Pause'),
-        ),
-      ],
-    );
-  }
-}
-
-//ToDo - same as below, just no first cards.
 class DisplayActivitiesWidget extends StatelessWidget {
   final Category? selectedCategory;
   final bool isCategorySelected;
   final Function(Category) onCategorySelected;
   final VoidCallback onBackButtonPressed;
+  final User user;
 
   const DisplayActivitiesWidget({
     super.key,
@@ -352,6 +272,7 @@ class DisplayActivitiesWidget extends StatelessWidget {
     required this.isCategorySelected,
     required this.onCategorySelected,
     required this.onBackButtonPressed,
+    required this.user,
   });
 
   @override
@@ -405,9 +326,11 @@ class DisplayActivitiesWidget extends StatelessWidget {
         itemCount: selectedCategory!.activityList.length,
         itemBuilder: (context, index) {
           Activity activity = selectedCategory!.activityList[index];
-          return Card(
-            // Your Card UI for each Route here
-            child: Text(activity.name),
+          return ActivitiesCard(
+            title: activity.name,
+            valueMap: activity.points,
+            user: user,
+            category: selectedCategory!.name,
           );
         },
       );
@@ -477,13 +400,11 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
       );
     } else {
       // Display the list of routes for the selected Place here
-      // You can access the selectedPlace and its routeList to build the UI
       return ListView.builder(
         itemCount: selectedPlace!.routeList.length,
         itemBuilder: (context, index) {
           RockRoute route = selectedPlace!.routeList[index];
           return CustomCard(
-            // Your Card UI for each Route here
             title: route.name,
             diffchanger: route.diffchanger,
             difficultyNum: route.difficulty,

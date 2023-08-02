@@ -140,18 +140,15 @@ class _LoginScreen extends State<LoginScreen> {
                 await context.read<LoadingCubit>().hideLoading();
                 if (state.authState == AuthState.authenticated) {
                   if (!mounted) return;
-
-                  //In case the user is authenticated BUT did not pick a start date yet.
-                  if (!state.user!.isStartDateSet) {
-                      pushAndRemoveUntil(
-                      context, DateTimePickerScreen(user: state.user!), false);         
-                  } else {
-                    pushAndRemoveUntil(
+                  pushAndRemoveUntil(
                       context, HomeScreen(user: state.user!), false);
-                  }
                 } 
                 else if (state.authState == AuthState.didNotPayYet) {
                   showSnackBar(context, state.message ?? 'You did not pay the entry fee yet.');
+                }
+                else if (state.authState == AuthState.didNotSetTime){
+                  pushAndRemoveUntil(
+                      context, DateTimePickerScreen(user: state.user!), false);
                 }
                 else {
                   if (!mounted) return;
