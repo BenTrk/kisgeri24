@@ -111,63 +111,70 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                   
                   const SizedBox(height: 10,),
                   
-                  ToggleButtons(
-                    fillColor: const Color(colorPrimary),
-                    selectedColor: Colors.white,
-                    color: const Color(colorPrimary),
-                    selectedBorderColor: const Color(colorPrimary),
-                    borderColor: const Color(colorPrimary),
-                    borderRadius: BorderRadius.circular(5),
-                    // List of booleans to specify whether each button is selected or not
-                    isSelected: [
-                      selectedClimber == SelectedClimber.climberOne,
-                      selectedClimber == SelectedClimber.climberTwo,
-                    ],
-                    // Callback when the user taps on a button
-                    onPressed: (index) {
-                      setState(() {
-                      // Update the selectedItem based on the button tapped
-                      selectedClimber = index == 0 ? SelectedClimber.climberOne : SelectedClimber.climberTwo;
-                      });
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(user.firstClimberName),
-                      Text(user.secondClimberName),
+                      ToggleButtons(
+                        fillColor: const Color(colorPrimary),
+                        selectedColor: Colors.white,
+                        color: const Color(colorPrimary),
+                        selectedBorderColor: const Color(colorPrimary),
+                        borderColor: const Color(colorPrimary),
+                        borderRadius: BorderRadius.circular(5),
+                        // List of booleans to specify whether each button is selected or not
+                        isSelected: [
+                          selectedClimber == SelectedClimber.climberOne,
+                          selectedClimber == SelectedClimber.climberTwo,
+                        ],
+                        // Callback when the user taps on a button
+                        onPressed: (index) {
+                          setState(() {
+                          // Update the selectedItem based on the button tapped
+                          selectedClimber = index == 0 ? SelectedClimber.climberOne : SelectedClimber.climberTwo;
+                          });
+                        },
+                        children: [
+                          Text(user.firstClimberName),
+                          Text(user.secondClimberName),
+                        ],
+                      ),
+                
+                      const SizedBox(width: 10,),
+
+                      ToggleButtons(
+                        fillColor: const Color(colorPrimary),
+                        selectedColor: Colors.white,
+                        color: const Color(colorPrimary),
+                        selectedBorderColor: const Color(colorPrimary),
+                        borderColor: const Color(colorPrimary),
+                        borderRadius: BorderRadius.circular(5),
+                        // List of booleans to specify whether each button is selected or not
+                        isSelected: [
+                          selectedItem == SelectedItem.places,
+                          selectedItem == SelectedItem.activities,
+                        ],
+                        // Callback when the user taps on a button
+                        onPressed: (index) {
+                          setState(() {
+                            // Update the selectedItem based on the button tapped
+                            selectedItem = index == 0 ? SelectedItem.places : SelectedItem.activities;
+                          });
+                        },
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Text('Places'),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(2.0),
+                            child: Text('Activities'),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                
-                  const SizedBox(height: 10,),
 
-                  ToggleButtons(
-                    fillColor: const Color(colorPrimary),
-                    selectedColor: Colors.white,
-                    color: const Color(colorPrimary),
-                    selectedBorderColor: const Color(colorPrimary),
-                    borderColor: const Color(colorPrimary),
-                    borderRadius: BorderRadius.circular(5),
-                    // List of booleans to specify whether each button is selected or not
-                    isSelected: [
-                      selectedItem == SelectedItem.places,
-                      selectedItem == SelectedItem.activities,
-                    ],
-                    // Callback when the user taps on a button
-                    onPressed: (index) {
-                      setState(() {
-                        // Update the selectedItem based on the button tapped
-                        selectedItem = index == 0 ? SelectedItem.places : SelectedItem.activities;
-                      });
-                    },
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text('Places'),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Text('Activities'),
-                      ),
-                    ],
-                              ),
+                  SizedBox(height: 16,),
                   
                   isPlaceSelected ||isCategorySelected
                     ? Row(
