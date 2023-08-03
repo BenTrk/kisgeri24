@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:kisgeri24/classes/place.dart';
+import 'package:kisgeri24/classes/rockroute.dart';
 
 class Places {
   List<Place> placeList;
@@ -21,5 +22,30 @@ class Places {
 
   getPlaceName(int position){
     return placeList[position].name;
+  }
+
+  getRoute(String routeName){
+    RockRoute route = RockRoute();
+    placeList.forEach((element) {
+      element.routeList.forEach((element) {
+        if (element.name == routeName){
+          route = element;
+        } 
+      });
+    });
+    return route;
+  }
+
+  String getPlaceWhereThisRoute(String routeName) {
+    String placeName = '';
+    placeList.forEach((element) {
+      String placeNameNow = element.name;
+      element.routeList.forEach((element) {
+        if (element.name == routeName){
+          placeName = placeNameNow;
+        }
+      });
+    });
+    return placeName;
   }
 }

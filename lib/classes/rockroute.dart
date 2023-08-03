@@ -7,13 +7,19 @@ class RockRoute {
   String diffchanger;
 
   RockRoute({
-    required this.name,
-    required this.points,
-    required this.length,
-    required this.key,
-    required this.difficulty,
-    required this.diffchanger,
-  });
+    String? name,
+    double? points,
+    int? length,
+    int? key,
+    int? difficulty,
+    String? diffchanger,
+  })
+    : name = name ?? '',
+      points = points ?? 0,
+      length = length ?? 0,
+      key = key ?? 0,
+      difficulty = difficulty ?? 0,
+      diffchanger = diffchanger ?? '';
   
   static RockRoute fromSnapshot(value) {
     Map routeMap = value as Map<dynamic, dynamic>;

@@ -28,8 +28,9 @@ class Category {
 
   Category({
     required this.name,
-    required this.activityList,
-  });
+    List<Activity>? activityList,
+  })
+  : activityList = activityList ?? [];
 
   static Category fromSnapshot(String name, Map<dynamic, dynamic> value) {
   String categoryName = name;

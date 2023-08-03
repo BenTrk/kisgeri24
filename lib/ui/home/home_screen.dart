@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/cards/activities_card.dart';
@@ -18,6 +19,7 @@ import '../../classes/places.dart';
 import '../../classes/results.dart';
 import '../../classes/rockroute.dart';
 import '../../misc/cards/card.dart';
+import '../../publics.dart';
 import 'date_time_picker_screen.dart';
 
 
@@ -37,7 +39,6 @@ enum SelectedItem { places, activities }
 
 class _HomeState extends State<HomeScreen> {
   late User user;
-  Results results = Results(points: 0.0, start: '');
   var scaffoldKey = GlobalKey<ScaffoldState>();
   //Places state vars
   Place? selectedPlace;
@@ -90,7 +91,7 @@ class _HomeState extends State<HomeScreen> {
     });
 
     // Start a timer to reset the pause status after one hour
-    Timer(Duration(hours: 1), () {
+    Timer(const Duration(hours: 1), () {
       setState(() {
         isPaused = false;
         pauseTime = null;
@@ -102,15 +103,7 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
-    updateResult();
-  }
-
-  //Update results - check later, maybe wrong.
-  Future<void> updateResult() async {
-    Results newResults = await init.getResults(user, results);
-    setState(() {
-      results = newResults; // Set your modified value here
-    });
+    init.getResults(context, user);
   }
 
   @override
@@ -194,12 +187,22 @@ class _HomeState extends State<HomeScreen> {
                               Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
                               
                                 !isPaused
-                                ? Text('Started: ${results.start}', style: TextStyle(color: Colors.grey.shade700, fontSize: 14))
+                                ? BlocBuilder<ResultsBloc, Results>(
+                                    builder: (context, state) {
+                                      // Build the UI based on the state of Variable A
+                                      return Text('Started at: ${state.start}');
+                                    },
+                                )
                                 : Text( 
                                   "On Pause!"
                                 , style: TextStyle(color: Colors.grey.shade700, fontSize: 14)
                                 ),
-                              Text(results.points.toString(), style: TextStyle(color: Color(colorPrimary), fontSize: 14, fontWeight: FontWeight.w500))
+                                BlocBuilder<ResultsBloc, Results>(
+                                    builder: (context, state) {
+                                      // Build the UI based on the state of Variable A
+                                      return Text('Points: ${state.points}');
+                                    },
+                                ),
                             ]
                           ),
                         ),
@@ -242,10 +245,6 @@ class _HomeState extends State<HomeScreen> {
                       user: user,
                     )
                     : DisplayActivitiesWidget(
-                      selectedCategory: selectedCategory,
-                      isCategorySelected: isCategorySelected,
-                      onCategorySelected: handleCategorySelected,
-                      onBackButtonPressed: handleBackButtonPressed,
                       user: user,
                     ),
                   ),
@@ -260,26 +259,17 @@ class _HomeState extends State<HomeScreen> {
 }
 
 class DisplayActivitiesWidget extends StatelessWidget {
-  final Category? selectedCategory;
-  final bool isCategorySelected;
-  final Function(Category) onCategorySelected;
-  final VoidCallback onBackButtonPressed;
   final User user;
 
   const DisplayActivitiesWidget({
     super.key,
-    required this.selectedCategory,
-    required this.isCategorySelected,
-    required this.onCategorySelected,
-    required this.onBackButtonPressed,
     required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (selectedCategory == null) {
-      return FutureBuilder<Activities>(
-        future: HomeModel.getActivities(),
+      return FutureBuilder<Category>(
+        future: HomeModel.getOnlyClimbersCategory(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -289,52 +279,20 @@ class DisplayActivitiesWidget extends StatelessWidget {
             return Text('Error: ${snapshot.error}');
           } else {
             return ListView.builder(
-              itemCount: snapshot.data!.categoryList.length,
+              itemCount: snapshot.data!.activityList.length,
               itemBuilder: (context, index) {
-                Category category = snapshot.data!.categoryList[index];
-                return GestureDetector(
-                  onTap: () => onCategorySelected(category),
-                  child: Card(
-                    color: Color(colorPrimary),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(width: 4, height: 4,),
-                        ListTile(
-                          leading: Icon(
-                            Icons.done,
-                            color: Colors.white),
-                          title: Text(
-                            category.name,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20
-                            ),),
-                        ),
-                        SizedBox(width: 4, height: 4,),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-        },
+                Activity activity = snapshot.data!.activityList[index];
+                return ActivitiesCard(
+                        title: activity.name,
+                        valueMap: activity.points,
+                        user: user,
+                        category: 'Climbers',
+                      );
+                    },
+                  );
+              }
+        }
       );
-    } else {
-      // ToDo: Style Cards as necessary.
-      return ListView.builder(
-        itemCount: selectedCategory!.activityList.length,
-        itemBuilder: (context, index) {
-          Activity activity = selectedCategory!.activityList[index];
-          return ActivitiesCard(
-            title: activity.name,
-            valueMap: activity.points,
-            user: user,
-            category: selectedCategory!.name,
-          );
-        },
-      );
-    }
   }
 }
 
@@ -373,22 +331,22 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => onPlaceSelected(place),
                   child: Card(
-                    color: Color(colorPrimary),
+                    color: const Color(colorPrimary),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(width: 4, height: 4,),
+                        const SizedBox(width: 4, height: 4,),
                         ListTile(
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.done,
                             color: Colors.white),
                           title: Text(
                             place.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20
                             ),),
                         ),
-                        SizedBox(width: 4, height: 4,),
+                        const SizedBox(width: 4, height: 4,),
                       ],
                     ),
                   ),

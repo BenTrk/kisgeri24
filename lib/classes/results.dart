@@ -5,6 +5,8 @@ class Results{
   String start;
   ClimbedPlaces climberOneResults;
   ClimbedPlaces climberTwoResults;
+  DidActivities climberOneActivities;
+  DidActivities climberTwoActivities;
   TeamResults teamResults;
 
   Results({
@@ -12,10 +14,14 @@ class Results{
     required this.start,
     ClimbedPlaces? climberOneResults,
     ClimbedPlaces? climberTwoResults,
+    DidActivities? climberOneActivities,
+    DidActivities? climberTwoActivities,
     TeamResults? teamResults, 
   }) : 
-    climberOneResults = climberOneResults ?? ClimbedPlaces(),
-    climberTwoResults = climberTwoResults ?? ClimbedPlaces(),
+    climberOneResults = climberOneResults ?? ClimbedPlaces(climberName: ''),
+    climberTwoResults = climberTwoResults ?? ClimbedPlaces(climberName: ''),
+    climberOneActivities = climberOneActivities ?? DidActivities(climberName: ''),
+    climberTwoActivities = climberTwoActivities ?? DidActivities(climberName: ''),
     teamResults = teamResults ?? TeamResults();
 
     updatePointsAndStart(num points, String start){
@@ -24,20 +30,123 @@ class Results{
     }
 
     getStart(){
-      return this.start;
+      return start;
+    }
+
+    ClimbedPlaces getClimbedPlacesForAClimber(String climber){
+      if (climber == climberOneResults.climberName){
+        return climberOneResults;
+      } else {
+        return climberTwoResults;
+      }
+    }
+
+    DidActivities getDidActivitiesForAClimber(String climber) {
+      if (climber == climberOneActivities.climberName){
+        return climberOneActivities;
+      } else {
+        return climberTwoActivities;
+      }
     }
 }
 
-class TeamResults {
+class DidActivities {
+  String climberName;
+  List<DidActivity> activitiesList;
 
+  DidActivities({
+    required this.climberName,
+    List<DidActivity>? activitiesList,
+  }) : activitiesList = activitiesList ?? [];
+
+  bool getIsActivityThere(String activityName) {
+    bool isThere = false;
+    for (var element in activitiesList) {
+      if (element.name == activityName){
+        isThere = true;
+      }
+    }
+    return isThere;
+  }
+
+  DidActivity getActivity(String activityName) {
+    DidActivity didActivity = DidActivity();
+    for (var element in activitiesList) {
+      if (element.name == activityName){
+        didActivity = element;
+      }
+    }
+    return didActivity;
+  } 
+
+  static DidActivities fromSnapshot(value, name) {
+    List<DidActivity> activityList = [];
+    Map activityMap = value as Map<dynamic, dynamic>;
+
+    activityMap.forEach((key, value) {
+      String activityName = key as String;
+      num points = 0;
+      Map insideMap = value as Map<dynamic, dynamic>;
+      insideMap.forEach((key, value) {
+        points = value;
+      });
+       
+      DidActivity activity = DidActivity(name: activityName, points: points);
+      activityList.add(activity);
+    });
+
+    return DidActivities(climberName: name, activitiesList: activityList);
+  }
+}
+
+class DidActivity {
+  num points;
+  String name;
+
+  DidActivity({
+    String? name,
+    num? points,
+  }) 
+  : name = name ?? '',
+    points = points ?? 0;
+}
+
+class TeamResults {
+  /** TODO */
 }
 
 class ClimbedPlaces {
+  String climberName;
   List<ClimbedPlace> climbedPlaceList;
   
   ClimbedPlaces({
+    required this.climberName,
     List<ClimbedPlace>? climbedPlaceList,
   }) : climbedPlaceList = climbedPlaceList ?? [];
+  
+  bool getIsClimbThere(String routeName) {
+    bool isThere = false;
+    for (var element in climbedPlaceList) {
+      for (var element in element.climbedRouteList) {
+        if (element.name == routeName){
+          isThere = true;
+        }
+      }
+    }
+    return isThere;
+  }
+
+  getRoute(String routeName){
+    ClimbedRoute route = ClimbedRoute();
+    climbedPlaceList.forEach((element) {
+      element.climbedRouteList.forEach((element) {
+        if (element.name == routeName){
+          route = element;
+        } 
+      });
+    });
+    return route;
+  }
 
   @override
   bool operator ==(Object other) {
@@ -48,7 +157,6 @@ class ClimbedPlaces {
 
   @override
   int get hashCode => climbedPlaceList.hashCode;
-
 }
 
 class ClimbedPlace {
@@ -60,15 +168,13 @@ class ClimbedPlace {
     required this.climbedRouteList,
   });
 
-  static ClimbedPlace fromSnapshot(String name, value) {
-    //ToDo
-    Map placeMap = value as Map<dynamic, dynamic>;
-    String placeName = name;
+  static ClimbedPlace fromSnapshot(value, placeName) {
     List<ClimbedRoute> climbedRouteList = [];
 
-    placeMap.forEach((key, value) { 
-      final ClimbedRoute climbedRoute = ClimbedRoute.fromSnapshot(value);
-      climbedRouteList.add(climbedRoute);
+      Map routeMap = value as Map<dynamic, dynamic>;
+      routeMap.forEach((key, value) {
+        final ClimbedRoute climbedRoute = ClimbedRoute.fromSnapshot(value);
+        climbedRouteList.add(climbedRoute);
     });
 
     ClimbedPlace place = ClimbedPlace(name: placeName, climbedRouteList: climbedRouteList);
@@ -94,10 +200,14 @@ class ClimbedRoute {
   double points;
 
   ClimbedRoute({
-    required this.name,
-    required this.points,
-    required this.best,
-  });
+    String? name,
+    double? points,
+    String? best,
+  })
+  : name = name ?? '',
+    points = points ?? 0,
+    best = best ?? '';
+
   
   static ClimbedRoute fromSnapshot(value) {
     Map routeMap = value as Map<dynamic, dynamic>;
@@ -106,13 +216,13 @@ class ClimbedRoute {
     String best = '';
 
     routeMap.forEach((key, value) {
-      if (key == 'name'){
-        name = value;
-      } else if (key == 'points'){
-        points = double.parse(value.toString());
-      } else if (key == 'best'){
-        best = value;
-      }
+        if (key == 'name'){
+          name = value;
+        } else if (key == 'points'){
+          points = double.parse(value.toString());
+        } else if (key == 'best'){
+          best = value;
+        }
     });
 
     ClimbedRoute route = ClimbedRoute(name: name, points: points, best: best);
@@ -132,4 +242,8 @@ class ClimbedRoute {
   @override
   int get hashCode =>
       Object.hash(name, points, best);
+
+  getName(){
+    return name;
+  }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:kisgeri24/constants.dart';
 
 class User {
   String email;

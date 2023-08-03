@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
+
+import 'package:kisgeri24/misc/database_writes.dart';
 
 import '../../model/user.dart';
 
@@ -37,6 +38,7 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
   String pointsSelected = '0';
   String? selectedItemKey;
   String? selectedItemValue;
+  DatabaseWrites databaseWrites = DatabaseWrites();
 
   @override
   void initState() {
@@ -124,7 +126,12 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
                             const SizedBox(width: 8),
                             TextButton(
                               child: const Text('Did it!', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
-                              onPressed: () {/* ToDo */},
+                              onPressed: () {
+                                List<String> names = [user.firstClimberName, user.secondClimberName];
+                                if (selectedItemValue != null){
+                                  databaseWrites.writeActivityToDatabase(context, user, names[selectedItem.index], title, valueMap[selectedItemValue]!);
+                                }
+                              },
                             ),
                             const SizedBox(width: 8),
                           ],
@@ -135,12 +142,12 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
                 : Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Container(decoration: BoxDecoration(
-                      color: Color(colorPrimary),
+                      color: const Color(colorPrimary),
                       borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text(
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
                           'Points will be given by judges.', 
                           style: TextStyle(color: Colors.white, fontSize: 14)
                         ),

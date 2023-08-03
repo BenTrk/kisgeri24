@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
+import '../blocs & events & states/results_bloc.dart';
+import '../blocs & events & states/results_events.dart';
 import '../classes/acivities.dart';
 import '../classes/place.dart';
 import '../classes/places.dart';
 import '../classes/results.dart';
+import '../publics.dart';
 
 class init{
   //Compare starttime and starttime + category to start and end times
@@ -67,12 +72,21 @@ class init{
     return isInRange;
   }
 
-  static getResults(User user, Results results) async {
+  static getResults(BuildContext context, User user) async {
+    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+
     num points = 0.0;
     String start = '';
+
     List<ClimbedPlace> firstClimberList = [];
-    List<ClimbedPlace> secondClimberList = []; 
-    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    List<ClimbedPlace> secondClimberList = [];
+    ClimbedPlaces climbedPlacesClimberOne = ClimbedPlaces(climberName: user.firstClimberName);
+    ClimbedPlaces climbedPlacesClimberTwo = ClimbedPlaces(climberName: user.secondClimberName); 
+
+    List<DidActivity> firstClimberActivitiesList = [];
+    List<DidActivity> secondClimberActivitiesList = [];
+    DidActivities didActivitiesClimberOne = DidActivities(climberName: user.firstClimberName);
+    DidActivities didActivitiesClimberTwo = DidActivities(climberName: user.secondClimberName);
 
     final snapshotStart = await resultsRef.child('start').get();
     final snapshotPoints = await resultsRef.child('points').get();
@@ -94,29 +108,51 @@ class init{
             start = value;
           } 
           else if (key == "Climbs") {
+            firstClimberList.clear();
             Map climbersMap = value as Map<dynamic, dynamic>;
             climbersMap.forEach((key, value) {
-              final ClimbedPlace climbedPlace = ClimbedPlace.fromSnapshot(key as String, value);
+              Map placeMap = value as Map<dynamic, dynamic>;
+              String climberNameHere = key;
+              String placeName = '';
+              placeMap.forEach((key, value) {
+
+                placeName = key;
+                final ClimbedPlace climbedPlace = ClimbedPlace.fromSnapshot(value, placeName);
+
+                if (climberNameHere == user.firstClimberName){
+                  firstClimberList.add(climbedPlace);
+                } 
+                else {
+                  secondClimberList.add(climbedPlace);
+                }
+
+              });
+            });
+            climbedPlacesClimberOne = ClimbedPlaces(climberName: user.firstClimberName, climbedPlaceList: firstClimberList);
+            climbedPlacesClimberTwo = ClimbedPlaces(climberName: user.secondClimberName, climbedPlaceList: secondClimberList);
+          }
+          
+          else if (key == "Activities") {
+            Map activitiesMap = value as Map<dynamic, dynamic>;
+            activitiesMap.forEach((key, value) {
               if (key == user.firstClimberName){
-                firstClimberList.add(climbedPlace);
-              } 
+                didActivitiesClimberOne = DidActivities.fromSnapshot(value, key);
+              }
               else {
-                secondClimberList.add(climbedPlace);
+                didActivitiesClimberTwo = DidActivities.fromSnapshot(value, key);
               }
             });
           } 
-          else if (key == "Activities") {
-            //ToDo
-          } 
         });
-        results = Results(points: points, start: start);
-        //TODO: updateResults();
+
+        results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
+          climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo);
+        BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
        });
     } catch (error) {
       // Handle any potential errors here
       print("Error fetching data: $error");
     }
-    return results;
   }
 
   static Future<Places> getPlacesWithRoutes() async {
@@ -158,5 +194,25 @@ class init{
     }
 
   return Activities(categoryList: categoryList);
+  }
+
+  static Future<Category> getOnlyClimbersActivities() async{
+     List<Activity> activityList = [];
+    DatabaseReference activitiesRef = FirebaseDatabase.instance.ref('Activities');
+    try {
+      DatabaseEvent event = await activitiesRef.child('Climbers').once();
+      DataSnapshot snapshot = event.snapshot;
+      final Map data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) {
+        final Activity activity = Activity.fromSnapshot(key as String, value);
+        activityList.add(activity);
+      });
+    } catch (error) {
+      // Handle any potential errors here
+      print("Error fetching data: $error");
+    }
+
+  return Category(name: 'Climbers', activityList: activityList); 
   }
 }
