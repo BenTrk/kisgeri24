@@ -10,7 +10,7 @@ import '../constants.dart';
 import '../model/authentication_bloc.dart';
 import '../model/user.dart';
 import '../services/helper.dart';
-import '../ui/climbs & more/climbs_and_more.dart';
+import '../ui/climbs & more/climbs_and_more_screen.dart';
 import '../ui/home/home_screen.dart';
 
 class CustomMenu extends StatefulWidget {

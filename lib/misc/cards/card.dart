@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/database_writes.dart';
 
+import '../../blocs & events & states/results_bloc.dart';
+import '../../classes/results.dart';
 import '../../model/user.dart';
 
 class CustomCard extends StatefulWidget {
@@ -134,13 +137,18 @@ class _CustomCardState extends State<CustomCard>{
                                   ],
                                 ),
                             const SizedBox(width: 8),
-                            TextButton(
-                              child: const Text('Climbed It', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
-                              onPressed: () {
-                                /* ToDo */
-                                List<String> names = [user.firstClimberName, user.secondClimberName];
-                                databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
-                                },
+                            BlocBuilder<ResultsBloc, Results>(
+                              builder: (context, state) {
+                                return TextButton(
+                                  child: const Text('Climbed It', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
+                                  onPressed: () {
+                                    if (!state.pausedHandler.isPaused) {
+                                      List<String> names = [user.firstClimberName, user.secondClimberName];
+                                      databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
+                                    }
+                                  }
+                                );
+                              }
                             ),
                             const SizedBox(width: 8),
                           ],

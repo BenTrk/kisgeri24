@@ -1,5 +1,4 @@
 
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +18,6 @@ import '../../classes/places.dart';
 import '../../classes/results.dart';
 import '../../classes/rockroute.dart';
 import '../../misc/cards/card.dart';
-import '../../publics.dart';
 import 'date_time_picker_screen.dart';
 
 
@@ -46,31 +44,19 @@ class _HomeState extends State<HomeScreen> {
   //Activities state vars
   Category? selectedCategory;
   bool isCategorySelected = false;
-  //Time pause vars
-  bool isPaused = false;
-  DateTime? pauseTime;
+  //Time pause vars - chage it so it works with state.pausehandler.isPaused
+  late bool isPaused;
+  HomeModel homeModel = HomeModel();
 
   //Enum for the Places/activites toggle button
   SelectedItem selectedItem = SelectedItem.places;
 
   //State handler for places
   void handlePlaceSelected(Place place) {
-    if (!isPaused) {
       setState(() {
         selectedPlace = place;
         isPlaceSelected = true;
       });
-    }
-  }
-
-  //State handler for Activities
-  void handleCategorySelected(Category category) {
-    if (!isPaused){
-      setState(() {
-        selectedCategory = category;
-        isCategorySelected = true;
-      });
-    }
   }
 
   //Backbutton for both Places and Activities
@@ -80,22 +66,6 @@ class _HomeState extends State<HomeScreen> {
       isPlaceSelected = false;
       selectedCategory = null;
       isCategorySelected = false;
-    });
-  }
-
-  //State handler for pause function
-  void pauseCards() {
-    setState(() {
-      isPaused = !isPaused;
-      pauseTime = DateTime.now();
-    });
-
-    // Start a timer to reset the pause status after one hour
-    Timer(const Duration(hours: 1), () {
-      setState(() {
-        isPaused = false;
-        pauseTime = null;
-      });
     });
   }
 
@@ -139,76 +109,88 @@ class _HomeState extends State<HomeScreen> {
                     children: [
                       Column(
                         children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(backgroundColor: const Color(colorPrimary)),
-                            onPressed: () {
-                              pauseCards();
-                            },
-                            child: Text(isPaused ? 'Cards Paused' : 'Pause Cards', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                          ),
-
-                          ToggleButtons(
-                            fillColor: const Color(colorPrimary),
-                            selectedColor: Colors.white,
-                            color: const Color(colorPrimary),
-                            selectedBorderColor: const Color(colorPrimary),
-                            borderColor: const Color(colorPrimary),
-                            borderRadius: BorderRadius.circular(5),
-                            // List of booleans to specify whether each button is selected or not
-                            isSelected: [
-                              selectedItem == SelectedItem.places,
-                              selectedItem == SelectedItem.activities,
-                            ],
-                            // Callback when the user taps on a button
-                            onPressed: (index) {
-                              setState(() {
-                                // Update the selectedItem based on the button tapped
-                                selectedItem = index == 0 ? SelectedItem.places : SelectedItem.activities;
-                              });
-                            },
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(2.0),
-                                child: Text('Places'),
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
+                                  BlocBuilder<ResultsBloc, Results>(
+                                    builder: (context, state) {
+                                      return Text(
+                                        !state.pausedHandler.isPaused
+                                          ? 'Started at: ${state.start}'
+                                          : "On Pause!"
+                                      );
+                                    },
+                                  ),
+                                    BlocBuilder<ResultsBloc, Results>(
+                                        builder: (context, state) {
+                                          return Text('Points: ${state.points}');
+                                        },
+                                    ),
+                                ]
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(2.0),
-                                child: Text('Activities'),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //This should be disabled when isPausedUsed is true in database
+                              BlocBuilder<ResultsBloc, Results>(
+                                builder: (context, state) {
+                                // Build the UI based on the state of Variable A
+                                  return ElevatedButton(
+                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(colorPrimary)),
+                                    onPressed: () {
+                                      !state.pausedHandler.isPausedUsed
+                                      ? pauseCards()
+                                      : showAlreadyUsedPauseError();
+                                    },
+                                    child: Text(state.pausedHandler.isPaused ? 'Time Paused' : 'Pause Time', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                  );
+                                },
+                              ),
+
+                              const SizedBox(width: 10,),
+
+                              ToggleButtons(
+                                fillColor: const Color(colorPrimary),
+                                selectedColor: Colors.white,
+                                color: const Color(colorPrimary),
+                                selectedBorderColor: const Color(colorPrimary),
+                                borderColor: const Color(colorPrimary),
+                                borderRadius: BorderRadius.circular(5),
+                                // List of booleans to specify whether each button is selected or not
+                                isSelected: [
+                                  selectedItem == SelectedItem.places,
+                                  selectedItem == SelectedItem.activities,
+                                ],
+                                // Callback when the user taps on a button
+                                onPressed: (index) {
+                                  setState(() {
+                                    // Update the selectedItem based on the button tapped
+                                    selectedItem = index == 0 ? SelectedItem.places : SelectedItem.activities;
+                                  });
+                                },
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(2.0),
+                                    child: Text('Places'),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(2.0),
+                                    child: Text('Activities'),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ],
                       ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                              
-                                !isPaused
-                                ? BlocBuilder<ResultsBloc, Results>(
-                                    builder: (context, state) {
-                                      // Build the UI based on the state of Variable A
-                                      return Text('Started at: ${state.start}');
-                                    },
-                                )
-                                : Text( 
-                                  "On Pause!"
-                                , style: TextStyle(color: Colors.grey.shade700, fontSize: 14)
-                                ),
-                                BlocBuilder<ResultsBloc, Results>(
-                                    builder: (context, state) {
-                                      // Build the UI based on the state of Variable A
-                                      return Text('Points: ${state.points}');
-                                    },
-                                ),
-                            ]
-                          ),
-                        ),
-                      )
                     ],
                   ),
+                  const SizedBox(height: 20,),
 
                   isPlaceSelected || isCategorySelected
                     ? Row(
@@ -254,6 +236,42 @@ class _HomeState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+  
+  showAlreadyUsedPauseError() {
+    showSnackBar(context, "You already used Pause.");
+  }
+
+  pauseCards() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Attention!'),
+          content: const Text('Are you sure you want to proceed? This will pause your climbing time and you won\'t be able to document climbs.'
+           '1 hour later you can continue climbing. You can use this function only once during the competition.'),
+          actions: [
+            // Button to cancel the action and pop the dialog
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            // Button to proceed with the action
+            TextButton(
+              onPressed: () {
+                // Call Function A1 to perform changes and updates
+                homeModel.writePauseInformation(DateTime.now(), user);
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

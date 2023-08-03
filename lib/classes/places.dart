@@ -26,26 +26,26 @@ class Places {
 
   getRoute(String routeName){
     RockRoute route = RockRoute();
-    placeList.forEach((element) {
-      element.routeList.forEach((element) {
+    for (var element in placeList) {
+      for (var element in element.routeList) {
         if (element.name == routeName){
           route = element;
         } 
-      });
-    });
+      }
+    }
     return route;
   }
 
   String getPlaceWhereThisRoute(String routeName) {
     String placeName = '';
-    placeList.forEach((element) {
+    for (var element in placeList) {
       String placeNameNow = element.name;
-      element.routeList.forEach((element) {
+      for (var element in element.routeList) {
         if (element.name == routeName){
           placeName = placeNameNow;
         }
-      });
-    });
+      }
+    }
     return placeName;
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/classes/places.dart';

@@ -8,6 +8,7 @@ class Results{
   DidActivities climberOneActivities;
   DidActivities climberTwoActivities;
   TeamResults teamResults;
+  PausedHandler pausedHandler;
 
   Results({
     required this.points,
@@ -16,13 +17,15 @@ class Results{
     ClimbedPlaces? climberTwoResults,
     DidActivities? climberOneActivities,
     DidActivities? climberTwoActivities,
-    TeamResults? teamResults, 
+    TeamResults? teamResults,
+    PausedHandler? pausedHandler, 
   }) : 
     climberOneResults = climberOneResults ?? ClimbedPlaces(climberName: ''),
     climberTwoResults = climberTwoResults ?? ClimbedPlaces(climberName: ''),
     climberOneActivities = climberOneActivities ?? DidActivities(climberName: ''),
     climberTwoActivities = climberTwoActivities ?? DidActivities(climberName: ''),
-    teamResults = teamResults ?? TeamResults();
+    teamResults = teamResults ?? TeamResults(),
+    pausedHandler = pausedHandler ?? PausedHandler(isPaused: false, isPausedUsed: false);
 
     updatePointsAndStart(num points, String start){
       this.points = points;
@@ -48,6 +51,19 @@ class Results{
         return climberTwoActivities;
       }
     }
+}
+
+class PausedHandler {
+  DateTime pauseOverTime;
+  bool isPaused;
+  bool isPausedUsed;
+
+  PausedHandler({
+    DateTime? pauseOverTime,
+    required this.isPausedUsed,
+    required this.isPaused,
+  }) : pauseOverTime = pauseOverTime ?? DateTime(2023,07,02, 10, 10);
+
 }
 
 class DidActivities {
@@ -138,13 +154,13 @@ class ClimbedPlaces {
 
   getRoute(String routeName){
     ClimbedRoute route = ClimbedRoute();
-    climbedPlaceList.forEach((element) {
-      element.climbedRouteList.forEach((element) {
+    for (var element in climbedPlaceList) {
+      for (var element in element.climbedRouteList) {
         if (element.name == routeName){
           route = element;
         } 
-      });
-    });
+      }
+    }
     return route;
   }
 

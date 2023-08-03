@@ -39,6 +39,7 @@ class init{
     }
 
     final snapshotResult = await resultsRef.get();
+    
     if (snapshot.exists) {
       String userStartTime = snapshotResult.child('start').value.toString();
       userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
@@ -83,11 +84,12 @@ class init{
     ClimbedPlaces climbedPlacesClimberOne = ClimbedPlaces(climberName: user.firstClimberName);
     ClimbedPlaces climbedPlacesClimberTwo = ClimbedPlaces(climberName: user.secondClimberName); 
 
-    List<DidActivity> firstClimberActivitiesList = [];
-    List<DidActivity> secondClimberActivitiesList = [];
     DidActivities didActivitiesClimberOne = DidActivities(climberName: user.firstClimberName);
     DidActivities didActivitiesClimberTwo = DidActivities(climberName: user.secondClimberName);
 
+    PausedHandler pausedHandler = PausedHandler(isPausedUsed: false, isPaused: false);
+
+    //These might be unnecessary, test it out
     final snapshotStart = await resultsRef.child('start').get();
     final snapshotPoints = await resultsRef.child('points').get();
     if (snapshotStart.exists && snapshotPoints.exists) {
@@ -106,7 +108,34 @@ class init{
           } 
           else if (key == "start") {
             start = value;
-          } 
+          }
+          else if (key == "pauseHandler") {
+            Map pauseMap = value as Map<dynamic, dynamic>;
+            DateTime pauseOverTime = DateTime.now();
+            bool isPaused = false;
+            bool isPausedUsed = false;
+
+            pauseMap.forEach((key, value) {
+              switch (key){
+                case ("pauseOverTime"):{
+                  pauseOverTime = DateTime.parse(value);
+                  break;
+                }
+                case ("isPausedUsed"): {
+                  isPausedUsed = value;
+                  break;
+                }
+              }
+            });
+
+            if (DateTime.now().isBefore(pauseOverTime)){
+              isPaused = true;
+            } else {
+              isPaused = false;
+            }
+
+            pausedHandler = PausedHandler(isPausedUsed: isPausedUsed, isPaused: isPaused, pauseOverTime: pauseOverTime);
+          }
           else if (key == "Climbs") {
             firstClimberList.clear();
             Map climbersMap = value as Map<dynamic, dynamic>;
@@ -131,7 +160,7 @@ class init{
             climbedPlacesClimberOne = ClimbedPlaces(climberName: user.firstClimberName, climbedPlaceList: firstClimberList);
             climbedPlacesClimberTwo = ClimbedPlaces(climberName: user.secondClimberName, climbedPlaceList: secondClimberList);
           }
-          
+
           else if (key == "Activities") {
             Map activitiesMap = value as Map<dynamic, dynamic>;
             activitiesMap.forEach((key, value) {
@@ -146,7 +175,7 @@ class init{
         });
 
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
-          climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo);
+          climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
         BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
        });
     } catch (error) {

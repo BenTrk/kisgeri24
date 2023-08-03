@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/classes/rockroute.dart';
 import 'package:kisgeri24/services/helper.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants.dart';
 import '../../../model/user.dart';
@@ -10,6 +11,25 @@ import '../publics.dart';
 
 class DatabaseWrites{
   DatabaseReference ref = FirebaseDatabase.instance.ref('Results');
+
+  void writePauseInformation(DateTime pauseOverTime, User user) async {
+
+    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    final snapshotResult = await resultsRef.get();
+    String userStartTime = snapshotResult.child('start').value.toString();
+    userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
+    DateTime userStartDateTime = DateTime.parse(userStartTime);
+    userStartDateTime = userStartDateTime.add(const Duration(hours: 1));
+
+    String formattedStartTime = DateFormat('yyyy-MM-dd - HH:mm').format(userStartDateTime);
+    String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(pauseOverTime);
+
+    await ref.child(user.userID).update({
+      "pauseHandler/pauseOverTime": formattedDateTime,
+      "pauseHandler/isPausedUsed": true,
+      "start": formattedStartTime,
+    });
+  }
 
   writeClimbToDatabase(BuildContext context, User user, String climber, String route, String style) async {
     //if -1, then something went wrong!

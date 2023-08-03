@@ -1,10 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
 
+import '../../blocs & events & states/results_bloc.dart';
+import '../../classes/results.dart';
 import '../../model/user.dart';
 
 class ActivitiesCard extends StatefulWidget {
@@ -124,13 +127,19 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
                               ],
                             ),
                             const SizedBox(width: 8),
-                            TextButton(
-                              child: const Text('Did it!', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
-                              onPressed: () {
-                                List<String> names = [user.firstClimberName, user.secondClimberName];
-                                if (selectedItemValue != null){
-                                  databaseWrites.writeActivityToDatabase(context, user, names[selectedItem.index], title, valueMap[selectedItemValue]!);
-                                }
+                            BlocBuilder<ResultsBloc, Results>(
+                              builder: (context, state) {
+                                return TextButton(
+                                  child: const Text('Did it!', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
+                                  onPressed: () {
+                                    if (!state.pausedHandler.isPaused){
+                                      List<String> names = [user.firstClimberName, user.secondClimberName];
+                                      if (selectedItemValue != null){
+                                        databaseWrites.writeActivityToDatabase(context, user, names[selectedItem.index], title, valueMap[selectedItemValue]!);
+                                      }
+                                    } //else say nooooo
+                                  },
+                                );
                               },
                             ),
                             const SizedBox(width: 8),
