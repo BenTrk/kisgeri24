@@ -32,6 +32,10 @@ class Results{
       this.start = start;
     }
 
+    updatePauseHandler(PausedHandler pausedHandler){
+      this.pausedHandler = pausedHandler;
+    }
+
     getStart(){
       return start;
     }
