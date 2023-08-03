@@ -263,7 +263,7 @@ class _HomeState extends State<HomeScreen> {
             TextButton(
               onPressed: () {
                 // Call Function A1 to perform changes and updates
-                homeModel.writePauseInformation(DateTime.now(), user);
+                homeModel.writePauseInformation(DateTime.now(), user, context);
                 // Close the dialog
                 Navigator.of(context).pop();
               },

@@ -174,7 +174,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                     ],
                   ),
 
-                  SizedBox(height: 16,),
+                  const SizedBox(height: 16,),
                   
                   isPlaceSelected ||isCategorySelected
                     ? Row(

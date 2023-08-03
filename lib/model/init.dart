@@ -73,6 +73,29 @@ class init{
     return isInRange;
   }
 
+  static getPauseOver(User user, BuildContext context) async {
+    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    PausedHandler pausedHandler = PausedHandler(isPausedUsed: false, isPaused: false);
+
+    final snapshotPause = await resultsRef.child('pauseHandler').get();
+    Map pauseMap = snapshotPause.value as Map<dynamic, dynamic>;
+    DateTime pauseOverTime = DateTime.now();
+
+    pauseMap.forEach((key, value) {
+      switch (key){
+        case ("pauseOverTime"):{
+          pauseOverTime = DateTime.parse(value);
+          break;
+        }
+      }
+    });
+
+    pausedHandler = PausedHandler(isPausedUsed: true, isPaused: false, pauseOverTime: pauseOverTime);
+
+    results = results.updatePauseHandler(pausedHandler);
+    BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
+  }
+
   static getResults(BuildContext context, User user) async {
     DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
 

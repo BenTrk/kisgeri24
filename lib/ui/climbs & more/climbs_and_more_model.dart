@@ -1,6 +1,5 @@
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
 
 import '../../classes/results.dart';
 import '../../publics.dart';

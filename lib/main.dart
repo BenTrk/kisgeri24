@@ -11,6 +11,7 @@ import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
 
+
 void main() async {
   if (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS) {
     await FacebookAuth.i.webAndDesktopInitialize(
@@ -20,6 +21,7 @@ void main() async {
       version: "v15.0",
     );
   }
+
   runApp(MultiRepositoryProvider(
     providers: [
       RepositoryProvider(create: (_) => AuthenticationBloc()),

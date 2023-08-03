@@ -58,6 +58,7 @@ class DatabaseWrites{
       }).then((document) => showSnackBar(context, 'Activity added to the database!'));
     }
   }
+
 }
 
 getIsActivityThere(String activityName, String climberName) {
