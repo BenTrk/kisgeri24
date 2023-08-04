@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
+import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
+import '../../blocs & events & states/results_bloc.dart';
+import '../../blocs & events & states/results_events.dart';
 import '../../model/user.dart';
+import '../../publics.dart';
 
 class CheckClimbedPlaceCard extends StatefulWidget {
   final ClimbedRoute climbedRoute;
@@ -81,7 +86,7 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                   child: IconButton(
-                    onPressed: () => removeIt(climbedRoute, user, climberName, placeName), 
+                    onPressed: () => removeIt(context, climbedRoute, user, climberName, placeName), 
                     icon: const Icon(Icons.remove_circle, color: Colors.red, size: 40,),),
                 ),
               ],
@@ -94,8 +99,14 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
 
 }
 
-removeIt(Object climbOrActivity, User user, String climberName, String placeName) {
+removeIt(BuildContext context, Object climbOrActivity, User user, String climberName, String placeName) {
   /** ToDo */
   ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   climbsAndMoreModel.removeClimbOrActivity(climbOrActivity, user, climberName, placeName);
+  getNewResults(context, user);
+}
+
+void getNewResults(BuildContext context, User user) async {
+  await init.getResults(context, user);
+  BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

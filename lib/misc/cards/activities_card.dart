@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
+import 'package:kisgeri24/model/init.dart';
 
 import '../../blocs & events & states/results_bloc.dart';
+import '../../blocs & events & states/results_events.dart';
 import '../../classes/results.dart';
 import '../../model/user.dart';
+import '../../publics.dart';
 
 class ActivitiesCard extends StatefulWidget {
   final String title;
@@ -136,6 +139,7 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
                                       List<String> names = [user.firstClimberName, user.secondClimberName];
                                       if (selectedItemValue != null){
                                         databaseWrites.writeActivityToDatabase(context, user, names[selectedItem.index], title, valueMap[selectedItemValue]!);
+                                        getNewResults(context, user);
                                       }
                                     } //else say nooooo
                                   },
@@ -171,4 +175,9 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
     );
   }
 
+}
+
+void getNewResults(BuildContext context, User user) async {
+  await init.getResults(context, user);
+  //BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

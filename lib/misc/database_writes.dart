@@ -63,10 +63,20 @@ class DatabaseWrites{
 
   void removeClimbedRoute(ClimbedRoute climb, String climberName, User user, String placeName) async {
     await ref.child(user.userID).child('Climbs').child(climberName).child(placeName).child(climb.name).remove();
+    //Points, you jackass :)
+    num newPoints = results.points - climb.points;
+    await ref.child(user.userID).update({
+      "points": newPoints
+    });
   }
 
   void removeDidActivity(DidActivity activity, String climberName, User user) async {
     await ref.child(user.userID).child('Activities').child(climberName).child(activity.name).remove();
+    //Points, you jackass :)
+    num newPoints = results.points - activity.points;
+    await ref.child(user.userID).update({
+      "points": newPoints
+    });
   }
 
 }

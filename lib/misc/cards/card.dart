@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/database_writes.dart';
+import 'package:kisgeri24/model/init.dart';
 
 import '../../blocs & events & states/results_bloc.dart';
+import '../../blocs & events & states/results_events.dart';
 import '../../classes/results.dart';
 import '../../model/user.dart';
+import '../../publics.dart';
 
 class CustomCard extends StatefulWidget {
   final String title;
@@ -145,6 +148,7 @@ class _CustomCardState extends State<CustomCard>{
                                     if (!state.pausedHandler.isPaused) {
                                       List<String> names = [user.firstClimberName, user.secondClimberName];
                                       databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
+                                      getNewResults(context, user);
                                     }
                                   }
                                 );
@@ -165,4 +169,9 @@ class _CustomCardState extends State<CustomCard>{
     );
   }
 
+}
+
+void getNewResults(BuildContext context, User user) async {
+  await init.getResults(context, user);
+  //BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

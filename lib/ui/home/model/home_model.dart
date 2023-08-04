@@ -16,11 +16,7 @@ import '../../../model/user.dart';
 class HomeModel{
   DatabaseWrites databaseWrites = DatabaseWrites();
   BuildContext? _context;
-  
-  //ToDo: Not necessary. get the places from results in publics. 
-  //Update results happen automatically by firebase.
-  //When changes are triggered, BlocProvider.of<ResultsBloc>(originalContext).add(UpdateResultsEvent(results)); should be triggered
-  //  these are: pause, save climb, save activity, remove activity, screen inits. 
+   
   static Future<Places> getPlaces() async{
     places = await init.getPlacesWithRoutes();
     return places;

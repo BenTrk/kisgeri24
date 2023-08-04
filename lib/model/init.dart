@@ -83,8 +83,8 @@ class init{
     });
   }
 
+  //maybe Future<Results>?
   static getResults(BuildContext context, User user) async {
-    BuildContext originalContext = context;
     DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
 
     num points = 0.0;
@@ -188,12 +188,15 @@ class init{
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
           climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
         //ToDo: Context gets lost :) this needs to be handled.
-        BlocProvider.of<ResultsBloc>(originalContext).add(UpdateResultsEvent(results));
+        //Update results happen automatically by firebase.
+        //When changes are triggered, BlocProvider.of<ResultsBloc>(originalContext).add(UpdateResultsEvent(results)); should be triggered
+        //  these are: pause, save climb, save activity, remove activity, screen inits. 
        });
     } catch (error) {
       // Handle any potential errors here
       print("Error fetching data: $error");
     }
+    BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
   }
 
   static Future<Places> getPlacesWithRoutes() async {

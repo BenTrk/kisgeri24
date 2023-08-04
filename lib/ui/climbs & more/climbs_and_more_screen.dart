@@ -109,9 +109,9 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                             },
                           ),
                             BlocBuilder<ResultsBloc, Results>(
-                    builder: (context, state) {
-                      return Text('Points: ${state.points}');
-                    },
+                              builder: (context, state) {
+                                return Text('Points: ${state.points}');
+                              },
                             ),
                         ]
                       ),
