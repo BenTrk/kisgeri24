@@ -27,6 +27,7 @@ apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
@@ -46,6 +47,7 @@ android {
     defaultConfig {
         applicationId "com.kisgeri24.flutter_kisgeri24"
         minSdkVersion 23
+        targetSdkVersion rootProject.ext.targetSdkVersion
         targetSdkVersion 33
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()

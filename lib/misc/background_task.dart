@@ -16,11 +16,8 @@ class BackgroundTask {
   });
 
   void startBackgroundTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
-    Future.delayed(const Duration(hours: 1, seconds: 5), () async {
+    Future.delayed(const Duration(hours: 1), () async {
       init.getPauseOver(user, context);
-      // Your code here to perform the desired action
-      // For example, update the data and show a notification
-      // This code will be executed every hour in the background
 
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(

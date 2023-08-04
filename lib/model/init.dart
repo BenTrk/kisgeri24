@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
@@ -75,25 +76,11 @@ class init{
 
   static getPauseOver(User user, BuildContext context) async {
     DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
-    PausedHandler pausedHandler = PausedHandler(isPausedUsed: false, isPaused: false);
-
-    final snapshotPause = await resultsRef.child('pauseHandler').get();
-    Map pauseMap = snapshotPause.value as Map<dynamic, dynamic>;
-    DateTime pauseOverTime = DateTime.now();
-
-    pauseMap.forEach((key, value) {
-      switch (key){
-        case ("pauseOverTime"):{
-          pauseOverTime = DateTime.parse(value);
-          break;
-        }
-      }
+    String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
+    
+    await resultsRef.update({
+      'pauseHandler/pauseOverTime': formattedDateTime
     });
-
-    pausedHandler = PausedHandler(isPausedUsed: true, isPaused: false, pauseOverTime: pauseOverTime);
-
-    results = results.updatePauseHandler(pausedHandler);
-    BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
   }
 
   static getResults(BuildContext context, User user) async {

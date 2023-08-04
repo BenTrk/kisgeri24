@@ -15,6 +15,7 @@ import '../../../model/user.dart';
 
 class HomeModel{
   DatabaseWrites databaseWrites = DatabaseWrites();
+  BuildContext? _context;
   
   static Future<Places> getPlaces() async{
     places = await init.getPlacesWithRoutes();
@@ -32,13 +33,16 @@ class HomeModel{
   }
 
   void writePauseInformation(DateTime pauseTime, User user, BuildContext context) async {
+    //For iOS it has to be set! Create an App... part: https://learn.microsoft.com/en-us/dotnet/maui/ios/capabilities?tabs=vs
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    const initializationSettingsAndroid = AndroidInitializationSettings('logo');
     const initializationSettingsIOS = DarwinInitializationSettings();
     const initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-    BackgroundTask(context: context, user: user).startBackgroundTask(flutterLocalNotificationsPlugin);
+    _context = context;
+
+    BackgroundTask(context: _context!, user: user).startBackgroundTask(flutterLocalNotificationsPlugin);
     DateTime pauseOverTime = pauseTime.add(const Duration(hours: 1));
     databaseWrites.writePauseInformation(pauseOverTime, user);
   }
