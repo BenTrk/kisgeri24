@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 class Results{
@@ -56,6 +58,33 @@ class Results{
         return climberTwoActivities;
       }
     }
+
+    @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Results &&
+        this.points == other.points &&
+        this.start == other.start &&
+        this.climberOneResults == other.climberOneResults &&
+        this.climberTwoResults == other.climberTwoResults &&
+        this.climberOneActivities == other.climberOneActivities &&
+        this.climberTwoActivities == other.climberTwoActivities &&
+        this.teamResults == other.teamResults &&
+        this.pausedHandler == other.pausedHandler;
+  }
+
+  @override
+  int get hashCode {
+    return points.hashCode ^
+        start.hashCode ^
+        climberOneResults.hashCode ^
+        climberTwoResults.hashCode ^
+        climberOneActivities.hashCode ^
+        climberTwoActivities.hashCode ^
+        teamResults.hashCode ^
+        pausedHandler.hashCode;
+  }
 }
 
 class PausedHandler {
@@ -100,6 +129,25 @@ class DidActivities {
     return didActivity;
   } 
 
+  // Override == operator to check for equality of properties
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is DidActivities &&
+        this.climberName == other.climberName &&
+        listEquals(this.activitiesList, other.activitiesList);
+  }
+
+  // Override hashCode to generate a hash based on the properties
+  @override
+  int get hashCode {
+    return Object.hash(
+      climberName.hashCode,
+      activitiesList.hashCode,
+    );
+  }
+
   static DidActivities fromSnapshot(value, name) {
     List<DidActivity> activityList = [];
     Map activityMap = value as Map<dynamic, dynamic>;
@@ -120,6 +168,7 @@ class DidActivities {
   }
 }
 
+
 class DidActivity {
   num points;
   String name;
@@ -130,7 +179,27 @@ class DidActivity {
   }) 
   : name = name ?? '',
     points = points ?? 0;
+
+  // Override == operator to check for equality of properties
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is DidActivity &&
+        this.name == other.name &&
+        this.points == other.points;
+  }
+
+  // Override hashCode to generate a hash based on the properties
+  @override
+  int get hashCode {
+    return hashValues(
+      name.hashCode,
+      points.hashCode,
+    );
+  }
 }
+
 
 class TeamResults {
   /** TODO */
@@ -155,6 +224,17 @@ class ClimbedPlaces {
       }
     }
     return isThere;
+  }
+
+  getClimbedPlace(String placeName){
+    ClimbedPlace climbedPlace = ClimbedPlace(name: '', climbedRouteList: []);
+    climbedPlaceList.forEach((element) {
+      if (placeName == element.name){
+        climbedPlace = element;
+      }
+    });
+    
+    return climbedPlace;
   }
 
   getRoute(String routeName){

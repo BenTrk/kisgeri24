@@ -10,6 +10,7 @@ import 'package:kisgeri24/firebase_options.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
+import 'package:flutter/foundation.dart';
 
 
 void main() async {

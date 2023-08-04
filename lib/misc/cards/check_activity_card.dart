@@ -100,7 +100,6 @@ removeIt(BuildContext context, climbOrActivity, User user, String climberName) {
   getNewResults(context, user);
 }
 
-void getNewResults(BuildContext context, User user) async {
-  await init.getResults(context, user); 
-  BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
+void getNewResults(BuildContext context, User user) {
+  init.getResults(context, user);
 }

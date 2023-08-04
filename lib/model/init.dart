@@ -187,16 +187,13 @@ class init{
 
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
           climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
-        //ToDo: Context gets lost :) this needs to be handled.
-        //Update results happen automatically by firebase.
-        //When changes are triggered, BlocProvider.of<ResultsBloc>(originalContext).add(UpdateResultsEvent(results)); should be triggered
-        //  these are: pause, save climb, save activity, remove activity, screen inits. 
+
+          BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
        });
     } catch (error) {
       // Handle any potential errors here
       print("Error fetching data: $error");
     }
-    BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
   }
 
   static Future<Places> getPlacesWithRoutes() async {
