@@ -3,17 +3,22 @@ import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
+import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
 import '../../model/user.dart';
 
 class CheckClimbedPlaceCard extends StatefulWidget {
   final ClimbedRoute climbedRoute;
   final User user;
+  final String climberName;
+  final String placeName;
 
   const CheckClimbedPlaceCard(
     {
       super.key,
       required this.climbedRoute,
       required this.user,
+      required this.climberName,
+      required this.placeName,
     }
   );
 
@@ -26,13 +31,17 @@ enum SelectedItem { climberOne, climberTwo }
 class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
   late ClimbedRoute climbedRoute;
   late User user;
+  late String climberName;
+  late String placeName;
   DatabaseWrites databaseWrites = DatabaseWrites();
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
+    climberName = widget.climberName;
     climbedRoute = widget.climbedRoute;
+    placeName = widget.placeName;
   }
 
   @override
@@ -72,7 +81,7 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                   child: IconButton(
-                    onPressed: removeIt(), 
+                    onPressed: () => removeIt(climbedRoute, user, climberName, placeName), 
                     icon: const Icon(Icons.remove_circle, color: Colors.red, size: 40,),),
                 ),
               ],
@@ -85,6 +94,8 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
 
 }
 
-removeIt() {
+removeIt(Object climbOrActivity, User user, String climberName, String placeName) {
   /** ToDo */
+  ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
+  climbsAndMoreModel.removeClimbOrActivity(climbOrActivity, user, climberName, placeName);
 }

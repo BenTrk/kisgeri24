@@ -247,7 +247,7 @@ class DisplayDidActivities extends StatelessWidget {
       itemCount: didActivities.activitiesList.length,
       itemBuilder: (context, index) {
         DidActivity didActivity = didActivities.activitiesList[index];
-        return CheckActivitiesCard(title: didActivity.name, points: didActivity.points, user: user);
+        return CheckActivitiesCard(didActivity: didActivity, user: user, climberName: climberName,);
       },
     );
   }
@@ -313,7 +313,7 @@ class DisplayClimbedRoutes extends StatelessWidget {
         itemCount: selectedPlace!.climbedRouteList.length,
         itemBuilder: (context, index) {
           ClimbedRoute route = selectedPlace!.climbedRouteList[index];
-          return CheckClimbedPlaceCard(climbedRoute: route, user: user);
+          return CheckClimbedPlaceCard(climbedRoute: route, user: user, climberName: climberName, placeName: selectedPlace!.name);
         },
       );
     }

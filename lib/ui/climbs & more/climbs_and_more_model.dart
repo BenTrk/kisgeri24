@@ -2,6 +2,7 @@
 import 'package:kisgeri24/misc/database_writes.dart';
 
 import '../../classes/results.dart';
+import '../../model/user.dart';
 import '../../publics.dart';
 
 class ClimbsAndMoreModel{
@@ -20,6 +21,19 @@ class ClimbsAndMoreModel{
       return results.climberOneResults;
     } else {
       return results.climberTwoResults;
+    }
+  }
+
+  void removeClimbOrActivity(climbOrActivity, User user, String climberName, String placeName) {
+    switch(climbOrActivity.runtimeType){
+      case(ClimbedRoute): {
+        databaseWrites.removeClimbedRoute(climbOrActivity as ClimbedRoute, climberName, user, placeName);
+        break;
+      }
+      case(DidActivity): {
+        databaseWrites.removeDidActivity(climbOrActivity as DidActivity, climberName, user);
+        break;
+      }
     }
   }
   

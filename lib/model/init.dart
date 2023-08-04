@@ -77,13 +77,14 @@ class init{
   static getPauseOver(User user, BuildContext context) async {
     DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
     String formattedDateTime = DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
-    
+
     await resultsRef.update({
       'pauseHandler/pauseOverTime': formattedDateTime
     });
   }
 
   static getResults(BuildContext context, User user) async {
+    BuildContext originalContext = context;
     DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
 
     num points = 0.0;
@@ -186,7 +187,8 @@ class init{
 
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
           climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
-        BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
+        //ToDo: Context gets lost :) this needs to be handled.
+        BlocProvider.of<ResultsBloc>(originalContext).add(UpdateResultsEvent(results));
        });
     } catch (error) {
       // Handle any potential errors here

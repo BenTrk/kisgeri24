@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:kisgeri24/classes/place.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/classes/rockroute.dart';
 import 'package:kisgeri24/services/helper.dart';
@@ -7,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../constants.dart';
 import '../../../model/user.dart';
+import '../classes/places.dart';
 import '../publics.dart';
 
 class DatabaseWrites{
@@ -57,6 +59,14 @@ class DatabaseWrites{
         "points": calculateActivityPoints(points, getIsActivityThere(activity, climber), climber, activity),
       }).then((document) => showSnackBar(context, 'Activity added to the database!'));
     }
+  }
+
+  void removeClimbedRoute(ClimbedRoute climb, String climberName, User user, String placeName) async {
+    await ref.child(user.userID).child('Climbs').child(climberName).child(placeName).child(climb.name).remove();
+  }
+
+  void removeDidActivity(DidActivity activity, String climberName, User user) async {
+    await ref.child(user.userID).child('Activities').child(climberName).child(activity.name).remove();
   }
 
 }
