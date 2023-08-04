@@ -14,6 +14,7 @@ import '../../blocs & events & states/results_bloc.dart';
 import '../../classes/place.dart';
 import '../../classes/results.dart';
 import '../../constants.dart';
+import '../../misc/cards/check_climb_card.dart';
 import '../home/date_time_picker_screen.dart';
 
 class ClimbsAndMoreScreen extends StatefulWidget {
@@ -34,7 +35,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
   late User user;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   bool isPlaceSelected = false;
-  Place? selectedPlace;
+  ClimbedPlace? selectedPlace;
   Category? selectedCategory;
   bool isCategorySelected = false;
   ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
@@ -50,6 +51,14 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
       selectedCategory = null;
       isCategorySelected = false;
     });
+  }
+
+  //State handler for places
+  void handlePlaceSelected(ClimbedPlace place) {
+      setState(() {
+        selectedPlace = place;
+        isPlaceSelected = true;
+      });
   }
 
   @override
@@ -204,7 +213,8 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                     width: 0.9 * MediaQuery.of(context).size.width,
                     height: 300,
                     child: selectedItem == SelectedItem.places
-                    ? DisplayClimbedRoutes(climberName: climbers[selectedClimber.index],)
+                    ? DisplayClimbedRoutes(selectedPlace: selectedPlace, isPlaceSelected: isPlaceSelected, onPlaceSelected: handlePlaceSelected, 
+                          onBackButtonPressed: handleBackButtonPressed, climberName: climbers[selectedClimber.index], user: user,)
                     : DisplayDidActivities(climberName: climbers[selectedClimber.index], user: user,)
                   ),
                 ],
@@ -231,6 +241,7 @@ class DisplayDidActivities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Will it update itself when a climb is removed?
     DidActivities didActivities = ClimbsAndMoreModel.getDidActivities(climberName);
     return ListView.builder(
       itemCount: didActivities.activitiesList.length,
@@ -244,18 +255,68 @@ class DisplayDidActivities extends StatelessWidget {
 
 class DisplayClimbedRoutes extends StatelessWidget {
   String climberName;
+  final VoidCallback onBackButtonPressed;
+  final Function(ClimbedPlace) onPlaceSelected;
+  final ClimbedPlace? selectedPlace;
+  final bool isPlaceSelected;
+  User user;
 
   DisplayClimbedRoutes(
     {
       super.key,
       required this.climberName,
+      required this.user,
+      required this.selectedPlace,
+      required this.isPlaceSelected,
+      required this.onPlaceSelected,
+      required this.onBackButtonPressed,
     }
   );
 
   @override
   Widget build(BuildContext context) {
-    ClimbsAndMoreModel.getClimbedClimbs(climberName);
-    return const Text("Climbs");
+    //Same question as above
+    ClimbedPlaces climbedPlaces = ClimbsAndMoreModel.getClimbedClimbs(climberName);
+    if (selectedPlace == null) {
+      return ListView.builder(
+        itemCount: climbedPlaces.climbedPlaceList.length,
+        itemBuilder: (context, index) {
+          ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
+          return GestureDetector(
+                    onTap: () => onPlaceSelected(place),
+                    child: Card(
+                      color: const Color(colorPrimary),
+                      child: Column(
+                        children: <Widget>[
+                          const SizedBox(width: 4, height: 4,),
+                          ListTile(
+                            leading: const Icon(
+                              Icons.done,
+                              color: Colors.white),
+                            title: Text(
+                              place.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20
+                              ),),
+                          ),
+                          const SizedBox(width: 4, height: 4,),
+                        ],
+                      ),
+                    ),
+                  );
+        },
+      );
+    } else {
+      // Display the list of routes for the selected Place here
+      return ListView.builder(
+        itemCount: selectedPlace!.climbedRouteList.length,
+        itemBuilder: (context, index) {
+          ClimbedRoute route = selectedPlace!.climbedRouteList[index];
+          return CheckClimbedPlaceCard(climbedRoute: route, user: user);
+        },
+      );
+    }
   }
 }
 
