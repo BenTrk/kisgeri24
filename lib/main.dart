@@ -27,15 +27,9 @@ void main() async {
     providers: [
       RepositoryProvider(create: (_) => AuthenticationBloc()),
       RepositoryProvider(create: (_) => LoadingCubit()),
-      RepositoryProvider(create: (_) => ResultsBloc())
     ],
-    child: MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => ResultsBloc()),
-        // Add other Blocs here if needed
-      ],
+    
       child: const MyApp(),
-    ),
   ));
 }
 

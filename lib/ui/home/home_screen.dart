@@ -73,7 +73,12 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
-    init.getResults(context, user);
+  }
+
+  @override
+  void dispose() {
+    BlocProvider.of<ResultsBloc>(context).close();
+    super.dispose();
   }
 
   @override
@@ -86,7 +91,12 @@ class _HomeState extends State<HomeScreen> {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
-      child: Scaffold(
+      child: BlocProvider<ResultsBloc>(
+        create: (context) => ResultsBloc(user),
+        child: BlocBuilder<ResultsBloc, Results>(
+        builder: (context, results) {
+
+      return Scaffold(
         key: scaffoldKey,
         body: ListView(
           children: <Widget>[
@@ -115,20 +125,13 @@ class _HomeState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                                  BlocBuilder<ResultsBloc, Results>(
-                                    builder: (context, state) {
-                                      return Text(
-                                        !state.pausedHandler.isPaused
-                                          ? 'Started at: ${state.start}'
+                                       Text(
+                                        !results.pausedHandler.isPaused
+                                          ? 'Started at: ${results.start}'
                                           : "On Pause!"
-                                      );
-                                    },
+                                      
                                   ),
-                                    BlocBuilder<ResultsBloc, Results>(
-                                        builder: (context, state) {
-                                          return Text('Points: ${state.points}');
-                                        },
-                                    ),
+                                    Text('Points: ${results.points}'),
                                 ]
                               ),
                             ),
@@ -137,20 +140,16 @@ class _HomeState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               //This should be disabled when isPausedUsed is true in database
-                              BlocBuilder<ResultsBloc, Results>(
-                                builder: (context, state) {
-                                // Build the UI based on the state of Variable A
-                                  return ElevatedButton(
+                              ElevatedButton(
                                     style: ElevatedButton.styleFrom(backgroundColor: const Color(colorPrimary)),
                                     onPressed: () {
-                                      !state.pausedHandler.isPausedUsed
+                                      !results.pausedHandler.isPausedUsed
                                       ? pauseCards()
                                       : showAlreadyUsedPauseError();
                                     },
-                                    child: Text(state.pausedHandler.isPaused ? 'Time Paused' : 'Pause Time', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                  );
-                                },
+                                    child: Text(results.pausedHandler.isPaused ? 'Time Paused' : 'Pause Time', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                               ),
+                                  
 
                               const SizedBox(width: 10,),
 
@@ -235,9 +234,12 @@ class _HomeState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
+      );
+    })
+      )
     );
   }
+  
   
   showAlreadyUsedPauseError() {
     showSnackBar(context, "You already used Pause.");

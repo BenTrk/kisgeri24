@@ -16,6 +16,7 @@ import '../../blocs & events & states/results_bloc.dart';
 import '../../classes/results.dart';
 import '../../constants.dart';
 import '../../misc/cards/check_climb_card.dart';
+import '../../publics.dart';
 import '../home/date_time_picker_screen.dart';
 
 typedef RemoveClimbedRouteCallback = void Function(Object climbOrActivity, User user, String climberName, String placeName);
@@ -70,7 +71,12 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
     super.initState();
     user = widget.user;
     climbers = [user.firstClimberName, user.secondClimberName];
-    init.getResults(context, user);
+  }
+
+  @override
+  void dispose() {
+    BlocProvider.of<ResultsBloc>(context).close();
+    super.dispose();
   }
 
   @override
@@ -83,8 +89,10 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
+      child: BlocProvider<ResultsBloc>(
+      create: (context) => ResultsBloc(user),
       child: BlocBuilder<ResultsBloc, Results>(
-        builder: (context, state) {
+      builder: (context, results) {
           return Scaffold(
             key: scaffoldKey,
             body: ListView(
@@ -109,8 +117,8 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                           child: Column(
                             children: [
                               Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                              Text('Started at: ${state.start}'),
-                              Text('Points: ${state.points}'),
+                              Text('Started at: ${results.start}'),
+                              Text('Points: ${results.points}'),
                             ]
                           ),
                         ),
@@ -138,6 +146,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                               setState(() {
                               // Update the selectedItem based on the button tapped
                               selectedClimber = index == 0 ? SelectedClimber.climberOne : SelectedClimber.climberTwo;
+                              log(selectedClimber.name);
                               });
                             },
                             children: [
@@ -223,7 +232,8 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
             ),
           );
         }
-      ),
+      )
+    )
     );
   }
 }
@@ -245,16 +255,17 @@ class DisplayDidActivities extends StatelessWidget {
     //Will it update itself when a climb is removed?
     DidActivities didActivities = ClimbsAndMoreModel.getDidActivities(climberName);
     return ListView.builder(
-      itemCount: didActivities.activitiesList.length,
-      itemBuilder: (context, index) {
-        DidActivity didActivity = didActivities.activitiesList[index];
-        return CheckActivitiesCard(didActivity: didActivity, user: user, climberName: climberName,);
-      },
-    );
+            itemCount: didActivities.activitiesList.length,
+            itemBuilder: (context, index) {
+              DidActivity didActivity = didActivities.activitiesList[index];
+              return CheckActivitiesCard(didActivity: didActivity, user: user, climberName: climberName,);
+            },
+          );
+        }
   }
-}
 
-class DisplayClimbedRoutes extends StatefulWidget {
+
+class DisplayClimbedRoutes extends StatelessWidget {
   String climberName;
   final VoidCallback onBackButtonPressed;
   final Function(ClimbedPlace) onPlaceSelected;
@@ -275,29 +286,27 @@ class DisplayClimbedRoutes extends StatefulWidget {
   );
 
   @override
-  _DisplayClimbedRoutesState createState() => _DisplayClimbedRoutesState();
-}
-
-class _DisplayClimbedRoutesState extends State<DisplayClimbedRoutes> {
-
-  @override
   Widget build(BuildContext context) {
+
+    return BlocProvider<ResultsBloc>(
+      create: (context) => ResultsBloc(user),
+      child: BlocBuilder<ResultsBloc, Results>(
+      builder: (context, results) {
+
+    ClimbedPlaces climbedPlaces;
+              if (results.climberOneResults.climberName == climberName){
+                  climbedPlaces = results.climberOneResults;
+                } else {
+                  climbedPlaces = results.climberTwoResults;
+                }
     //Same question as above
-    if (widget.selectedPlace == null) {
-      return BlocBuilder<ResultsBloc, Results>(
-        builder: (context, state) {
-          ClimbedPlaces climbedPlaces;
-          if (state.climberOneResults.climberName == widget.climberName){
-              climbedPlaces = state.climberOneResults;
-            } else {
-              climbedPlaces = state.climberTwoResults;
-            }
-          return ListView.builder(
+    if (selectedPlace == null && climbedPlaces.climbedPlaceList.isNotEmpty) {
+    return ListView.builder(
             itemCount: climbedPlaces.climbedPlaceList.length,
             itemBuilder: (context, index) {
               ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
               return GestureDetector(
-                        onTap: () => widget.onPlaceSelected(place),
+                        onTap: () => onPlaceSelected(place),
                         child: Card(
                           color: const Color(colorPrimary),
                           child: Column(
@@ -321,26 +330,26 @@ class _DisplayClimbedRoutesState extends State<DisplayClimbedRoutes> {
                       );
             },
           );
+        } else if (selectedPlace != null && climbedPlaces.climbedPlaceList.isNotEmpty) {
+          // Display the list of routes for the selected Place here
+              ClimbedPlace routesPlace = results.climberOneResults.getClimbedPlace(selectedPlace!.name);
+              log('routename:' + routesPlace.name + ' ' + selectedPlace!.name);
+              return ListView.builder(
+                itemCount: routesPlace.climbedRouteList.length,
+                itemBuilder: (context, index) {
+                  ClimbedRoute route = routesPlace.climbedRouteList[index];
+                  return CheckClimbedPlaceCard(climbedRoute: route, user: user, climberName: climberName, placeName: selectedPlace!.name,);
+                },
+              );
+        } else {
+          return Text('No climbs yet.');
         }
-      );
-    } else {
-      // Display the list of routes for the selected Place here
-      return BlocBuilder<ResultsBloc, Results>(
-        builder: (context, state) {
-          ClimbedPlace routesPlace = state.climberOneResults.getClimbedPlace(widget.selectedPlace!.name);
-          return ListView.builder(
-            itemCount: routesPlace.climbedRouteList.length,
-            itemBuilder: (context, index) {
-              ClimbedRoute route = routesPlace.climbedRouteList[index];
-              return CheckClimbedPlaceCard(climbedRoute: route, user: widget.user, climberName: widget.climberName, placeName: widget.selectedPlace!.name,);
-            },
-          );
-        },
-      );
-    }
-  }
-
+  }));
 }
+}
+
+  
+
 
 class ClimbsAndMoreScreenTitleWidget extends StatelessWidget {
   final User user;

@@ -97,9 +97,5 @@ removeIt(BuildContext context, climbOrActivity, User user, String climberName) {
   /** ToDo */
   ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   climbsAndMoreModel.removeClimbOrActivity(climbOrActivity, user, climberName, '');
-  getNewResults(context, user);
 }
 
-void getNewResults(BuildContext context, User user) {
-  init.getResults(context, user);
-}

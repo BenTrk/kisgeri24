@@ -1,5 +1,6 @@
 
 import 'package:bloc/bloc.dart';
+import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/authenticate.dart';
@@ -38,6 +39,7 @@ class AuthenticationBloc
           emit(AuthenticationState.outOfDateTimeRange(user: user!));
         }
         else {
+          ResultsBloc(user!);
           emit(AuthenticationState.authenticated(user!));
         }
       }
@@ -51,6 +53,7 @@ class AuthenticationBloc
           event.email, event.password);
       if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
         user = result;
+        ResultsBloc(user!);
         emit(AuthenticationState.authenticated(user!));
       } 
       else if (result != null && result is String) {

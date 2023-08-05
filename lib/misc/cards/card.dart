@@ -148,7 +148,6 @@ class _CustomCardState extends State<CustomCard>{
                                     if (!state.pausedHandler.isPaused) {
                                       List<String> names = [user.firstClimberName, user.secondClimberName];
                                       databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
-                                      getNewResults(context, user);
                                     }
                                   }
                                 );
@@ -169,9 +168,4 @@ class _CustomCardState extends State<CustomCard>{
     );
   }
 
-}
-
-void getNewResults(BuildContext context, User user) async {
-  await init.getResults(context, user);
-  //BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

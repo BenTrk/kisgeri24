@@ -53,7 +53,7 @@ class CustomMenu extends StatefulWidget {
                     if (!isStartTimeSet) {
                       showSnackBar(context, 'You did not set the start time yet.');
                     } else {
-                      pushAndRemoveUntil( context, HomeScreen(user: user), false);
+                      pushReplacement( context, HomeScreen(user: user));
                     }
                   },
                 ),
@@ -69,7 +69,7 @@ class CustomMenu extends StatefulWidget {
                       log('Boyaa');
                       showSnackBar(context, 'You did not set the start time yet.');
                     } else {
-                      pushAndRemoveUntil( context, ClimbsAndMoreScreen(user: user), false);
+                      pushReplacement( context, ClimbsAndMoreScreen(user: user));
                     }
                   },
                 ),
@@ -81,8 +81,8 @@ class CustomMenu extends StatefulWidget {
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed ManageAccounts');
-                    pushAndRemoveUntil(
-                          context, OptionsScreen(user: user), false);
+                    pushReplacement(
+                          context, OptionsScreen(user: user));
                     },
                 ),
               ),
@@ -93,8 +93,8 @@ class CustomMenu extends StatefulWidget {
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');
-                    pushAndRemoveUntil(
-                          context, SponsorsScreen(user: user), false);
+                    pushReplacement(
+                          context, SponsorsScreen(user: user));
                     },
                 ),
               ),
@@ -105,8 +105,8 @@ class CustomMenu extends StatefulWidget {
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');
-                    pushAndRemoveUntil(
-                          context, SponsorsScreen(user: user), false);
+                    pushReplacement(
+                          context, SponsorsScreen(user: user));
                     },
                 ),
               ),
@@ -117,8 +117,8 @@ class CustomMenu extends StatefulWidget {
                   color: Colors.white,
                   onPressed: () {
                     log('Pressed Sponsor');
-                    pushAndRemoveUntil(
-                          context, SponsorsScreen(user: user), false);
+                    pushReplacement(
+                          context, SponsorsScreen(user: user));
                   },
                 ),
               ),

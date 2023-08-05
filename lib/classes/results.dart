@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -228,6 +229,7 @@ class ClimbedPlaces {
 
   getClimbedPlace(String placeName){
     ClimbedPlace climbedPlace = ClimbedPlace(name: '', climbedRouteList: []);
+    log('list length: ' + climbedPlaceList.length.toString());
     climbedPlaceList.forEach((element) {
       if (placeName == element.name){
         climbedPlace = element;

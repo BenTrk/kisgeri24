@@ -29,6 +29,7 @@ dependencies:
   flutter:
     sdk: flutter
   background_fetch: ^1.2.0
+  equatable: ^2.0.3
 
   cupertino_icons: ^1.0.5
   firebase_database: ^10.2.4
