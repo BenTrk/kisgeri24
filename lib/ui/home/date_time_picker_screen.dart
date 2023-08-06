@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
 import 'package:kisgeri24/publics.dart';
 import 'package:numberpicker/numberpicker.dart';
-import '../../blocs & events & states/results_bloc.dart';
 import '../../constants.dart';
 import '../../model/authentication_bloc.dart';
 import '../../model/user.dart';
@@ -201,7 +200,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
               onPressed: () {
                 //Move to the HomePage! Disable database writes while not in competition
                 user.isStartDateSet = true;
-                ResultsBloc(user);
                 Navigator.of(dialogContext).pop();
                 DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
                 pushAndRemoveUntil(
@@ -245,7 +243,7 @@ class LogoImageWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                         ),
                       ), 
-                      CustomMenu(user: user,),
+                      CustomMenu(user: user, contextFrom: context,),
                     ],
                   ),
                 ),

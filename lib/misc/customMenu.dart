@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/ui/options/options.dart';
 import 'package:kisgeri24/ui/sponsors/sponsors.dart';
 
+import '../blocs & events & states/results_bloc.dart';
 import '../constants.dart';
 import '../model/authentication_bloc.dart';
 import '../model/user.dart';
@@ -15,7 +16,8 @@ import '../ui/home/home_screen.dart';
 
 class CustomMenu extends StatefulWidget {
   final User user;
-  const CustomMenu({super.key, required this.user});
+  final BuildContext contextFrom;
+  const CustomMenu({super.key, required this.user, required this.contextFrom});
 
   @override
   State createState() => _CustomMenuState();

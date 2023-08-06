@@ -140,19 +140,15 @@ class _CustomCardState extends State<CustomCard>{
                                   ],
                                 ),
                             const SizedBox(width: 8),
-                            BlocBuilder<ResultsBloc, Results>(
-                              builder: (context, state) {
-                                return TextButton(
+                            TextButton(
                                   child: const Text('Climbed It', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
                                   onPressed: () {
-                                    if (!state.pausedHandler.isPaused) {
+                                    if (!results.pausedHandler.isPaused) {
                                       List<String> names = [user.firstClimberName, user.secondClimberName];
                                       databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
                                     }
                                   }
-                                );
-                              }
-                            ),
+                                ),
                             const SizedBox(width: 8),
                           ],
                         ),

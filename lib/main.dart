@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/firebase_options.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';

@@ -1,6 +1,8 @@
 
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/acivities.dart';
@@ -12,7 +14,6 @@ import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
-import '../../blocs & events & states/results_bloc.dart';
 import '../../classes/results.dart';
 import '../../constants.dart';
 import '../../misc/cards/check_climb_card.dart';
@@ -44,9 +45,14 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
   bool isCategorySelected = false;
   ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   late List<String> climbers;
+  late DatabaseReference resultsRef;
+  StreamSubscription<DatabaseEvent>? _streamSubscription;
+  UniqueKey displayClimbedRoutesKey = UniqueKey();
 
   SelectedClimber selectedClimber = SelectedClimber.climberOne;
   SelectedItem selectedItem = SelectedItem.places;
+
+  late ClimbedPlaces climbedPlaces;
 
   void handleBackButtonPressed() {
     setState(() {
@@ -62,20 +68,30 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
       setState(() {
         selectedPlace = place;
         isPlaceSelected = true;
+        climbedPlaces;
+        if (results.climberOneResults.climberName == climbers[selectedClimber.index]){
+            climbedPlaces = results.climberOneResults;
+          } else {
+            climbedPlaces = results.climberTwoResults;
+          }
       });
   }
-
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
     climbers = [user.firstClimberName, user.secondClimberName];
+    climbedPlaces = results.climberOneResults;
+    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    _streamSubscription = resultsRef.onValue.listen((event) {
+      init.getResults(user, event.snapshot);
+    });
   }
 
   @override
   void dispose() {
-    BlocProvider.of<ResultsBloc>(context).close();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 
@@ -89,10 +105,13 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
-      child: BlocProvider<ResultsBloc>(
-      create: (context) => ResultsBloc(user),
-      child: BlocBuilder<ResultsBloc, Results>(
-      builder: (context, results) {
+      child: StreamBuilder(
+        stream: resultsRef.onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            //return CircularProgressIndicator(backgroundColor: Colors.transparent,);
+          }
+
           return Scaffold(
             key: scaffoldKey,
             body: ListView(
@@ -143,10 +162,16 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                             ],
                             // Callback when the user taps on a button
                             onPressed: (index) {
+                              handleBackButtonPressed();
                               setState(() {
-                              // Update the selectedItem based on the button tapped
-                              selectedClimber = index == 0 ? SelectedClimber.climberOne : SelectedClimber.climberTwo;
-                              log(selectedClimber.name);
+                                // Update the selectedItem based on the button tapped
+                                selectedClimber = index == 0 ? SelectedClimber.climberOne : SelectedClimber.climberTwo;
+                                if (results.climberOneResults.climberName == climbers[selectedClimber.index]){
+                                  climbedPlaces = results.climberOneResults;
+                                } else {
+                                  climbedPlaces = results.climberTwoResults;
+                                }
+                                log(selectedClimber.name);
                               });
                             },
                             children: [
@@ -219,9 +244,10 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                       SizedBox(
                         width: 0.9 * MediaQuery.of(context).size.width,
                         height: 300,
-                        child: selectedItem == SelectedItem.places
+                        child: 
+                        selectedItem == SelectedItem.places
                         ? DisplayClimbedRoutes(selectedPlace: selectedPlace, isPlaceSelected: isPlaceSelected, onPlaceSelected: handlePlaceSelected, 
-                              onBackButtonPressed: handleBackButtonPressed, climberName: climbers[selectedClimber.index], user: user)
+                              onBackButtonPressed: handleBackButtonPressed, climberName: (selectedClimber == SelectedClimber.climberOne) ? 0 : 1, user: user, climbedPlaces: climbedPlaces)
                         : DisplayDidActivities(climberName: climbers[selectedClimber.index], user: user,)
                       ),
 
@@ -231,18 +257,16 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
               ],
             ),
           );
+        }));
         }
-      )
-    )
-    );
-  }
-}
+    }
+  
 
 class DisplayDidActivities extends StatelessWidget {
-  String climberName;
-  User user;
+  final String climberName;
+  final User user;
 
-  DisplayDidActivities(
+  const DisplayDidActivities(
     {
       super.key,
       required this.climberName,
@@ -266,14 +290,15 @@ class DisplayDidActivities extends StatelessWidget {
 
 
 class DisplayClimbedRoutes extends StatelessWidget {
-  String climberName;
+  final int climberName;
   final VoidCallback onBackButtonPressed;
   final Function(ClimbedPlace) onPlaceSelected;
   final ClimbedPlace? selectedPlace;
   final bool isPlaceSelected;
-  User user;
+  final User user;
+  final ClimbedPlaces climbedPlaces;
 
-  DisplayClimbedRoutes(
+  const DisplayClimbedRoutes(
     {
       super.key,
       required this.climberName,
@@ -282,71 +307,72 @@ class DisplayClimbedRoutes extends StatelessWidget {
       required this.isPlaceSelected,
       required this.onPlaceSelected,
       required this.onBackButtonPressed,
+      required this.climbedPlaces,
     }
   );
 
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider<ResultsBloc>(
-      create: (context) => ResultsBloc(user),
-      child: BlocBuilder<ResultsBloc, Results>(
-      builder: (context, results) {
-
-    ClimbedPlaces climbedPlaces;
-              if (results.climberOneResults.climberName == climberName){
-                  climbedPlaces = results.climberOneResults;
-                } else {
-                  climbedPlaces = results.climberTwoResults;
-                }
-    //Same question as above
-    if (selectedPlace == null && climbedPlaces.climbedPlaceList.isNotEmpty) {
-    return ListView.builder(
-            itemCount: climbedPlaces.climbedPlaceList.length,
-            itemBuilder: (context, index) {
-              ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
-              return GestureDetector(
-                        onTap: () => onPlaceSelected(place),
-                        child: Card(
-                          color: const Color(colorPrimary),
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(width: 4, height: 4,),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.done,
-                                  color: Colors.white),
-                                title: Text(
-                                  place.name,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20
-                                  ),),
-                              ),
-                              const SizedBox(width: 4, height: 4,),
-                            ],
+    List<String> names = [user.firstClimberName, user.secondClimberName];
+    String selectedClimberName = names[climberName];
+      if (selectedPlace == null && climbedPlaces.climbedPlaceList.isNotEmpty) {
+      return ListView.builder(
+              itemCount: climbedPlaces.climbedPlaceList.length,
+              itemBuilder: (context, index) {
+                ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
+                return GestureDetector(
+                          onTap: () => onPlaceSelected(place),
+                          child: Card(
+                            color: const Color(colorPrimary),
+                            child: Column(
+                              children: <Widget>[
+                                const SizedBox(width: 4, height: 4,),
+                                ListTile(
+                                  leading: const Icon(
+                                    Icons.done,
+                                    color: Colors.white),
+                                  title: Text(
+                                    place.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20
+                                    ),),
+                                ),
+                                const SizedBox(width: 4, height: 4,),
+                              ],
+                            ),
                           ),
-                        ),
+                        );
+              },
+            );
+          } else if (selectedPlace != null && climbedPlaces.climbedPlaceList.isNotEmpty) {
+            // Display the list of routes for the selected Place here
+                ClimbedPlace routesPlace = climbedPlaces.getClimbedPlace(selectedPlace!.name);
+                log('routename:' + routesPlace.name + ' ' + selectedPlace!.name);
+                return ListView.builder(
+                  itemCount: routesPlace.climbedRouteList.length,
+                  itemBuilder: (context, index) {
+                    ClimbedRoute route = routesPlace.climbedRouteList[index];
+                    return CheckClimbedPlaceCard(
+                      climbedRoute: route, 
+                      user: user, 
+                      climberName: selectedClimberName, 
+                      placeName: routesPlace.name, 
                       );
-            },
-          );
-        } else if (selectedPlace != null && climbedPlaces.climbedPlaceList.isNotEmpty) {
-          // Display the list of routes for the selected Place here
-              ClimbedPlace routesPlace = results.climberOneResults.getClimbedPlace(selectedPlace!.name);
-              log('routename:' + routesPlace.name + ' ' + selectedPlace!.name);
-              return ListView.builder(
-                itemCount: routesPlace.climbedRouteList.length,
-                itemBuilder: (context, index) {
-                  ClimbedRoute route = routesPlace.climbedRouteList[index];
-                  return CheckClimbedPlaceCard(climbedRoute: route, user: user, climberName: climberName, placeName: selectedPlace!.name,);
-                },
-              );
-        } else {
-          return Text('No climbs yet.');
+                  },
+                );
+          } else {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('No climbs yet for $selectedClimberName.', style: TextStyle(color: Colors.grey.shade700, fontSize: 16, fontWeight: FontWeight.w600,)),
+              ],
+            );
+          }
         }
-  }));
-}
-}
+  }
+
 
   
 
@@ -400,7 +426,7 @@ class ClimbsAndMoreScreenTitleWidget extends StatelessWidget {
                           ]
                         )
                       ),
-                      CustomMenu(user: user),
+                      CustomMenu(user: user, contextFrom: context,),
                     ],
                   ),
                 ),

@@ -84,9 +84,7 @@ class init{
   }
 
   //maybe Future<Results>?
-  static getResults(BuildContext context, User user) async {
-    DatabaseReference resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
-
+  static getResults(User user, DataSnapshot dataSnapshot) async {
     num points = 0.0;
     String start = '';
 
@@ -100,19 +98,8 @@ class init{
 
     PausedHandler pausedHandler = PausedHandler(isPausedUsed: false, isPaused: false);
 
-    //These might be unnecessary, test it out
-    final snapshotStart = await resultsRef.child('start').get();
-    final snapshotPoints = await resultsRef.child('points').get();
-    if (snapshotStart.exists && snapshotPoints.exists) {
-      results.updatePointsAndStart(num.parse(snapshotPoints.value.toString()), snapshotStart.value as String);
-    } else {
-      print('No data available.');
-    }
-
     try{
-      resultsRef.onValue.listen((DatabaseEvent event) {
-        DataSnapshot snapshot = event.snapshot;
-        final Map data = snapshot.value as Map<dynamic, dynamic>;
+      Map<dynamic, dynamic> data = dataSnapshot.value as Map;
         data.forEach((key, value) {
           if(key == 'points'){
             points = value;
@@ -149,10 +136,11 @@ class init{
           }
           else if (key == "Climbs") {
             firstClimberList.clear();
+            secondClimberList.clear();
             Map climbersMap = value as Map<dynamic, dynamic>;
-            climbersMap.forEach((key, value) {
+            climbersMap.forEach((nameKey, value) {
               Map placeMap = value as Map<dynamic, dynamic>;
-              String climberNameHere = key;
+              String climberNameHere = nameKey;
               String placeName = '';
               placeMap.forEach((key, value) {
 
@@ -188,9 +176,8 @@ class init{
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
           climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
 
-          BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
-       });
-    } catch (error) {
+       }
+     catch (error) {
       // Handle any potential errors here
       print("Error fetching data: $error");
     }

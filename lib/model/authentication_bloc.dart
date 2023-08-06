@@ -39,7 +39,6 @@ class AuthenticationBloc
           emit(AuthenticationState.outOfDateTimeRange(user: user!));
         }
         else {
-          ResultsBloc(user!);
           emit(AuthenticationState.authenticated(user!));
         }
       }
@@ -53,7 +52,6 @@ class AuthenticationBloc
           event.email, event.password);
       if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
         user = result;
-        ResultsBloc(user!);
         emit(AuthenticationState.authenticated(user!));
       } 
       else if (result != null && result is String) {

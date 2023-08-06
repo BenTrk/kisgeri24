@@ -1,8 +1,10 @@
 
 
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/cards/activities_card.dart';
@@ -18,6 +20,7 @@ import '../../classes/places.dart';
 import '../../classes/results.dart';
 import '../../classes/rockroute.dart';
 import '../../misc/cards/card.dart';
+import '../../publics.dart';
 import 'date_time_picker_screen.dart';
 
 
@@ -47,6 +50,9 @@ class _HomeState extends State<HomeScreen> {
   //Time pause vars - chage it so it works with state.pausehandler.isPaused
   late bool isPaused;
   HomeModel homeModel = HomeModel();
+  
+  late DatabaseReference resultsRef;
+  StreamSubscription<DatabaseEvent>? _streamSubscription;
 
   //Enum for the Places/activites toggle button
   SelectedItem selectedItem = SelectedItem.places;
@@ -73,11 +79,15 @@ class _HomeState extends State<HomeScreen> {
   void initState() {
     super.initState();
     user = widget.user;
+    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    _streamSubscription = resultsRef.onValue.listen((event) {
+      init.getResults(user, event.snapshot);
+    });
   }
 
   @override
   void dispose() {
-    BlocProvider.of<ResultsBloc>(context).close();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 
@@ -91,12 +101,14 @@ class _HomeState extends State<HomeScreen> {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
       },
-      child: BlocProvider<ResultsBloc>(
-        create: (context) => ResultsBloc(user),
-        child: BlocBuilder<ResultsBloc, Results>(
-        builder: (context, results) {
 
-      return Scaffold(
+      child: StreamBuilder(
+        stream: resultsRef.onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+              //child: CircularProgressIndicator(),
+          }
+          return Scaffold(
         key: scaffoldKey,
         body: ListView(
           children: <Widget>[
@@ -235,10 +247,8 @@ class _HomeState extends State<HomeScreen> {
           ],
         ),
       );
-    })
-      )
-    );
-  }
+  }));
+    }
   
   
   showAlreadyUsedPauseError() {
@@ -442,8 +452,7 @@ class HomeScreenTitleWidget extends StatelessWidget {
                           ]
                         )
                       ),
-                      //CustomMenu.getCustomMenu(context, user, state),
-                      CustomMenu(user: user),
+                      CustomMenu(contextFrom: context, user: user),
                     ],
                   ),
                 ),
