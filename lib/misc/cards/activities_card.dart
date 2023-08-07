@@ -1,15 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
 
-import '../../blocs & events & states/results_bloc.dart';
-import '../../blocs & events & states/results_events.dart';
-import '../../classes/results.dart';
 import '../../model/user.dart';
 import '../../publics.dart';
 

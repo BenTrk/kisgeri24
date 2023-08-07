@@ -1,24 +1,22 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
-import '../../blocs & events & states/results_bloc.dart';
-import '../../blocs & events & states/results_events.dart';
 import '../../model/user.dart';
-import '../../publics.dart';
 import '../../ui/climbs & more/climbs_and_more_model.dart';
 
 class CheckActivitiesCard extends StatefulWidget {
   final DidActivity didActivity;
   final User user;
   final String climberName;
+  @override
+  final Key? key;
 
   const CheckActivitiesCard(
-    {
-      super.key,
+    { 
+      this.key,
       required this.didActivity,
       required this.user,
       required this.climberName,
@@ -38,6 +36,7 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard>{
   late User user;
   late String climberName;
   DatabaseWrites databaseWrites = DatabaseWrites();
+  bool isActive = true;
 
   @override
   void initState() {
@@ -53,7 +52,9 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard>{
   Widget build(BuildContext context) {
 
     return Center(
-      child: Card(
+      child: 
+      isActive
+      ? Card(
         color: Colors.white,
         shape: RoundedRectangleBorder( 
           side: const BorderSide(
@@ -80,12 +81,37 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard>{
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                   child: IconButton(
-                    onPressed: () => removeIt(context, didActivity, user, climberName), 
+                    onPressed: () {
+                      removeIt(context, didActivity, user, climberName);
+                      setState(() {
+                        isActive = false; // Set isActive to false when the remove button is pressed
+                      });
+                    }, 
                     icon: const Icon(Icons.remove_circle, color: Colors.red, size: 40,),),
                 ),
               ],
             ),
           ],
+        ),
+      )
+      :
+      Card(
+        color: Colors.grey.shade200,
+        shape: RoundedRectangleBorder( 
+          side: BorderSide(
+            color: Colors.grey.shade200,
+          ),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.rocket_launch, color: Colors.grey.shade200),
+              Text(title, style: TextStyle(color: Colors.grey.shade700, fontSize: 16, fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,)),
+            ],
+          ),
         ),
       ),
     );

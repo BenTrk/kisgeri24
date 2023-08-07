@@ -17,6 +17,7 @@ import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
 import '../../classes/results.dart';
 import '../../constants.dart';
 import '../../misc/cards/check_climb_card.dart';
+import '../../misc/cards/check_extra_points_card.dart';
 import '../../publics.dart';
 import '../home/date_time_picker_screen.dart';
 
@@ -87,12 +88,6 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
     _streamSubscription = resultsRef.onValue.listen((event) {
       init.getResults(user, event.snapshot);
     });
-  }
-
-  @override
-  void dispose() {
-    _streamSubscription?.cancel();
-    super.dispose();
   }
 
   @override
@@ -171,7 +166,6 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                                 } else {
                                   climbedPlaces = results.climberTwoResults;
                                 }
-                                log(selectedClimber.name);
                               });
                             },
                             children: [
@@ -262,31 +256,89 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
     }
   
 
-class DisplayDidActivities extends StatelessWidget {
+class DisplayDidActivities extends StatefulWidget {
   final String climberName;
   final User user;
 
-  const DisplayDidActivities(
-    {
-      super.key,
-      required this.climberName,
-      required this.user
+  const DisplayDidActivities({
+    Key? key,
+    required this.climberName,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  _DisplayDidActivitiesState createState() => _DisplayDidActivitiesState();
+}
+
+class _DisplayDidActivitiesState extends State<DisplayDidActivities> {
+  late DidActivities didActivities;
+  late TeamResults teamResults;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDidActivities(); // Fetch the initial DidActivities
+    //fetchDidActivites have to be updated to fetch team results, see below
+  }
+
+  void fetchDidActivities() {
+    didActivities = ClimbsAndMoreModel.getDidActivities(widget.climberName);
+    teamResults = ClimbsAndMoreModel.getTeamResults();
+    log('${teamResults.teamResultList.length}'); //to get the team results from results
+  }
+
+  @override
+  void didUpdateWidget(covariant DisplayDidActivities oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.climberName != oldWidget.climberName) {
+      fetchDidActivities();
+      //fetchDidActivities() have to be updated to fetch the team results too when climbername is updated. Check above.
     }
-  );
+  }
 
   @override
   Widget build(BuildContext context) {
-    //Will it update itself when a climb is removed?
-    DidActivities didActivities = ClimbsAndMoreModel.getDidActivities(climberName);
-    return ListView.builder(
-            itemCount: didActivities.activitiesList.length,
-            itemBuilder: (context, index) {
-              DidActivity didActivity = didActivities.activitiesList[index];
-              return CheckActivitiesCard(didActivity: didActivity, user: user, climberName: climberName,);
-            },
-          );
+    Widget widgetToDisplay;
+
+    if (didActivities.activitiesList.isNotEmpty || teamResults.teamResultList.isNotEmpty) {
+      return ListView.builder(
+        itemCount: didActivities.activitiesList.length + teamResults.teamResultList.length,
+        itemBuilder: (context, index) {
+          if (index < didActivities.activitiesList.length) {
+            // Display CheckActivitiesCard
+            DidActivity didActivity = didActivities.activitiesList[index];
+            return CheckActivitiesCard(
+              key: ValueKey(widget.climberName),
+              didActivity: didActivity,
+              user: widget.user,
+              climberName: widget.climberName,
+            );
+          } else {
+            // Display CheckExtraPointsCard
+            int teamResultIndex = index - didActivities.activitiesList.length;
+            TeamResult teamResult = teamResults.teamResultList[teamResultIndex];
+            return CheckExtraPointsCard(
+              teamResult: teamResult,
+              user: widget.user,
+            );
+          }
         }
+      );
+    } else {
+      log('none');
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'No activities yet for ${widget.climberName}.',
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 16, fontWeight: FontWeight.w600,),
+          ),
+        ],
+      );
+    }
   }
+}
+
 
 
 class DisplayClimbedRoutes extends StatelessWidget {
@@ -349,7 +401,7 @@ class DisplayClimbedRoutes extends StatelessWidget {
           } else if (selectedPlace != null && climbedPlaces.climbedPlaceList.isNotEmpty) {
             // Display the list of routes for the selected Place here
                 ClimbedPlace routesPlace = climbedPlaces.getClimbedPlace(selectedPlace!.name);
-                log('routename:' + routesPlace.name + ' ' + selectedPlace!.name);
+                log('routename:${routesPlace.name} ${selectedPlace!.name}');
                 return ListView.builder(
                   itemCount: routesPlace.climbedRouteList.length,
                   itemBuilder: (context, index) {

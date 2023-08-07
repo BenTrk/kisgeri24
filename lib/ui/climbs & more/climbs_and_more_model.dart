@@ -8,6 +8,10 @@ import '../../publics.dart';
 class ClimbsAndMoreModel{
   DatabaseWrites databaseWrites = DatabaseWrites();
 
+  static TeamResults getTeamResults(){
+    return results.teamResults;
+  }
+  
   static DidActivities getDidActivities(String climberName) {
     if (results.climberOneActivities.climberName == climberName){
       return results.climberOneActivities;

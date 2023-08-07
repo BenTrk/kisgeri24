@@ -2,13 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/misc/exceptions.dart';
 
-import '../blocs & events & states/results_bloc.dart';
-import '../blocs & events & states/results_events.dart';
 import '../classes/acivities.dart';
 import '../classes/place.dart';
 import '../classes/places.dart';
@@ -81,6 +78,9 @@ class init{
     await resultsRef.update({
       'pauseHandler/pauseOverTime': formattedDateTime
     });
+
+    DataSnapshot dataSnapshot = await resultsRef.get();
+    init.getResults(user, dataSnapshot);
   }
 
   //maybe Future<Results>?
@@ -97,6 +97,8 @@ class init{
     DidActivities didActivitiesClimberTwo = DidActivities(climberName: user.secondClimberName);
 
     PausedHandler pausedHandler = PausedHandler(isPausedUsed: false, isPaused: false);
+
+    TeamResults teamResults = TeamResults();
 
     try{
       Map<dynamic, dynamic> data = dataSnapshot.value as Map;
@@ -159,7 +161,6 @@ class init{
             climbedPlacesClimberOne = ClimbedPlaces(climberName: user.firstClimberName, climbedPlaceList: firstClimberList);
             climbedPlacesClimberTwo = ClimbedPlaces(climberName: user.secondClimberName, climbedPlaceList: secondClimberList);
           }
-
           else if (key == "Activities") {
             Map activitiesMap = value as Map<dynamic, dynamic>;
             activitiesMap.forEach((key, value) {
@@ -170,11 +171,19 @@ class init{
                 didActivitiesClimberTwo = DidActivities.fromSnapshot(value, key);
               }
             });
+          }
+          //Important! Currently, since adding extra Team points are done by hand in Firebase, the sum points have to be update as well!
+          else if (key == "Teams") {
+            Map teamsMap = value as Map<dynamic, dynamic>;
+            teamsMap.forEach((key, value) {
+              TeamResults teamResultsInside = TeamResults.fromJSON(value);
+              teamResults.teamResultList.addAll(teamResultsInside.teamResultList);
+            });
           } 
         });
 
         results = Results(points: points, start: start, climberOneResults: climbedPlacesClimberOne, climberTwoResults: climbedPlacesClimberTwo, 
-          climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler);
+          climberOneActivities: didActivitiesClimberOne, climberTwoActivities: didActivitiesClimberTwo, pausedHandler: pausedHandler, teamResults: teamResults);
 
        }
      catch (error) {

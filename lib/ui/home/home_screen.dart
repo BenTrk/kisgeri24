@@ -17,7 +17,6 @@ import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/home/model/home_model.dart';
 import '../../classes/place.dart';
 import '../../classes/places.dart';
-import '../../classes/results.dart';
 import '../../classes/rockroute.dart';
 import '../../misc/cards/card.dart';
 import '../../publics.dart';
@@ -83,12 +82,6 @@ class _HomeState extends State<HomeScreen> {
     _streamSubscription = resultsRef.onValue.listen((event) {
       init.getResults(user, event.snapshot);
     });
-  }
-
-  @override
-  void dispose() {
-    _streamSubscription?.cancel();
-    super.dispose();
   }
 
   @override

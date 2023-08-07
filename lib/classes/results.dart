@@ -65,14 +65,14 @@ class Results{
     if (identical(this, other)) return true;
 
     return other is Results &&
-        this.points == other.points &&
-        this.start == other.start &&
-        this.climberOneResults == other.climberOneResults &&
-        this.climberTwoResults == other.climberTwoResults &&
-        this.climberOneActivities == other.climberOneActivities &&
-        this.climberTwoActivities == other.climberTwoActivities &&
-        this.teamResults == other.teamResults &&
-        this.pausedHandler == other.pausedHandler;
+        points == other.points &&
+        start == other.start &&
+        climberOneResults == other.climberOneResults &&
+        climberTwoResults == other.climberTwoResults &&
+        climberOneActivities == other.climberOneActivities &&
+        climberTwoActivities == other.climberTwoActivities &&
+        teamResults == other.teamResults &&
+        pausedHandler == other.pausedHandler;
   }
 
   @override
@@ -136,8 +136,8 @@ class DidActivities {
     if (identical(this, other)) return true;
 
     return other is DidActivities &&
-        this.climberName == other.climberName &&
-        listEquals(this.activitiesList, other.activitiesList);
+        climberName == other.climberName &&
+        listEquals(activitiesList, other.activitiesList);
   }
 
   // Override hashCode to generate a hash based on the properties
@@ -187,8 +187,8 @@ class DidActivity {
     if (identical(this, other)) return true;
 
     return other is DidActivity &&
-        this.name == other.name &&
-        this.points == other.points;
+        name == other.name &&
+        points == other.points;
   }
 
   // Override hashCode to generate a hash based on the properties
@@ -203,7 +203,43 @@ class DidActivity {
 
 
 class TeamResults {
-  /** TODO */
+  List<TeamResult> teamResultList = [];
+  
+  TeamResults({
+    List<TeamResult>? teamResultList
+  }) : teamResultList = teamResultList ?? [];
+
+  static TeamResults fromJSON(value) {
+    TeamResults teamResults = TeamResults();
+    Map teamResultMap = value as Map<dynamic, dynamic>;
+    teamResultMap.forEach((key, value) {
+      String action = key as String;
+      num points = value;
+      TeamResult teamResult = TeamResult(action: action, points: points);
+      teamResults.teamResultList.add(teamResult);
+    });
+    return teamResults;
+  }
+
+  num getPoints() {
+    num points = 0;
+    teamResultList.forEach((element) { 
+      points = points + element.points;
+    });
+    return points;
+  }
+}
+
+class TeamResult {
+  String action;
+  num points;
+
+  TeamResult({
+    String? action,
+    num? points,
+  }) : 
+  action = action ?? '',
+  points = points ?? 0;
 }
 
 class ClimbedPlaces {
@@ -229,12 +265,12 @@ class ClimbedPlaces {
 
   getClimbedPlace(String placeName){
     ClimbedPlace climbedPlace = ClimbedPlace(name: '', climbedRouteList: []);
-    log('list length: ' + climbedPlaceList.length.toString());
-    climbedPlaceList.forEach((element) {
+    log('list length: ${climbedPlaceList.length}');
+    for (var element in climbedPlaceList) {
       if (placeName == element.name){
         climbedPlace = element;
       }
-    });
+    }
     
     return climbedPlace;
   }
