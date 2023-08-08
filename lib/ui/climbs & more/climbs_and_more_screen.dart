@@ -284,7 +284,6 @@ class _DisplayDidActivitiesState extends State<DisplayDidActivities> {
   void fetchDidActivities() {
     didActivities = ClimbsAndMoreModel.getDidActivities(widget.climberName);
     teamResults = ClimbsAndMoreModel.getTeamResults();
-    log('${teamResults.teamResultList.length}'); //to get the team results from results
   }
 
   @override
@@ -298,7 +297,6 @@ class _DisplayDidActivitiesState extends State<DisplayDidActivities> {
 
   @override
   Widget build(BuildContext context) {
-    Widget widgetToDisplay;
 
     if (didActivities.activitiesList.isNotEmpty || teamResults.teamResultList.isNotEmpty) {
       return ListView.builder(

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/ui/options/options.dart';
+import 'package:kisgeri24/ui/options/options_screen.dart';
 import 'package:kisgeri24/ui/sponsors/sponsors.dart';
 
 import '../constants.dart';
