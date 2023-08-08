@@ -4,7 +4,7 @@ import 'package:expandable_menu/expandable_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/ui/options/options_screen.dart';
-import 'package:kisgeri24/ui/sponsors/sponsors.dart';
+import 'package:kisgeri24/ui/sponsors/sponsors_bedrull_screen.dart';
 
 import '../constants.dart';
 import '../model/authentication_bloc.dart';
@@ -12,6 +12,8 @@ import '../model/user.dart';
 import '../services/helper.dart';
 import '../ui/climbs & more/climbs_and_more_screen.dart';
 import '../ui/home/home_screen.dart';
+import '../ui/sponsors/sponsors_deichatlon_screen.dart';
+import '../ui/sponsors/sponsors_randomsponsor_screen.dart';
 
 class CustomMenu extends StatefulWidget {
   final User user;
@@ -95,7 +97,7 @@ class CustomMenu extends StatefulWidget {
                   onPressed: () {
                     log('Pressed Sponsor');
                     pushReplacement(
-                          context, SponsorsScreen(user: user));
+                          context, SponsorsBedRullScreen(user: user));
                     },
                 ),
               ),
@@ -107,7 +109,7 @@ class CustomMenu extends StatefulWidget {
                   onPressed: () {
                     log('Pressed Sponsor');
                     pushReplacement(
-                          context, SponsorsScreen(user: user));
+                          context, SponsorsDeichatlonScreen(user: user));
                     },
                 ),
               ),
@@ -119,7 +121,7 @@ class CustomMenu extends StatefulWidget {
                   onPressed: () {
                     log('Pressed Sponsor');
                     pushReplacement(
-                          context, SponsorsScreen(user: user));
+                          context, SponsorsRandomSponsorScreen(user: user));
                   },
                 ),
               ),
