@@ -16,6 +16,66 @@ class init{
   //Compare starttime and starttime + category to start and end times
   //return true if in range, false, if out of range
   //Take extra care when adding dates for testing manually - the format is important
+  static Duration getTimeUntilStartTime(String startTime) {
+    Duration duration = Duration.zero;
+    DateTime userStartDateTime;
+
+    String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
+    userStartDateTime = DateTime.parse(userStartTime);
+
+    duration = DateTime.now().difference(userStartDateTime);
+
+    return duration;
+  }
+
+  static getTenMinutesLeftDurationInMinutes(int category){
+    category = category * 60; //so it is in minutes
+    category = category - 10; //so it is 10 minutes before the end
+    return category;
+  }
+
+  static getOneHourLeftDurationInHours(int category){
+    category = category - 1;
+    return category;
+  }
+
+  static int getCategoryTime(User user){
+    String category = user.category;
+    int categoryTime = 0;
+
+    category = category.replaceAll('H', '');
+    categoryTime = int.parse(category);
+
+    return categoryTime;
+  }
+
+  static String getEndDate(User user, String startTime) {
+    String userCategory = user.category;
+    Duration duration = Duration.zero;
+    DateTime userStartDateTime;
+
+    String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
+    userStartDateTime = DateTime.parse(userStartTime);
+
+    switch(userCategory) {
+      case ('6H'): {
+        duration = const Duration(hours: 6);
+        break;
+      }
+      case ('12H'): {
+        duration = const Duration(hours: 12);
+        break;
+      }
+      case ('24H'): {
+        duration = const Duration(hours: 24);
+        break;
+      }
+    }
+
+    DateTime userEndDateTime = userStartDateTime.add(duration);
+
+    return userEndDateTime.toString();
+  }
 
   //ToDo: Use try catch for dates, do not initialize on start for stupid values!
   static Future<bool> checkDateTime(User user) async {
@@ -38,7 +98,7 @@ class init{
 
     final snapshotResult = await resultsRef.get();
     
-    if (snapshot.exists) {
+    if (snapshotResult.exists) {
       String userStartTime = snapshotResult.child('start').value.toString();
       userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
       userStartDateTime = DateTime.parse(userStartTime);
@@ -252,4 +312,5 @@ class init{
 
   return Category(name: 'Climbers', activityList: activityList); 
   }
+
 }

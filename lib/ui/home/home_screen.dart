@@ -46,12 +46,12 @@ class _HomeState extends State<HomeScreen> {
   //Activities state vars
   Category? selectedCategory;
   bool isCategorySelected = false;
-  //Time pause vars - chage it so it works with state.pausehandler.isPaused
-  late bool isPaused;
   HomeModel homeModel = HomeModel();
   
   late DatabaseReference resultsRef;
   StreamSubscription<DatabaseEvent>? _streamSubscription;
+
+  //bool isTimeToClimb = false;
 
   //Enum for the Places/activites toggle button
   SelectedItem selectedItem = SelectedItem.places;
@@ -86,13 +86,28 @@ class _HomeState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.authState == AuthState.unauthenticated) {
           pushAndRemoveUntil(context, const WelcomeScreen(), false);
-        } else if (state.authState == AuthState.didNotSetTime) {
+        } 
+        else if (state.authState == AuthState.didNotSetTime) {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
+
+        //implemented, remove to test it out!
+
+        //else if (state.authState == AuthState.outOfDateTimeRange) {
+        //  isTimeToClimb = false;
+        //  BackgroundTask(user: user).startCheckAuthStateWhenOutOfDateRange(results, context);
+        //}
+        //else if (state.authState == AuthState.authenticated) {
+        //  isTimeToClimb = true;
+        //  BackgroundTask(user: user).startHalfTimeNotificationsTask
+        //  BackgroundTask(user: user).startOneHourLeftNotificationsTask
+        //  BackgroundTask(user: user).startTenMinutesLeftNotificationsTask
+        //}
       },
 
       child: StreamBuilder(
@@ -132,7 +147,7 @@ class _HomeState extends State<HomeScreen> {
                                   Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
                                        Text(
                                         !results.pausedHandler.isPaused
-                                          ? 'Started at: ${results.start}'
+                                          ? 'End time: ${init.getEndDate(user, results.start)}'
                                           : "On Pause!"
                                       
                                   ),
@@ -196,6 +211,9 @@ class _HomeState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 20,),
 
+                  //isTimeToClimb
+                  //?
+
                   isPlaceSelected || isCategorySelected
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -221,7 +239,7 @@ class _HomeState extends State<HomeScreen> {
                     : const SizedBox(),
                   SizedBox(
                     width: 0.9 * MediaQuery.of(context).size.width,
-                    height: 300,
+                    height: 250,
                     child: selectedItem == SelectedItem.places
                     ? DisplayPlacesAndRoutesWidget(
                       selectedPlace: selectedPlace,
@@ -234,6 +252,8 @@ class _HomeState extends State<HomeScreen> {
                       user: user,
                     ),
                   ),
+                  //:
+                  // Text('It\'s not the time to climb yet.')
                 ],
               ),
             ),

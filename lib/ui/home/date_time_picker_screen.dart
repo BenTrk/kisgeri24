@@ -127,7 +127,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   value: teamMinutes,
                                   axis: Axis.vertical,
                                   minValue: 0,
-                                  maxValue: 60,
+                                  maxValue: 45,
                                   itemHeight: 40,
                                   step: 15,
                                   onChanged: (value) => setState(() => teamMinutes = value),

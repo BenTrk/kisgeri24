@@ -131,7 +131,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                           child: Column(
                             children: [
                               Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                              Text('Started at: ${results.start}'),
+                              Text('End time: ${init.getEndDate(user, results.start)}'),
                               Text('Points: ${results.points}'),
                             ]
                           ),

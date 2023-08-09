@@ -99,5 +99,14 @@ class AuthenticationBloc
       user = null;
       emit(const AuthenticationState.unauthenticated());
     });
+
+    on<CheckAuthenticationEvent>((event, emit) async {
+      User? user = await FireStoreUtils.getAuthUser();
+      if (user != null){
+        if (await init.checkDateTime(user)){
+          emit(AuthenticationState.authenticated(user));
+        }
+      } //ToDo error handling
+    });
   }
 }
