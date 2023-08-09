@@ -1,16 +1,19 @@
 
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/cards/activities_card.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
 import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/authenticate.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
@@ -18,6 +21,7 @@ import 'package:kisgeri24/ui/home/model/home_model.dart';
 import '../../classes/place.dart';
 import '../../classes/places.dart';
 import '../../classes/rockroute.dart';
+import '../../misc/background_task.dart';
 import '../../misc/cards/card.dart';
 import '../../publics.dart';
 import 'date_time_picker_screen.dart';
@@ -51,7 +55,7 @@ class _HomeState extends State<HomeScreen> {
   late DatabaseReference resultsRef;
   StreamSubscription<DatabaseEvent>? _streamSubscription;
 
-  //bool isTimeToClimb = false;
+  bool isTimeToClimb = false;
 
   //Enum for the Places/activites toggle button
   SelectedItem selectedItem = SelectedItem.places;
@@ -74,14 +78,30 @@ class _HomeState extends State<HomeScreen> {
     });
   }
 
+  void checkIfInRange(User user) async {
+    bool isIn = await init.checkDateTime(user);
+    if (isIn) {
+      setState(() {
+        isTimeToClimb = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     user = widget.user;
+    checkIfInRange(user);
     resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
     _streamSubscription = resultsRef.onValue.listen((event) {
       init.getResults(user, event.snapshot);
+      if (!isTimeToClimb){
+        //Have to check, might get initialized with empty results! (But how can that be if I listen here for CHANGES in the db, i dunno.)
+        BackgroundTask(user: user).startCheckAuthStateWhenOutOfDateRange(results, context);
+        //For testing: Set dates[], dateTimePickerModel - teamdate, database - compStart and EndTime
+      }
     });
+    //if outOfTimeRange
   }
 
   @override
@@ -89,6 +109,7 @@ class _HomeState extends State<HomeScreen> {
 
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
+        log(state.authState.toString());
         if (state.authState == AuthState.unauthenticated) {
           pushAndRemoveUntil(context, const WelcomeScreen(), false);
         } 
@@ -97,17 +118,12 @@ class _HomeState extends State<HomeScreen> {
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
 
         //implemented, remove to test it out!
-
-        //else if (state.authState == AuthState.outOfDateTimeRange) {
-        //  isTimeToClimb = false;
-        //  BackgroundTask(user: user).startCheckAuthStateWhenOutOfDateRange(results, context);
-        //}
-        //else if (state.authState == AuthState.authenticated) {
-        //  isTimeToClimb = true;
-        //  BackgroundTask(user: user).startHalfTimeNotificationsTask
-        //  BackgroundTask(user: user).startOneHourLeftNotificationsTask
-        //  BackgroundTask(user: user).startTenMinutesLeftNotificationsTask
-        //}
+        else if (state.authState == AuthState.authenticated) {
+          setState(() {
+            isTimeToClimb = true;
+          });
+          startBackGroundTasksForNotifications(user);
+        }
       },
 
       child: StreamBuilder(
@@ -211,9 +227,7 @@ class _HomeState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 20,),
 
-                  //isTimeToClimb
-                  //?
-
+                  
                   isPlaceSelected || isCategorySelected
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -237,6 +251,8 @@ class _HomeState extends State<HomeScreen> {
                       ],
                     )
                     : const SizedBox(),
+                  isTimeToClimb
+                  ?
                   SizedBox(
                     width: 0.9 * MediaQuery.of(context).size.width,
                     height: 250,
@@ -251,9 +267,9 @@ class _HomeState extends State<HomeScreen> {
                     : DisplayActivitiesWidget(
                       user: user,
                     ),
-                  ),
-                  //:
-                  // Text('It\'s not the time to climb yet.')
+                  )
+                  :
+                  const Text('It\'s not the time to climb yet.')
                 ],
               ),
             ),
@@ -261,6 +277,19 @@ class _HomeState extends State<HomeScreen> {
         ),
       );
   }));
+}
+
+  void startBackGroundTasksForNotifications(User user) async {
+      //For iOS it has to be set! Create an App... part: https://learn.microsoft.com/en-us/dotnet/maui/ios/capabilities?tabs=vs
+      final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      const initializationSettingsAndroid = AndroidInitializationSettings('logo');
+      const initializationSettingsIOS = DarwinInitializationSettings();
+      const initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+      BackgroundTask(user: user).startHalfTimeNotificationsTask(flutterLocalNotificationsPlugin);
+      BackgroundTask(user: user).startOneHourLeftNotificationsTask(flutterLocalNotificationsPlugin);
+      BackgroundTask(user: user).startTenMinutesLeftNotificationsTask(flutterLocalNotificationsPlugin);
     }
   
   
@@ -287,6 +316,7 @@ class _HomeState extends State<HomeScreen> {
             // Button to proceed with the action
             TextButton(
               onPressed: () {
+                //ToDo: if DateTime.now() - teamEndTime < 1 hours -> show error
                 homeModel.writePauseInformation(DateTime.now(), user, context);
                 // Close the dialog
                 Navigator.of(context).pop();

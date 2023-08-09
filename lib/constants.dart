@@ -6,5 +6,5 @@ const usersCollection = 'users';
 const eula = 'https://www.instamobile.io/eula-instachatty/';
 const categories = <String> ['6H', '12H', '24H'];
 const styles = <String> ['Top-Rope', 'Lead', 'Clean'];
-const dates = <String> ['01-June', '02-June'];
+const dates = <String> ['09-August', '10-August'];
 const defaultDateTime = '1969-07-20 - 20:18';

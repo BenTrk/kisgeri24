@@ -21,7 +21,12 @@ class init{
     DateTime userStartDateTime;
 
     String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
-    userStartDateTime = DateTime.parse(userStartTime);
+    if (userStartTime == ""){
+      //?
+      userStartDateTime = DateTime(2017, 9, 7, 17, 30);
+    } else {
+      userStartDateTime = DateTime.parse(userStartTime);
+    }
 
     duration = DateTime.now().difference(userStartDateTime);
 
@@ -55,7 +60,11 @@ class init{
     DateTime userStartDateTime;
 
     String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
-    userStartDateTime = DateTime.parse(userStartTime);
+    if (userStartTime == ""){
+      userStartDateTime = DateTime.now();
+    } else {
+      userStartDateTime = DateTime.parse(userStartTime);
+    }
 
     switch(userCategory) {
       case ('6H'): {
@@ -74,7 +83,7 @@ class init{
 
     DateTime userEndDateTime = userStartDateTime.add(duration);
 
-    return userEndDateTime.toString();
+    return DateFormat('hh:mm - dd-MM').format(userEndDateTime);
   }
 
   //ToDo: Use try catch for dates, do not initialize on start for stupid values!
@@ -85,6 +94,7 @@ class init{
     DateTime userStartDateTime = DateTime(1969,07,20,20,17);
     String userCategory = user.category;
     Duration duration = const Duration(hours: 0);
+    bool isInRange = false;
  
     final snapshot = await basicRef.get();
     if (snapshot.exists) {
@@ -93,7 +103,7 @@ class init{
       compStartTime = compStartTime.replaceFirst(RegExp(' - '), 'T');
       compStartDateTime = DateTime.parse(compStartTime);
     } else {
-      throw customException.noSnapshotException();
+      return isInRange;
     }
 
     final snapshotResult = await resultsRef.get();
@@ -103,7 +113,7 @@ class init{
       userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
       userStartDateTime = DateTime.parse(userStartTime);
     } else {
-      throw customException.noSnapshotException();
+      return isInRange;
     }
 
     switch(userCategory) {
@@ -123,7 +133,6 @@ class init{
 
     DateTime userEndDateTime = userStartDateTime.add(duration);
 
-    bool isInRange = false;
     if (DateTime.now().isBefore(compStartDateTime) || DateTime.now().isAfter(userEndDateTime)){
        isInRange = false;
     } else { isInRange = true; }

@@ -76,6 +76,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                     child: Divider( color: Color(colorPrimary),),
                   ),
                   Row(
+                    //ToDo: should be based on category so teams cannot select a start time that would end after compEndTime.
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Padding(

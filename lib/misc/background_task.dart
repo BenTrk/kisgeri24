@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,8 +40,10 @@ class BackgroundTask {
 
   //should be triggered right after the start time!
   void startHalfTimeNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+    log('Started notification halftime');
     int categoryTime = init.getCategoryTime(user); //To get the category num
-    categoryTime = categoryTime / 2 as int; //Create function for get duration for 1 hour left, and 10 minutes left.
+    double _timeInDouble = categoryTime / 2;
+    categoryTime = _timeInDouble.toInt(); //Create function for get duration for 1 hour left, and 10 minutes left.
     Future.delayed(Duration(hours: categoryTime), () async {
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -61,6 +64,7 @@ class BackgroundTask {
 
   //should be triggered right after the start time!
   void startOneHourLeftNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+    log('Started notification 1 hour');
     int categoryTime = init.getCategoryTime(user); //To get the category num
     categoryTime = init.getOneHourLeftDurationInHours(categoryTime);
     Future.delayed(Duration(hours: categoryTime), () async {
@@ -83,6 +87,7 @@ class BackgroundTask {
 
   //should be triggered right after the start time!
   void startTenMinutesLeftNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+    log('Started notification 10 minutes');
     int categoryTime = init.getCategoryTime(user); //To get the category num
     categoryTime = init.getTenMinutesLeftDurationInMinutes(categoryTime);
     Future.delayed(Duration(minutes: categoryTime), () async {
@@ -104,11 +109,19 @@ class BackgroundTask {
   }
 
   void startCheckAuthStateWhenOutOfDateRange(Results results, BuildContext context){
+    
     String startTime = results.start;
     Duration duration = init.getTimeUntilStartTime(startTime);
+    log('Started check for dateTime range');
 
-    Future.delayed(duration, () async {
+    if (duration.isNegative){
+      log('Created check, will be done in $duration');
+      Future.delayed(-duration, () async {
+        context.read<AuthenticationBloc>().add(CheckAuthenticationEvent());
+        log('Fired up check for dateTime range');
+      });
+    } else {
       context.read<AuthenticationBloc>().add(CheckAuthenticationEvent());
-    });
+    }
   }
 }
