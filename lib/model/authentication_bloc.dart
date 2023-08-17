@@ -1,9 +1,7 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/authenticate.dart';
-import 'package:kisgeri24/services/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kisgeri24/model/init.dart';
 
@@ -28,17 +26,15 @@ class AuthenticationBloc
         user = await FireStoreUtils.getAuthUser();
         if (user == null) {
           emit(const AuthenticationState.unauthenticated());
-        } 
-        else if (user!.isPaid == false){
-          emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
-        } 
-        else if (!user!.isStartDateSet){
-          emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
-        }
-        else if (! await init.checkDateTime(user!)){
+        } else if (user!.isPaid == false) {
+          emit(AuthenticationState.didNotPayYet(
+              user: user!, message: 'You did not pay the entry fee yet.'));
+        } else if (!user!.isStartDateSet) {
+          emit(AuthenticationState.didNotSetTime(
+              user: user!, message: 'You need to set the startdate first.'));
+        } else if (!await Init.checkDateTime(user!)) {
           emit(AuthenticationState.outOfDateTimeRange(user: user!));
-        }
-        else {
+        } else {
           emit(AuthenticationState.authenticated(user!));
         }
       }
@@ -50,27 +46,26 @@ class AuthenticationBloc
     on<LoginWithEmailAndPasswordEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.loginWithEmailAndPassword(
           event.email, event.password);
-      if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
+      if (result != null &&
+          result is User &&
+          result.isPaid &&
+          await Init.checkDateTime(result)) {
         user = result;
         emit(AuthenticationState.authenticated(user!));
-      } 
-      else if (result != null && result is String) {
+      } else if (result != null && result is String) {
         emit(AuthenticationState.unauthenticated(message: result));
-      } 
-      else if (result != null && result is User && result.isPaid == false) {
+      } else if (result != null && result is User && result.isPaid == false) {
         user = result;
-        emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
-      }
-      else if (result != null && result is User && !result.isStartDateSet){
-          user = result;
-          emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
-      } 
-      else if (result != null && result is User && result.isStartDateSet){
-        
+        emit(AuthenticationState.didNotPayYet(
+            user: user!, message: 'You did not pay the entry fee yet.'));
+      } else if (result != null && result is User && !result.isStartDateSet) {
+        user = result;
+        emit(AuthenticationState.didNotSetTime(
+            user: user!, message: 'You need to set the startdate first.'));
+      } else if (result != null && result is User && result.isStartDateSet) {
         user = result;
         emit(AuthenticationState.outOfDateTimeRange(user: user!));
-      }
-      else {
+      } else {
         emit(const AuthenticationState.unauthenticated(
             message: 'Login failed, Please try again.'));
       }
@@ -79,29 +74,31 @@ class AuthenticationBloc
     //might need to add other states too.
     on<SignupWithEmailAndPasswordEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.signUpWithEmailAndPassword(
-          emailAddress: event.emailAddress,
-          password: event.password,
-          teamName: event.teamName,
-          firstClimberName: event.firstClimberName,
-          secondClimberName: event.secondClimberName,
-          category: event.category,);
-      if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
+        emailAddress: event.emailAddress,
+        password: event.password,
+        teamName: event.teamName,
+        firstClimberName: event.firstClimberName,
+        secondClimberName: event.secondClimberName,
+        category: event.category,
+      );
+      if (result != null &&
+          result is User &&
+          result.isPaid &&
+          await Init.checkDateTime(result)) {
         user = result;
         emit(AuthenticationState.authenticated(user!));
-      }
-      else if (result != null && result is User && result.isPaid == false) {
+      } else if (result != null && result is User && result.isPaid == false) {
         user = result;
-        emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
-      }
-      else if (result != null && result is User && !result.isStartDateSet){
-          user = result;
-          emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
-      } 
-      else if (result != null && result is User && result.isStartDateSet){
+        emit(AuthenticationState.didNotPayYet(
+            user: user!, message: 'You did not pay the entry fee yet.'));
+      } else if (result != null && result is User && !result.isStartDateSet) {
+        user = result;
+        emit(AuthenticationState.didNotSetTime(
+            user: user!, message: 'You need to set the startdate first.'));
+      } else if (result != null && result is User && result.isStartDateSet) {
         user = result;
         emit(AuthenticationState.outOfDateTimeRange(user: user!));
-      }
-       else if (result != null && result is String) {
+      } else if (result != null && result is String) {
         emit(AuthenticationState.unauthenticated(message: result));
       } else {
         emit(const AuthenticationState.unauthenticated(
@@ -116,8 +113,8 @@ class AuthenticationBloc
 
     on<CheckAuthenticationEvent>((event, emit) async {
       User? user = await FireStoreUtils.getAuthUser();
-      if (user != null){
-        if (await init.checkDateTime(user)){
+      if (user != null) {
+        if (await Init.checkDateTime(user)) {
           emit(AuthenticationState.authenticated(user));
         }
       } //ToDo error handling

@@ -1,18 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/misc/customMenu.dart';
+import 'package:kisgeri24/misc/custom_menu.dart';
 import 'package:kisgeri24/publics.dart';
 import 'package:numberpicker/numberpicker.dart';
-import '../../constants.dart';
-import '../../model/authentication_bloc.dart';
-import '../../model/user.dart';
-import '../../services/helper.dart';
-import '../auth/welcome/welcome_screen.dart';
-import '../home/model/date_time_picker_model.dart';
-import '/misc/toggleButtonsDateSelector.dart';
+import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/helper.dart';
+import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
+import 'package:kisgeri24/ui/home/model/date_time_picker_model.dart';
+import 'package:kisgeri24/misc/toggle_buttons_date_selector.dart';
 import 'home_screen.dart';
-
 
 class DateTimePickerScreen extends StatefulWidget {
   final User user;
@@ -40,7 +38,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state.authState == AuthState.unauthenticated) {
@@ -51,7 +48,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
         key: scaffoldKey,
         body: ListView(
           children: <Widget>[
-            
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +69,9 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                   ),
                   const Padding(
                     padding: EdgeInsets.all(25.0),
-                    child: Divider( color: Color(colorPrimary),),
+                    child: Divider(
+                      color: Color(colorPrimary),
+                    ),
                   ),
                   Row(
                     //ToDo: should be based on category so teams cannot select a start time that would end after compEndTime.
@@ -84,62 +82,67 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                         child: CustomToggleDateButtons(),
                       ),
                       Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              const Text(
-                                'Hours:',
-                                style: TextStyle(color: Color(colorPrimary), fontSize: 16)
-                                ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child:
-                                NumberPicker(
-                                  textStyle: const TextStyle(color: Color(colorPrimary)),
-                                  value: teamHours,
-                                  axis: Axis.vertical,
-                                  minValue: 0,
-                                  maxValue: 24,
-                                  itemHeight: 40,
-                                  onChanged: (value) => setState(() => teamHours = value),
-                                  decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            const Text('Hours:',
+                                style: TextStyle(
+                                    color: Color(colorPrimary), fontSize: 16)),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: NumberPicker(
+                                textStyle:
+                                    const TextStyle(color: Color(colorPrimary)),
+                                value: teamHours,
+                                axis: Axis.vertical,
+                                minValue: 0,
+                                maxValue: 24,
+                                itemHeight: 40,
+                                onChanged: (value) =>
+                                    setState(() => teamHours = value),
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: const Color.fromRGBO(255, 186, 0, 1), width: 2),
-                                  ),
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromRGBO(255, 186, 0, 1),
+                                      width: 2),
                                 ),
                               ),
-                            ],
-                          ),
-                          
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              const Text(
-                                'Minutes:',
-                                style: TextStyle(color: Color(colorPrimary), fontSize: 16)
-                                ),
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child:
-                                NumberPicker(
-                                  textStyle: const TextStyle(color: Color(colorPrimary)),
-                                  value: teamMinutes,
-                                  axis: Axis.vertical,
-                                  minValue: 0,
-                                  maxValue: 45,
-                                  itemHeight: 40,
-                                  step: 15,
-                                  onChanged: (value) => setState(() => teamMinutes = value),
-                                  decoration: BoxDecoration(
+                        child: Column(
+                          children: [
+                            const Text('Minutes:',
+                                style: TextStyle(
+                                    color: Color(colorPrimary), fontSize: 16)),
+                            Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: NumberPicker(
+                                textStyle:
+                                    const TextStyle(color: Color(colorPrimary)),
+                                value: teamMinutes,
+                                axis: Axis.vertical,
+                                minValue: 0,
+                                maxValue: 45,
+                                itemHeight: 40,
+                                step: 15,
+                                onChanged: (value) =>
+                                    setState(() => teamMinutes = value),
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: const Color.fromRGBO(255, 186, 0, 1), width: 2),
-                                  ),
+                                  border: Border.all(
+                                      color:
+                                          const Color.fromRGBO(255, 186, 0, 1),
+                                      width: 2),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -150,17 +153,15 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: const Color(colorPrimary),
-                                    minimumSize: const Size(150, 40)
-                                  ),
-                              onPressed: 
-                                _showAlertDialog,
-                              child: const Text(
-                                'All Set!',
-                                style: TextStyle(fontSize: 24),
-                              ),
-                            ),
+                              foregroundColor: Colors.white,
+                              backgroundColor: const Color(colorPrimary),
+                              minimumSize: const Size(150, 40)),
+                          onPressed: _showAlertDialog,
+                          child: const Text(
+                            'All Set!',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -178,9 +179,10 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
-        dateTime = DateTimePickerModel().setDateTime(teamHours, teamMinutes, teamDate);
+        dateTime =
+            DateTimePickerModel().setDateTime(teamHours, teamMinutes, teamDate);
 
-        return AlertDialog( 
+        return AlertDialog(
           title: const Text('Are you sure?'),
           content: SingleChildScrollView(
             child: ListBody(
@@ -202,9 +204,9 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                 //Move to the HomePage! Disable database writes while not in competition
                 user.isStartDateSet = true;
                 Navigator.of(dialogContext).pop();
-                DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
-                pushAndRemoveUntil(
-                      context, HomeScreen(user: user), false);
+                DateTimePickerModel()
+                    .writeDateToDatabase(context, dateTime, user);
+                pushAndRemoveUntil(context, HomeScreen(user: user), false);
               },
             ),
           ],
@@ -212,7 +214,6 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
       },
     );
   }
-
 }
 
 class LogoImageWidget extends StatelessWidget {
@@ -228,29 +229,31 @@ class LogoImageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        children: [ 
+        children: [
           Expanded(
-                  child: Stack(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 10.0, right: 24.0, left: 24.0),
+                  child: Image.asset(
+                    'assets/images/welcome_image.png',
                     alignment: Alignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10.0, right: 24.0, left: 24.0),
-                        child: Image.asset(
-                          'assets/images/welcome_image.png',
-                        alignment: Alignment.center,
-                        width: 150.0,
-                        height: 150.0,
-                        fit: BoxFit.cover,
-                        ),
-                      ), 
-                      CustomMenu(user: user, contextFrom: context,),
-                    ],
+                    width: 150.0,
+                    height: 150.0,
+                    fit: BoxFit.cover,
                   ),
                 ),
+                CustomMenu(
+                  user: user,
+                  contextFrom: context,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
-

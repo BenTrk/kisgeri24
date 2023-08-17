@@ -17,9 +17,11 @@ class BackgroundTask {
     required this.user,
   });
 
-  void startBackgroundTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin, BuildContext context) {
+  void startBackgroundTask(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+      BuildContext context) {
     Future.delayed(const Duration(hours: 1), () async {
-      init.getPauseOver(user, context);
+      Init.getPauseOver(user, context);
 
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -28,7 +30,8 @@ class BackgroundTask {
         importance: Importance.max,
         priority: Priority.high,
       );
-      const notificationDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+      const notificationDetails =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
       flutterLocalNotificationsPlugin.show(
         0,
         'It\'s Time to Climb Again!',
@@ -39,11 +42,13 @@ class BackgroundTask {
   }
 
   //should be triggered right after the start time!
-  void startHalfTimeNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+  void startHalfTimeNotificationsTask(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
     log('Started notification halftime');
-    int categoryTime = init.getCategoryTime(user); //To get the category num
-    double _timeInDouble = categoryTime / 2;
-    categoryTime = _timeInDouble.toInt(); //Create function for get duration for 1 hour left, and 10 minutes left.
+    int categoryTime = Init.getCategoryTime(user); //To get the category num
+    double timeInDouble = categoryTime / 2;
+    categoryTime = timeInDouble
+        .toInt(); //Create function for get duration for 1 hour left, and 10 minutes left.
     Future.delayed(Duration(hours: categoryTime), () async {
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -52,7 +57,8 @@ class BackgroundTask {
         importance: Importance.max,
         priority: Priority.high,
       );
-      const notificationDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+      const notificationDetails =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
       flutterLocalNotificationsPlugin.show(
         0,
         'Way to go!',
@@ -63,10 +69,11 @@ class BackgroundTask {
   }
 
   //should be triggered right after the start time!
-  void startOneHourLeftNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+  void startOneHourLeftNotificationsTask(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
     log('Started notification 1 hour');
-    int categoryTime = init.getCategoryTime(user); //To get the category num
-    categoryTime = init.getOneHourLeftDurationInHours(categoryTime);
+    int categoryTime = Init.getCategoryTime(user); //To get the category num
+    categoryTime = Init.getOneHourLeftDurationInHours(categoryTime);
     Future.delayed(Duration(hours: categoryTime), () async {
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -75,7 +82,8 @@ class BackgroundTask {
         importance: Importance.max,
         priority: Priority.high,
       );
-      const notificationDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+      const notificationDetails =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
       flutterLocalNotificationsPlugin.show(
         0,
         'Time is ticking!',
@@ -86,10 +94,11 @@ class BackgroundTask {
   }
 
   //should be triggered right after the start time!
-  void startTenMinutesLeftNotificationsTask(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+  void startTenMinutesLeftNotificationsTask(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
     log('Started notification 10 minutes');
-    int categoryTime = init.getCategoryTime(user); //To get the category num
-    categoryTime = init.getTenMinutesLeftDurationInMinutes(categoryTime);
+    int categoryTime = Init.getCategoryTime(user); //To get the category num
+    categoryTime = Init.getTenMinutesLeftDurationInMinutes(categoryTime);
     Future.delayed(Duration(minutes: categoryTime), () async {
       // Show a notification
       const androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -98,7 +107,8 @@ class BackgroundTask {
         importance: Importance.max,
         priority: Priority.high,
       );
-      const notificationDetails = NotificationDetails(android: androidPlatformChannelSpecifics);
+      const notificationDetails =
+          NotificationDetails(android: androidPlatformChannelSpecifics);
       flutterLocalNotificationsPlugin.show(
         0,
         'Almost finished!',
@@ -108,13 +118,13 @@ class BackgroundTask {
     });
   }
 
-  void startCheckAuthStateWhenOutOfDateRange(Results results, BuildContext context){
-    
+  void startCheckAuthStateWhenOutOfDateRange(
+      Results results, BuildContext context) {
     String startTime = results.start;
-    Duration duration = init.getTimeUntilStartTime(startTime);
+    Duration duration = Init.getTimeUntilStartTime(startTime);
     log('Started check for dateTime range');
 
-    if (duration.isNegative){
+    if (duration.isNegative) {
       log('Created check, will be done in $duration');
       Future.delayed(-duration, () async {
         context.read<AuthenticationBloc>().add(CheckAuthenticationEvent());

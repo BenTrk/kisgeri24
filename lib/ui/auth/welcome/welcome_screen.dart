@@ -63,16 +63,15 @@ class SignUpButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          right: 40.0, left: 40.0, top: 20, bottom: 20),
+      padding:
+          const EdgeInsets.only(right: 40.0, left: 40.0, top: 20, bottom: 20),
       child: TextButton(
         onPressed: () {
           context.read<WelcomeBloc>().add(SignupPressed());
         },
         style: TextButton.styleFrom(
           padding: const EdgeInsets.only(top: 16, bottom: 16),
-          fixedSize: Size.fromWidth(
-              MediaQuery.of(context).size.width / 1.5),
+          fixedSize: Size.fromWidth(MediaQuery.of(context).size.width / 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
             side: const BorderSide(
@@ -100,12 +99,10 @@ class LogInButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
+      padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          fixedSize: Size.fromWidth(
-              MediaQuery.of(context).size.width / 1.5),
+          fixedSize: Size.fromWidth(MediaQuery.of(context).size.width / 1.5),
           backgroundColor: const Color(colorPrimary),
           textStyle: const TextStyle(color: Colors.white),
           padding: const EdgeInsets.only(top: 16, bottom: 16),
@@ -115,8 +112,7 @@ class LogInButtonWidget extends StatelessWidget {
         ),
         child: const Text(
           'Log In',
-          style: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         onPressed: () {
           context.read<WelcomeBloc>().add(LoginPressed());
@@ -152,8 +148,7 @@ class WelcomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(
-          left: 16, top: 32, right: 16, bottom: 8),
+      padding: EdgeInsets.only(left: 16, top: 32, right: 16, bottom: 8),
       child: Text(
         'Hello there, fellow climbers!',
         textAlign: TextAlign.center,

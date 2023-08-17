@@ -67,42 +67,40 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Form createForm(BuildContext context) {
     return Form(
-                autovalidateMode: _validate,
-                key: _key,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const ResetPasswordWidget(),
-                      getEmailToResetPassword(context),
-                      ButtonToResetPassword(keyInWidget: _key),
-                    ],
-                  ),
-                ),
-              );
+      autovalidateMode: _validate,
+      key: _key,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const ResetPasswordWidget(),
+            getEmailToResetPassword(context),
+            ButtonToResetPassword(keyInWidget: _key),
+          ],
+        ),
+      ),
+    );
   }
 
   Padding getEmailToResetPassword(BuildContext context) {
     return Padding(
-                      padding: const EdgeInsets.only(
-                          top: 32.0, right: 24.0, left: 24.0),
-                      child: TextFormField(
-                        textAlignVertical: TextAlignVertical.center,
-                        textInputAction: TextInputAction.done,
-                        validator: validateEmail,
-                        onFieldSubmitted: (_) => context
-                            .read<ResetPasswordCubit>()
-                            .checkValidField(_key),
-                        onSaved: (val) => _emailAddress = val!,
-                        style: const TextStyle(fontSize: 18.0),
-                        keyboardType: TextInputType.emailAddress,
-                        cursorColor: const Color(colorPrimary),
-                        decoration: getInputDecoration(
-                            hint: 'E-mail',
-                            darkMode: isDarkMode(context),
-                            errorColor: Theme.of(context).colorScheme.error),
-                      ),
-                    );
+      padding: const EdgeInsets.only(top: 32.0, right: 24.0, left: 24.0),
+      child: TextFormField(
+        textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.done,
+        validator: validateEmail,
+        onFieldSubmitted: (_) =>
+            context.read<ResetPasswordCubit>().checkValidField(_key),
+        onSaved: (val) => _emailAddress = val!,
+        style: const TextStyle(fontSize: 18.0),
+        keyboardType: TextInputType.emailAddress,
+        cursorColor: const Color(colorPrimary),
+        decoration: getInputDecoration(
+            hint: 'E-mail',
+            darkMode: isDarkMode(context),
+            errorColor: Theme.of(context).colorScheme.error),
+      ),
+    );
   }
 }
 
@@ -117,15 +115,12 @@ class ButtonToResetPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          right: 40.0, left: 40.0, top: 40),
+      padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          fixedSize: Size.fromWidth(
-              MediaQuery.of(context).size.width / 1.5),
+          fixedSize: Size.fromWidth(MediaQuery.of(context).size.width / 1.5),
           backgroundColor: const Color(colorPrimary),
-          padding:
-              const EdgeInsets.only(top: 12, bottom: 12),
+          padding: const EdgeInsets.only(top: 12, bottom: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.0),
             side: const BorderSide(
@@ -141,9 +136,8 @@ class ButtonToResetPassword extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        onPressed: () => context
-            .read<ResetPasswordCubit>()
-            .checkValidField(_key),
+        onPressed: () =>
+            context.read<ResetPasswordCubit>().checkValidField(_key),
       ),
     );
   }
@@ -157,8 +151,7 @@ class ResetPasswordWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-      padding: EdgeInsets.only(
-          top: 32.0, right: 16.0, left: 16.0),
+      padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
       child: Text(
         'Reset Password',
         style: TextStyle(

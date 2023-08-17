@@ -1,12 +1,11 @@
 import 'dart:developer';
 
-class customException {
-
-  customException(String message){
+class CustomException {
+  CustomException(String message) {
     log(message);
   }
 
   static noSnapshotException() {
-    throw customException('No snapshot found.');
+    throw CustomException('No snapshot found.');
   }
 }

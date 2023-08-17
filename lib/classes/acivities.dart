@@ -17,7 +17,7 @@ class Activities {
   @override
   int get hashCode => categoryList.hashCode;
 
-  getCategoryName(int position){
+  getCategoryName(int position) {
     return categoryList[position].name;
   }
 }
@@ -29,21 +29,21 @@ class Category {
   Category({
     required this.name,
     List<Activity>? activityList,
-  })
-  : activityList = activityList ?? [];
+  }) : activityList = activityList ?? [];
 
   static Category fromSnapshot(String name, Map<dynamic, dynamic> value) {
-  String categoryName = name;
-  List<Activity> activityList = [];
+    String categoryName = name;
+    List<Activity> activityList = [];
 
-  value.forEach((key, value) { 
-    final Activity activity = Activity.fromSnapshot(key as String, value);
-    activityList.add(activity);
-  });
+    value.forEach((key, value) {
+      final Activity activity = Activity.fromSnapshot(key as String, value);
+      activityList.add(activity);
+    });
 
-  Category category = Category(name: categoryName, activityList: activityList);
-  return category;
-}
+    Category category =
+        Category(name: categoryName, activityList: activityList);
+    return category;
+  }
 
   @override
   bool operator ==(Object other) {

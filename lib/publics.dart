@@ -1,4 +1,3 @@
-
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/classes/places.dart';
 import 'package:kisgeri24/constants.dart';
@@ -13,5 +12,5 @@ String teamStartTime = '7:15';
 
 Places places = Places();
 Activities activities = Activities();
-Results results = Results(points:0, start:'');
+Results results = Results(points: 0, start: '');
 Category climbersCategory = Category(name: 'Climbers');

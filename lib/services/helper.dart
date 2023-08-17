@@ -123,9 +123,13 @@ push(BuildContext context, Widget destination) {
 }
 
 pushAndRemoveUntil(BuildContext context, Widget destination, bool predict) {
-  Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => destination),
-      (Route<dynamic> route) => predict);
+  final navigator = Navigator.of(context);
+  routePredicate(Route<dynamic> route) => predict;
+
+  navigator.pushAndRemoveUntil(
+    MaterialPageRoute(builder: (context) => destination),
+    routePredicate,
+  );
 }
 
 Widget displayCircleImage(String picUrl, double size, hasBorder) =>
@@ -212,7 +216,9 @@ InputDecoration getInputDecoration(
 }
 
 showSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context)
+  final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+  scaffoldMessenger
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(

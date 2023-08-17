@@ -10,7 +10,6 @@ import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
 import 'package:flutter/foundation.dart';
 
-
 void main() async {
   if (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS) {
     await FacebookAuth.i.webAndDesktopInitialize(
@@ -26,8 +25,7 @@ void main() async {
       RepositoryProvider(create: (_) => AuthenticationBloc()),
       RepositoryProvider(create: (_) => LoadingCubit()),
     ],
-    
-      child: const MyApp(),
+    child: const MyApp(),
   ));
 }
 

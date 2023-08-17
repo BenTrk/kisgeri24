@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +18,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
             imageData: await response.file!.readAsBytes()));
       }
     });
-
-  
 
     on<ValidateFieldsEvent>((event, emit) async {
       if (event.key.currentState?.validate() ?? false) {

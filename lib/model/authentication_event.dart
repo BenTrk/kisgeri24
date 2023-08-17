@@ -23,8 +23,7 @@ class SignupWithEmailAndPasswordEvent extends AuthenticationEvent {
       required this.teamName,
       required this.firstClimberName,
       required this.secondClimberName,
-      required this.category
-      });
+      required this.category});
 }
 
 class LogoutEvent extends AuthenticationEvent {
