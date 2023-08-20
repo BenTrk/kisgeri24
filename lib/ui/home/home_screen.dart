@@ -1,23 +1,29 @@
 
 
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/cards/activities_card.dart';
 import 'package:kisgeri24/misc/customMenu.dart';
 import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/authenticate.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/home/model/home_model.dart';
 import '../../classes/place.dart';
 import '../../classes/places.dart';
-import '../../classes/results.dart';
 import '../../classes/rockroute.dart';
+import '../../misc/background_task.dart';
 import '../../misc/cards/card.dart';
+import '../../publics.dart';
 import 'date_time_picker_screen.dart';
 
 
@@ -44,9 +50,12 @@ class _HomeState extends State<HomeScreen> {
   //Activities state vars
   Category? selectedCategory;
   bool isCategorySelected = false;
-  //Time pause vars - chage it so it works with state.pausehandler.isPaused
-  late bool isPaused;
   HomeModel homeModel = HomeModel();
+  
+  late DatabaseReference resultsRef;
+  StreamSubscription<DatabaseEvent>? _streamSubscription;
+
+  bool isTimeToClimb = false;
 
   //Enum for the Places/activites toggle button
   SelectedItem selectedItem = SelectedItem.places;
@@ -69,24 +78,61 @@ class _HomeState extends State<HomeScreen> {
     });
   }
 
+  void checkIfInRange(User user) async {
+    bool isIn = await init.checkDateTime(user);
+    if (isIn) {
+      setState(() {
+        isTimeToClimb = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     user = widget.user;
-    init.getResults(context, user);
+    checkIfInRange(user);
+    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    _streamSubscription = resultsRef.onValue.listen((event) {
+      init.getResults(user, event.snapshot);
+      if (!isTimeToClimb){
+        //Have to check, might get initialized with empty results! (But how can that be if I listen here for CHANGES in the db, i dunno.)
+        BackgroundTask(user: user).startCheckAuthStateWhenOutOfDateRange(results, context);
+        //For testing: Set dates[], dateTimePickerModel - teamdate, database - compStart and EndTime
+      }
+    });
+    //if outOfTimeRange
   }
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
+        log(state.authState.toString());
         if (state.authState == AuthState.unauthenticated) {
           pushAndRemoveUntil(context, const WelcomeScreen(), false);
-        } else if (state.authState == AuthState.didNotSetTime) {
+        } 
+        else if (state.authState == AuthState.didNotSetTime) {
           pushAndRemoveUntil(context, DateTimePickerScreen(user: user), false);
         } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
+
+        //implemented, remove to test it out!
+        else if (state.authState == AuthState.authenticated) {
+          setState(() {
+            isTimeToClimb = true;
+          });
+          startBackGroundTasksForNotifications(user);
+        }
       },
-      child: Scaffold(
+
+      child: StreamBuilder(
+        stream: resultsRef.onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+              //child: CircularProgressIndicator(),
+          }
+          return Scaffold(
         key: scaffoldKey,
         body: ListView(
           children: <Widget>[
@@ -115,20 +161,13 @@ class _HomeState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Text(user.teamName, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-                                  BlocBuilder<ResultsBloc, Results>(
-                                    builder: (context, state) {
-                                      return Text(
-                                        !state.pausedHandler.isPaused
-                                          ? 'Started at: ${state.start}'
+                                       Text(
+                                        !results.pausedHandler.isPaused
+                                          ? 'End time: ${init.getEndDate(user, results.start)}'
                                           : "On Pause!"
-                                      );
-                                    },
+                                      
                                   ),
-                                    BlocBuilder<ResultsBloc, Results>(
-                                        builder: (context, state) {
-                                          return Text('Points: ${state.points}');
-                                        },
-                                    ),
+                                    Text('Points: ${results.points}'),
                                 ]
                               ),
                             ),
@@ -137,20 +176,16 @@ class _HomeState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               //This should be disabled when isPausedUsed is true in database
-                              BlocBuilder<ResultsBloc, Results>(
-                                builder: (context, state) {
-                                // Build the UI based on the state of Variable A
-                                  return ElevatedButton(
+                              ElevatedButton(
                                     style: ElevatedButton.styleFrom(backgroundColor: const Color(colorPrimary)),
                                     onPressed: () {
-                                      !state.pausedHandler.isPausedUsed
+                                      !results.pausedHandler.isPausedUsed
                                       ? pauseCards()
                                       : showAlreadyUsedPauseError();
                                     },
-                                    child: Text(state.pausedHandler.isPaused ? 'Time Paused' : 'Pause Time', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                  );
-                                },
+                                    child: Text(results.pausedHandler.isPaused ? 'Time Paused' : 'Pause Time', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                               ),
+                                  
 
                               const SizedBox(width: 10,),
 
@@ -192,6 +227,7 @@ class _HomeState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 20,),
 
+                  
                   isPlaceSelected || isCategorySelected
                     ? Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -215,9 +251,11 @@ class _HomeState extends State<HomeScreen> {
                       ],
                     )
                     : const SizedBox(),
+                  isTimeToClimb
+                  ?
                   SizedBox(
                     width: 0.9 * MediaQuery.of(context).size.width,
-                    height: 300,
+                    height: 250,
                     child: selectedItem == SelectedItem.places
                     ? DisplayPlacesAndRoutesWidget(
                       selectedPlace: selectedPlace,
@@ -229,15 +267,31 @@ class _HomeState extends State<HomeScreen> {
                     : DisplayActivitiesWidget(
                       user: user,
                     ),
-                  ),
+                  )
+                  :
+                  const Text('It\'s not the time to climb yet.')
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
+      );
+  }));
+}
+
+  void startBackGroundTasksForNotifications(User user) async {
+      //For iOS it has to be set! Create an App... part: https://learn.microsoft.com/en-us/dotnet/maui/ios/capabilities?tabs=vs
+      final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      const initializationSettingsAndroid = AndroidInitializationSettings('logo');
+      const initializationSettingsIOS = DarwinInitializationSettings();
+      const initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+      BackgroundTask(user: user).startHalfTimeNotificationsTask(flutterLocalNotificationsPlugin);
+      BackgroundTask(user: user).startOneHourLeftNotificationsTask(flutterLocalNotificationsPlugin);
+      BackgroundTask(user: user).startTenMinutesLeftNotificationsTask(flutterLocalNotificationsPlugin);
+    }
+  
   
   showAlreadyUsedPauseError() {
     showSnackBar(context, "You already used Pause.");
@@ -262,6 +316,7 @@ class _HomeState extends State<HomeScreen> {
             // Button to proceed with the action
             TextButton(
               onPressed: () {
+                //ToDo: if DateTime.now() - teamEndTime < 1 hours -> show error
                 homeModel.writePauseInformation(DateTime.now(), user, context);
                 // Close the dialog
                 Navigator.of(context).pop();
@@ -440,8 +495,7 @@ class HomeScreenTitleWidget extends StatelessWidget {
                           ]
                         )
                       ),
-                      //CustomMenu.getCustomMenu(context, user, state),
-                      CustomMenu(user: user),
+                      CustomMenu(contextFrom: context, user: user),
                     ],
                   ),
                 ),

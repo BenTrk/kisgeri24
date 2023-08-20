@@ -36,9 +36,9 @@ class DateTimePickerModel{
 
     String teamStartTime = '$teamHoursString:$teamMinutesString';
         if (teamDate == dates[0]) {
-          teamDate = '2023-07-01';
+          teamDate = '2023-08-09';
         } else {
-          teamDate = '2023-07-02';
+          teamDate = '2023-08-10';
         }
         return '$teamDate - $teamStartTime';
   }

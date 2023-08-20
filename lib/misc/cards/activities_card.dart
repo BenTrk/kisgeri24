@@ -1,15 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
 
-import '../../blocs & events & states/results_bloc.dart';
-import '../../blocs & events & states/results_events.dart';
-import '../../classes/results.dart';
 import '../../model/user.dart';
 import '../../publics.dart';
 
@@ -129,23 +124,18 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
                                 Text(user.secondClimberName),
                               ],
                             ),
-                            const SizedBox(width: 8),
-                            BlocBuilder<ResultsBloc, Results>(
-                              builder: (context, state) {
-                                return TextButton(
+                            const SizedBox(width: 8),TextButton(
                                   child: const Text('Did it!', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
                                   onPressed: () {
-                                    if (!state.pausedHandler.isPaused){
+                                    if (!results.pausedHandler.isPaused){
                                       List<String> names = [user.firstClimberName, user.secondClimberName];
                                       if (selectedItemValue != null){
                                         databaseWrites.writeActivityToDatabase(context, user, names[selectedItem.index], title, valueMap[selectedItemValue]!);
-                                        getNewResults(context, user);
                                       }
                                     } //else say nooooo
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                            
                             const SizedBox(width: 8),
                           ],
                         ),
@@ -175,9 +165,4 @@ class _ActivitiesCardState extends State<ActivitiesCard>{
     );
   }
 
-}
-
-void getNewResults(BuildContext context, User user) async {
-  await init.getResults(context, user);
-  //BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

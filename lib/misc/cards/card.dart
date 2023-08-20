@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
 
-import '../../blocs & events & states/results_bloc.dart';
-import '../../blocs & events & states/results_events.dart';
-import '../../classes/results.dart';
 import '../../model/user.dart';
 import '../../publics.dart';
 
@@ -33,10 +28,11 @@ class CustomCard extends StatefulWidget {
 enum SelectedItem { climberOne, climberTwo }
 enum SelectedStyle { style1, style2, style3 }
 
-class _CustomCardState extends State<CustomCard>{
+class _CustomCardState extends State<CustomCard> with TickerProviderStateMixin{
   late String difficulty;
   late String title;
   late User user;
+  bool isRowVisible = false;
   SelectedItem selectedItem = SelectedItem.climberOne;
   SelectedStyle selectedStyle = SelectedStyle.style1;
   DatabaseWrites databaseWrites = DatabaseWrites();
@@ -52,126 +48,124 @@ class _CustomCardState extends State<CustomCard>{
   @override
   Widget build(BuildContext context) {
 
-    return Center(
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder( //<-- SEE HERE
-          side: const BorderSide(
-            color: Color(colorPrimary),
-          ),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.rocket_launch, color: Color(colorPrimary)),
-              title: Text(title, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
-              subtitle: Text('Difficulty: $difficulty', style: const TextStyle(color: Color(colorPrimary), fontSize: 14)),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isRowVisible = !isRowVisible; // Toggle the visibility of the first Row
+        });
+      },
+      child: Center(
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder( //<-- SEE HERE
+            side: const BorderSide(
+              color: Color(colorPrimary),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Column(
-                    children: [
-                      ToggleButtons(
-                        fillColor: const Color(colorPrimary),
-                        selectedColor: Colors.white,
-                        color: const Color(colorPrimary),
-                        selectedBorderColor: const Color(colorPrimary),
-                        borderColor: const Color(colorPrimary),
-                        borderRadius: BorderRadius.circular(5),
-                        isSelected: [
-                          selectedStyle == SelectedStyle.style1,
-                          selectedStyle == SelectedStyle.style2,
-                          selectedStyle == SelectedStyle.style3,
-                        ],
-                        onPressed: (index) {
-                          setState(() {
-                            switch(index){
-                              case(0):{
-                                selectedStyle = SelectedStyle.style1;
-                                break;
-                              }
-                              case(1):{
-                                selectedStyle = SelectedStyle.style2;
-                                break;
-                              }
-                              case(2):{
-                                selectedStyle = SelectedStyle.style3;
-                                break;
-                              }
-                            }
-                          });
-                        },
-                        children: [
-                          Text(styles[0]),
-                          Text(styles[1]),
-                          Text(styles[2]),
-                        ],
-                      ),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.rocket_launch, color: Color(colorPrimary)),
+                title: Text(title, style: const TextStyle(color: Color(colorPrimary), fontSize: 16, fontWeight: FontWeight.w600)),
+                subtitle: Text('Difficulty: $difficulty', style: const TextStyle(color: Color(colorPrimary), fontSize: 14)),
+              ),
+              if (isRowVisible)
+              Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Column(
                           children: [
                             ToggleButtons(
-                                  fillColor: const Color(colorPrimary),
-                                  selectedColor: Colors.white,
-                                  color: const Color(colorPrimary),
-                                  selectedBorderColor: const Color(colorPrimary),
-                                  borderColor: const Color(colorPrimary),
-                                  borderRadius: BorderRadius.circular(5),
-                                  // List of booleans to specify whether each button is selected or not
-                                  isSelected: [
-                                    selectedItem == SelectedItem.climberOne,
-                                    selectedItem == SelectedItem.climberTwo,
-                                  ],
-                                  // Callback when the user taps on a button
-                                  onPressed: (index) {
-                                    setState(() {
-                                    // Update the selectedItem based on the button tapped
-                                    selectedItem = index == 0 ? SelectedItem.climberOne : SelectedItem.climberTwo;
-                                    });
-                                  },
-                                  children: [
-                                    Text(user.firstClimberName),
-                                    Text(user.secondClimberName),
-                                  ],
-                                ),
-                            const SizedBox(width: 8),
-                            BlocBuilder<ResultsBloc, Results>(
-                              builder: (context, state) {
-                                return TextButton(
-                                  child: const Text('Climbed It', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
-                                  onPressed: () {
-                                    if (!state.pausedHandler.isPaused) {
-                                      List<String> names = [user.firstClimberName, user.secondClimberName];
-                                      databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
-                                      getNewResults(context, user);
+                              fillColor: const Color(colorPrimary),
+                              selectedColor: Colors.white,
+                              color: const Color(colorPrimary),
+                              selectedBorderColor: const Color(colorPrimary),
+                              borderColor: const Color(colorPrimary),
+                              borderRadius: BorderRadius.circular(5),
+                              isSelected: [
+                                selectedStyle == SelectedStyle.style1,
+                                selectedStyle == SelectedStyle.style2,
+                                selectedStyle == SelectedStyle.style3,
+                              ],
+                              onPressed: (index) {
+                                setState(() {
+                                  switch(index){
+                                    case(0):{
+                                      selectedStyle = SelectedStyle.style1;
+                                      break;
+                                    }
+                                    case(1):{
+                                      selectedStyle = SelectedStyle.style2;
+                                      break;
+                                    }
+                                    case(2):{
+                                      selectedStyle = SelectedStyle.style3;
+                                      break;
                                     }
                                   }
-                                );
-                              }
+                                });
+                              },
+                              children: [
+                                Text(styles[0]),
+                                Text(styles[1]),
+                                Text(styles[2]),
+                              ],
                             ),
-                            const SizedBox(width: 8),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  ToggleButtons(
+                                        fillColor: const Color(colorPrimary),
+                                        selectedColor: Colors.white,
+                                        color: const Color(colorPrimary),
+                                        selectedBorderColor: const Color(colorPrimary),
+                                        borderColor: const Color(colorPrimary),
+                                        borderRadius: BorderRadius.circular(5),
+                                        // List of booleans to specify whether each button is selected or not
+                                        isSelected: [
+                                          selectedItem == SelectedItem.climberOne,
+                                          selectedItem == SelectedItem.climberTwo,
+                                        ],
+                                        // Callback when the user taps on a button
+                                        onPressed: (index) {
+                                          setState(() {
+                                          // Update the selectedItem based on the button tapped
+                                          selectedItem = index == 0 ? SelectedItem.climberOne : SelectedItem.climberTwo;
+                                          });
+                                        },
+                                        children: [
+                                          Text(user.firstClimberName),
+                                          Text(user.secondClimberName),
+                                        ],
+                                      ),
+                                  const SizedBox(width: 8),
+                                  TextButton(
+                                        child: const Text('Climbed It', style: TextStyle(color: Color(colorPrimary), fontSize: 14)),
+                                        onPressed: () {
+                                          if (!results.pausedHandler.isPaused) {
+                                            List<String> names = [user.firstClimberName, user.secondClimberName];
+                                            databaseWrites.writeClimbToDatabase(context, user, names[selectedItem.index], title, styles[selectedStyle.index]);
+                                          }
+                                        }
+                                      ),
+                                  const SizedBox(width: 8),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ],
+                ]
+              ),
+          ),
         ),
-      ),
-    );
+      );
   }
 
-}
-
-void getNewResults(BuildContext context, User user) async {
-  await init.getResults(context, user);
-  //BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
 }

@@ -76,6 +76,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                     child: Divider( color: Color(colorPrimary),),
                   ),
                   Row(
+                    //ToDo: should be based on category so teams cannot select a start time that would end after compEndTime.
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Padding(
@@ -127,7 +128,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   value: teamMinutes,
                                   axis: Axis.vertical,
                                   minValue: 0,
-                                  maxValue: 60,
+                                  maxValue: 45,
                                   itemHeight: 40,
                                   step: 15,
                                   onChanged: (value) => setState(() => teamMinutes = value),
@@ -199,6 +200,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
               child: const Text('Yes'),
               onPressed: () {
                 //Move to the HomePage! Disable database writes while not in competition
+                user.isStartDateSet = true;
                 Navigator.of(dialogContext).pop();
                 DateTimePickerModel().writeDateToDatabase(context, dateTime, user);
                 pushAndRemoveUntil(
@@ -242,7 +244,7 @@ class LogoImageWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                         ),
                       ), 
-                      CustomMenu(user: user,),
+                      CustomMenu(user: user, contextFrom: context,),
                     ],
                   ),
                 ),

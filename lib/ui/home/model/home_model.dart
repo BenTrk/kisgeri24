@@ -42,7 +42,7 @@ class HomeModel{
 
     _context = context;
 
-    BackgroundTask(context: _context!, user: user).startBackgroundTask(flutterLocalNotificationsPlugin);
+    BackgroundTask(user: user).startBackgroundTask(flutterLocalNotificationsPlugin, _context!);
     DateTime pauseOverTime = pauseTime.add(const Duration(hours: 1));
     databaseWrites.writePauseInformation(pauseOverTime, user);
   }

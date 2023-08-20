@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/authenticate.dart';
+import 'package:kisgeri24/services/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kisgeri24/model/init.dart';
 
@@ -84,10 +85,23 @@ class AuthenticationBloc
           firstClimberName: event.firstClimberName,
           secondClimberName: event.secondClimberName,
           category: event.category,);
-      if (result != null && result is User) {
+      if (result != null && result is User && result.isPaid && await init.checkDateTime(result)) {
         user = result;
         emit(AuthenticationState.authenticated(user!));
-      } else if (result != null && result is String) {
+      }
+      else if (result != null && result is User && result.isPaid == false) {
+        user = result;
+        emit(AuthenticationState.didNotPayYet(user: user!, message: 'You did not pay the entry fee yet.'));
+      }
+      else if (result != null && result is User && !result.isStartDateSet){
+          user = result;
+          emit (AuthenticationState.didNotSetTime(user: user!, message: 'You need to set the startdate first.'));
+      } 
+      else if (result != null && result is User && result.isStartDateSet){
+        user = result;
+        emit(AuthenticationState.outOfDateTimeRange(user: user!));
+      }
+       else if (result != null && result is String) {
         emit(AuthenticationState.unauthenticated(message: result));
       } else {
         emit(const AuthenticationState.unauthenticated(
@@ -98,6 +112,15 @@ class AuthenticationBloc
       await FireStoreUtils.logout();
       user = null;
       emit(const AuthenticationState.unauthenticated());
+    });
+
+    on<CheckAuthenticationEvent>((event, emit) async {
+      User? user = await FireStoreUtils.getAuthUser();
+      if (user != null){
+        if (await init.checkDateTime(user)){
+          emit(AuthenticationState.authenticated(user));
+        }
+      } //ToDo error handling
     });
   }
 }

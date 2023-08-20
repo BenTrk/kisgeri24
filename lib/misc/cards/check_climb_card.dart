@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
-import '../../blocs & events & states/results_bloc.dart';
-import '../../blocs & events & states/results_events.dart';
 import '../../model/user.dart';
-import '../../publics.dart';
+
 
 class CheckClimbedPlaceCard extends StatefulWidget {
   final ClimbedRoute climbedRoute;
@@ -39,6 +35,7 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
   late String climberName;
   late String placeName;
   DatabaseWrites databaseWrites = DatabaseWrites();
+  bool isActive = true;
 
   @override
   void initState() {
@@ -53,7 +50,9 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
   Widget build(BuildContext context) {
 
     return Center(
-      child: Card(
+      child: 
+      isActive
+      ? Card(
         color: Colors.white,
         shape: RoundedRectangleBorder( 
           side: const BorderSide(
@@ -86,27 +85,48 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard>{
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                   child: IconButton(
-                    onPressed: () => removeIt(context, climbedRoute, user, climberName, placeName), 
+                    onPressed: () {
+                      removeIt(context, climbedRoute, user, climberName, placeName);
+                      setState(() {
+                        isActive = false; // Set isActive to false when the remove button is pressed
+                      });
+                    },
                     icon: const Icon(Icons.remove_circle, color: Colors.red, size: 40,),),
                 ),
               ],
             )
           ],
         ),
-      ),
+      )
+      : 
+      Card(
+        color: Colors.grey.shade200,
+        shape: RoundedRectangleBorder( 
+          side: BorderSide(
+            color: Colors.grey.shade200,
+          ),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.rocket_launch, color: Colors.grey.shade200),
+              Text(climbedRoute.name, style: TextStyle(color: Colors.grey.shade700, fontSize: 16, fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,)),
+            ],
+          ),
+        ),
+      )
     );
   }
 
 }
 
-removeIt(BuildContext context, Object climbOrActivity, User user, String climberName, String placeName) {
+removeIt(BuildContext context, Object climbOrActivity, User user, String climberName, String placeName,) {
   /** ToDo */
+
   ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   climbsAndMoreModel.removeClimbOrActivity(climbOrActivity, user, climberName, placeName);
-  getNewResults(context, user);
 }
 
-void getNewResults(BuildContext context, User user) async {
-  await init.getResults(context, user);
-  BlocProvider.of<ResultsBloc>(context).add(UpdateResultsEvent(results));
-}

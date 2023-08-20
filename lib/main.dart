@@ -1,15 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:kisgeri24/blocs%20&%20events%20&%20states/results_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/firebase_options.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
+import 'package:flutter/foundation.dart';
 
 
 void main() async {
@@ -26,15 +25,9 @@ void main() async {
     providers: [
       RepositoryProvider(create: (_) => AuthenticationBloc()),
       RepositoryProvider(create: (_) => LoadingCubit()),
-      RepositoryProvider(create: (_) => ResultsBloc())
     ],
-    child: MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => ResultsBloc()),
-        // Add other Blocs here if needed
-      ],
+    
       child: const MyApp(),
-    ),
   ));
 }
 
