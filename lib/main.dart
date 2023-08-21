@@ -100,6 +100,11 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       );
     }
 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
