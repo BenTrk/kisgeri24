@@ -38,6 +38,7 @@ class _LauncherScreenState extends State<LauncherScreen> {
               pushReplacement(
                   context,
                   OnBoardingScreen(
+                    key: Key("onboarding-screen"),
                     images: imageList,
                     titles: titlesList,
                     subtitles: subtitlesList,
