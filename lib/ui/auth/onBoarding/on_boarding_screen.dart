@@ -43,7 +43,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 PageView.builder(
                   itemBuilder: (context, index) => OnBoardingPage(
-                    key: Key("onboarding-page"),
+                    key: const Key("onboarding-page"),
                     image: widget.images[index],
                     title: widget.titles[index],
                     subtitle: widget.subtitles[index],
