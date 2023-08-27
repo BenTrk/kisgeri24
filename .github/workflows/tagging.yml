@@ -26,4 +26,3 @@ jobs:
           PRERELEASE: true
           INITIAL_VERSION: v0.1.0
           TAG_CONTEXT: branch
-
