@@ -29,3 +29,4 @@ jobs:
           PRERELEASE: false
           TAG_CONTEXT: branch
           DEFAULT_BUMP: patch
+
