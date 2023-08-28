@@ -20,24 +20,21 @@ class User {
 
   bool isStartDateSet;
 
-  User(
-      {this.email = '',
-      this.firstClimberName = '',
-      this.secondClimberName = '',
-      this.userID = '',
-      this.teamName = '',
-      this.category = '',
-      this.isPaid = false,
-      this.isStartDateSet = false,
-      })
-      : appIdentifier =
-            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';   
-        
+  User({
+    this.email = '',
+    this.firstClimberName = '',
+    this.secondClimberName = '',
+    this.userID = '',
+    this.teamName = '',
+    this.category = '',
+    this.isPaid = false,
+    this.isStartDateSet = false,
+  }) : appIdentifier =
+            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
 
   String getTeamName() => teamName;
 
   bool getStartDate() => isStartDateSet;
-  
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
@@ -61,7 +58,7 @@ class User {
       'category': category,
       'isPaid': isPaid,
       'appIdentifier': appIdentifier,
-      'isStartDateSet' : isStartDateSet
+      'isStartDateSet': isStartDateSet
     };
   }
 

@@ -6,7 +6,6 @@ import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 
 class FireStoreUtils {
-
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static Reference storage = FirebaseStorage.instance.ref();
 
@@ -76,25 +75,26 @@ class FireStoreUtils {
       .set(user.toJson())
       .then((value) => null, onError: (e) => e);
 
-  static signUpWithEmailAndPassword(
-      {required String emailAddress,
-      required String password,
-      required String teamName,
-      required String firstClimberName,
-      required String secondClimberName,
-      required String category,}) async {
+  static signUpWithEmailAndPassword({
+    required String emailAddress,
+    required String password,
+    required String teamName,
+    required String firstClimberName,
+    required String secondClimberName,
+    required String category,
+  }) async {
     try {
       auth.UserCredential result = await auth.FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: emailAddress, password: password);
       User user = User(
-          email: emailAddress,
-          teamName: teamName,
-          userID: result.user?.uid ?? '',
-          firstClimberName: firstClimberName,
-          secondClimberName: secondClimberName,
-          category: category,
-          );
+        email: emailAddress,
+        teamName: teamName,
+        userID: result.user?.uid ?? '',
+        firstClimberName: firstClimberName,
+        secondClimberName: secondClimberName,
+        category: category,
+      );
       String? errorMessage = await createNewUser(user);
       if (errorMessage == null) {
         return user;

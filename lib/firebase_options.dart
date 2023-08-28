@@ -49,7 +49,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
     authDomain: 'kisgeri24-4d598.firebaseapp.com',
-    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
     measurementId: 'G-PHXG0FBWEK',
   );
@@ -59,7 +60,8 @@ class DefaultFirebaseOptions {
     appId: '1:661526883314:android:4453b2e55edb94974bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
-    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
   );
 
@@ -68,9 +70,11 @@ class DefaultFirebaseOptions {
     appId: '1:661526883314:ios:e1ee42bce6b349334bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
-    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
-    iosClientId: '661526883314-1qhavrgp9sbjr7n57jrq4dmeqqo141kg.apps.googleusercontent.com',
+    iosClientId:
+        '661526883314-1qhavrgp9sbjr7n57jrq4dmeqqo141kg.apps.googleusercontent.com',
     iosBundleId: 'com.kisgeri24.flutterkisgeri24',
   );
 
@@ -79,9 +83,11 @@ class DefaultFirebaseOptions {
     appId: '1:661526883314:ios:e6bbde8ec4b5e4d24bd96b',
     messagingSenderId: '661526883314',
     projectId: 'kisgeri24-4d598',
-    databaseURL: 'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://kisgeri24-4d598-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'kisgeri24-4d598.appspot.com',
-    iosClientId: '661526883314-beu7v1ejtu6rqcvje09n77ve366cp0kd.apps.googleusercontent.com',
+    iosClientId:
+        '661526883314-beu7v1ejtu6rqcvje09n77ve366cp0kd.apps.googleusercontent.com',
     iosBundleId: 'com.kisgeri24.flutterkisgeri24.mac',
   );
 }

@@ -1,4 +1,3 @@
-
 ///list of strings containing onBoarding titles
 final List<String> titlesList = [
   'Welcome to Kisgeri24!',

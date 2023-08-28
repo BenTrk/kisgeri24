@@ -16,7 +16,7 @@ class Place {
     String placeName = name;
     List<RockRoute> routeList = [];
 
-    placeMap.forEach((key, value) { 
+    placeMap.forEach((key, value) {
       final RockRoute route = RockRoute.fromSnapshot(value);
       routeList.add(route);
     });
