@@ -1,63 +1,27 @@
 name: Auto-Rebase on Comment
-
 on:
   issue_comment:
-    types: [created]
-
+    types: [ created ]
 jobs:
   rebase:
+    name: Rebase
     runs-on: ubuntu-latest
-
+    if: >-
+      github.event.issue.pull_request != '' && 
+      (
+        contains(github.event.comment.body, '/rebase') || 
+        contains(github.event.comment.body, '/autosquash')
+      )
     steps:
-      - name: Check for "/rebase please" comment
-        id: check_comment
-        uses: actions/github-script@v5
+      - name: Checkout the latest code
+        uses: actions/checkout@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const comment = context.payload.comment.body;
-            if (comment.includes('/rebase please')) {
-              console.log('Rebase requested');
-              core.setOutput('rebaseRequested', 'true');
-            }
-
-      - name: Set up Octokit
-        id: octokit
-        uses: octokit/request-action@v2.x
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
+      - name: Automatic Rebase
+        uses: cirrus-actions/rebase@1.8
         with:
-          route: GET /repos/{owner}/{repo}/actions/runs
-
-      - name: Get workflow IDs
-        id: workflows
-        run: |
-          const workflowIds = JSON.stringify(steps.octokit.data.workflow_runs.map(wf => wf.id));
-          console.log(`Workflow IDs: ${workflowIds}`);
-          core.setOutput('workflowIds', workflowIds);
-
-      - name: Stop existing workflows
-        if: steps.check_comment.outputs.rebaseRequested == 'true'
-        run: |
-          const workflowIds = ${{ steps.workflows.outputs.workflowIds }};
-          const workflowIdsArray = JSON.parse(workflowIds);
-          const octokit = new (require('@octokit/rest'))();
-          octokit.authenticate({
-            type: 'token',
-            token: process.env.GITHUB_TOKEN,
-          });
-          for (const workflowId of workflowIdsArray) {
-            await octokit.actions.cancelWorkflowRun({
-              owner: process.env.GITHUB_REPOSITORY_OWNER,
-              repo: process.env.GITHUB_REPOSITORY,
-              run_id: workflowId,
-            });
-          }
-
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Rebase if requested
-        if: steps.check_comment.outputs.rebaseRequested == 'true'
-        run: |
-          git fetch origin pull/${{ github.event.issue.number }}/head:pr/${{ github.event.issue.number }}/head
-          git rebase pr/${{ github.event.issue.number }}/head
-          git push origin HEAD:refs/heads/${{ github.head_ref }}
+          autosquash: |
+            ${{ contains(github.event.comment.body, '/autosquash') || contains(github.event.comment.body, '/rebase-autosquash') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
