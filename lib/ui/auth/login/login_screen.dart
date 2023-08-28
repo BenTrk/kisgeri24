@@ -58,105 +58,103 @@ class _LoginScreen extends State<LoginScreen> {
 
   Form createForm(BuildContext context) {
     return Form(
-                key: _key,
-                autovalidateMode: _validate,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const LogoImageWidget(),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 32.0, right: 24.0, left: 24.0),
-                        child: TextFormField(
-                            textAlignVertical: TextAlignVertical.center,
-                            textInputAction: TextInputAction.next,
-                            validator: validateEmail,
-                            onSaved: (String? val) {
-                              email = val;
-                            },
-                            style: const TextStyle(fontSize: 18.0),
-                            keyboardType: TextInputType.emailAddress,
-                            cursorColor: const Color(colorPrimary),
-                            decoration: getInputDecoration(
-                                hint: 'Email Address',
-                                darkMode: isDarkMode(context),
-                                errorColor: Theme.of(context).colorScheme.error)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 32.0, right: 24.0, left: 24.0),
-                        child: TextFormField(
-                            textAlignVertical: TextAlignVertical.center,
-                            obscureText: true,
-                            validator: validatePassword,
-                            onSaved: (String? val) {
-                              password = val;
-                            },
-                            onFieldSubmitted: (password) => context
-                                .read<LoginBloc>()
-                                .add(ValidateLoginFieldsEvent(_key)),
-                            textInputAction: TextInputAction.done,
-                            style: const TextStyle(fontSize: 18.0),
-                            cursorColor: const Color(colorPrimary),
-                            decoration: getInputDecoration(
-                                hint: 'Password',
-                                darkMode: isDarkMode(context),
-                                errorColor: Theme.of(context).colorScheme.error)),
-                      ),
+      key: _key,
+      autovalidateMode: _validate,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const LogoImageWidget(),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 32.0, right: 24.0, left: 24.0),
+              child: TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  textInputAction: TextInputAction.next,
+                  validator: validateEmail,
+                  onSaved: (String? val) {
+                    email = val;
+                  },
+                  style: const TextStyle(fontSize: 18.0),
+                  keyboardType: TextInputType.emailAddress,
+                  cursorColor: const Color(colorPrimary),
+                  decoration: getInputDecoration(
+                      hint: 'Email Address',
+                      darkMode: isDarkMode(context),
+                      errorColor: Theme.of(context).colorScheme.error)),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 32.0, right: 24.0, left: 24.0),
+              child: TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  obscureText: true,
+                  validator: validatePassword,
+                  onSaved: (String? val) {
+                    password = val;
+                  },
+                  onFieldSubmitted: (password) => context
+                      .read<LoginBloc>()
+                      .add(ValidateLoginFieldsEvent(_key)),
+                  textInputAction: TextInputAction.done,
+                  style: const TextStyle(fontSize: 18.0),
+                  cursorColor: const Color(colorPrimary),
+                  decoration: getInputDecoration(
+                      hint: 'Password',
+                      darkMode: isDarkMode(context),
+                      errorColor: Theme.of(context).colorScheme.error)),
+            ),
 
-                      /// forgot password text, navigates user to ResetPasswordScreen
-                      /// and this is only visible when logging with email and password
-                      const ForgotPasswordWidget(),
-                      LogInButtonWidget(keyInWidget: _key),
-                      
-                    ],
-                  ),
-                ),
-              );
+            /// forgot password text, navigates user to ResetPasswordScreen
+            /// and this is only visible when logging with email and password
+            const ForgotPasswordWidget(),
+            LogInButtonWidget(keyInWidget: _key),
+          ],
+        ),
+      ),
+    );
   }
 
   BlocListener<LoginBloc, LoginState> loginUserLoginListener() {
     return BlocListener<LoginBloc, LoginState>(
-              listener: (context, state) async {
-                if (state is ValidLoginFields) {
-                  await context.read<LoadingCubit>().showLoading(
-                      context, 'Logging in, Please wait...', false);
-                  if (!mounted) return;
-                  context.read<AuthenticationBloc>().add(
-                        LoginWithEmailAndPasswordEvent(
-                          email: email!,
-                          password: password!,
-                        ),
-                      );
-                }
-              },
-            ); //@
+      listener: (context, state) async {
+        if (state is ValidLoginFields) {
+          await context
+              .read<LoadingCubit>()
+              .showLoading(context, 'Logging in, Please wait...', false);
+          if (!mounted) return;
+          context.read<AuthenticationBloc>().add(
+                LoginWithEmailAndPasswordEvent(
+                  email: email!,
+                  password: password!,
+                ),
+              );
+        }
+      },
+    ); //@
   }
 
-  BlocListener<AuthenticationBloc, AuthenticationState> loginUserAuthenticateListener() {
+  BlocListener<AuthenticationBloc, AuthenticationState>
+      loginUserAuthenticateListener() {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) async {
-                await context.read<LoadingCubit>().hideLoading();
-                if (state.authState == AuthState.authenticated) {
-                  if (!mounted) return;
-                  pushAndRemoveUntil(
-                      context, HomeScreen(user: state.user!), false);
-                } 
-                else if (state.authState == AuthState.didNotPayYet) {
-                  showSnackBar(context, state.message ?? 'You did not pay the entry fee yet.');
-                }
-                else if (state.authState == AuthState.didNotSetTime){
-                  pushAndRemoveUntil(
-                      context, DateTimePickerScreen(user: state.user!), false);
-                }
-                else {
-                  if (!mounted) return;
-                  showSnackBar(context,
-                      state.message ?? 'Couldn\'t login, Please try again.');
-                }
-              },
-            );
+      listener: (context, state) async {
+        await context.read<LoadingCubit>().hideLoading();
+        if (state.authState == AuthState.authenticated) {
+          if (!mounted) return;
+          pushAndRemoveUntil(context, HomeScreen(user: state.user!), false);
+        } else if (state.authState == AuthState.didNotPayYet) {
+          showSnackBar(
+              context, state.message ?? 'You did not pay the entry fee yet.');
+        } else if (state.authState == AuthState.didNotSetTime) {
+          pushAndRemoveUntil(
+              context, DateTimePickerScreen(user: state.user!), false);
+        } else {
+          if (!mounted) return;
+          showSnackBar(
+              context, state.message ?? 'Couldn\'t login, Please try again.');
+        }
+      },
+    );
   }
 }
 
@@ -171,12 +169,10 @@ class LogInButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          right: 40.0, left: 40.0, top: 40),
+      padding: const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          fixedSize: Size.fromWidth(
-              MediaQuery.of(context).size.width / 1.5),
+          fixedSize: Size.fromWidth(MediaQuery.of(context).size.width / 1.5),
           padding: const EdgeInsets.symmetric(vertical: 16),
           backgroundColor: const Color(colorPrimary),
           shape: RoundedRectangleBorder(
@@ -194,9 +190,8 @@ class LogInButtonWidget extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        onPressed: () => context
-            .read<LoginBloc>()
-            .add(ValidateLoginFieldsEvent(_key)),
+        onPressed: () =>
+            context.read<LoginBloc>().add(ValidateLoginFieldsEvent(_key)),
       ),
     );
   }
@@ -210,15 +205,13 @@ class ForgotPasswordWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: const BoxConstraints(
-          maxWidth: 720, minWidth: 200),
+      constraints: const BoxConstraints(maxWidth: 720, minWidth: 200),
       child: Padding(
         padding: const EdgeInsets.only(top: 16, right: 24),
         child: Align(
           alignment: Alignment.centerRight,
           child: GestureDetector(
-            onTap: () =>
-                push(context, const ResetPasswordScreen()),
+            onTap: () => push(context, const ResetPasswordScreen()),
             child: const Text(
               'Forgot password?',
               style: TextStyle(
@@ -242,15 +235,14 @@ class LogoImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-      top: 10.0, right: 24.0, left: 24.0),
-        child: Image.asset(
+      padding: const EdgeInsets.only(top: 10.0, right: 24.0, left: 24.0),
+      child: Image.asset(
         'assets/images/welcome_image.png',
         alignment: Alignment.center,
         width: 150.0,
         height: 150.0,
         fit: BoxFit.cover,
-        ),
-      );
+      ),
+    );
   }
 }

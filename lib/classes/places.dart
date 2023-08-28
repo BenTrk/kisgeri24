@@ -9,7 +9,6 @@ class Places {
     List<Place>? placeList,
   }) : placeList = placeList ?? [];
 
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -20,17 +19,17 @@ class Places {
   @override
   int get hashCode => placeList.hashCode;
 
-  getPlaceName(int position){
+  getPlaceName(int position) {
     return placeList[position].name;
   }
 
-  getRoute(String routeName){
+  getRoute(String routeName) {
     RockRoute route = RockRoute();
     for (var element in placeList) {
       for (var element in element.routeList) {
-        if (element.name == routeName){
+        if (element.name == routeName) {
           route = element;
-        } 
+        }
       }
     }
     return route;
@@ -41,7 +40,7 @@ class Places {
     for (var element in placeList) {
       String placeNameNow = element.name;
       for (var element in element.routeList) {
-        if (element.name == routeName){
+        if (element.name == routeName) {
           placeName = placeNameNow;
         }
       }
