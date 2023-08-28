@@ -125,7 +125,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
             colorScheme: ColorScheme.fromSwatch().copyWith(
                 secondary: const Color(colorPrimary),
                 brightness: Brightness.dark)),
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: const bool.fromEnvironment("DEBUG_MODE"),
         color: const Color(colorPrimary),
         home: const LauncherScreen());
   }

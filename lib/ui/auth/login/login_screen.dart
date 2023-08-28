@@ -9,6 +9,9 @@ import 'package:kisgeri24/ui/home/date_time_picker_screen.dart';
 import 'package:kisgeri24/ui/home/home_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
 
+const bool ENABLED = true;
+const bool DISABLED = !ENABLED;
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -211,7 +214,7 @@ class ForgotPasswordWidget extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerRight,
           child: GestureDetector(
-            onTap: () => push(context, const ResetPasswordScreen()),
+            onTap: () => push(context, const ResetPasswordScreen(), ENABLED),
             child: const Text(
               'Forgot password?',
               style: TextStyle(

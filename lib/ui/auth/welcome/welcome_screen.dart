@@ -20,10 +20,11 @@ class WelcomeScreen extends StatelessWidget {
               listener: (context, state) {
                 switch (state.pressTarget) {
                   case WelcomePressTarget.login:
-                    push(context, const LoginScreen());
+                    push(context, const LoginScreen(), ENABLED);
                     break;
                   case WelcomePressTarget.signup:
-                    push(context, const SignUpScreen());
+                    push(context, const SignUpScreen(),
+                        isRegistrationFeatureEnabled());
                     break;
                   default:
                     break;
@@ -32,20 +33,7 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Image.asset(
-                      'assets/images/welcome_image.png',
-                      width: 150.0,
-                      height: 150.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const WelcomeWidget(),
-                  const SubTitleWelcomeWidget(),
-                  const LogInButtonWidget(),
-                  const SignUpButtonWidget()
-                ],
+                children: getScreenComponents(),
               ),
             ),
           );
@@ -53,6 +41,31 @@ class WelcomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+List<Widget> getScreenComponents() {
+  List<Widget> ws = [
+    Center(
+      key: const Key("value"),
+      child: Image.asset(
+        'assets/images/welcome_image.png',
+        width: 150.0,
+        height: 150.0,
+        fit: BoxFit.cover,
+      ),
+    ),
+    const WelcomeWidget(),
+    const SubTitleWelcomeWidget(),
+    const LogInButtonWidget()
+  ];
+  if (isRegistrationFeatureEnabled()) {
+    ws.add(const SignUpButtonWidget());
+  }
+  return ws;
+}
+
+bool isRegistrationFeatureEnabled() {
+  return const bool.fromEnvironment("REGISTRATION_ENABLED");
 }
 
 class SignUpButtonWidget extends StatelessWidget {
