@@ -24,6 +24,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           PRERELEASE: false
-          #INITIAL_VERSION: v0.1.0
           TAG_CONTEXT: branch
           DEFAULT_BUMP: patch
