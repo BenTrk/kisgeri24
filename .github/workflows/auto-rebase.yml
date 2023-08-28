@@ -25,12 +25,12 @@ jobs:
         id: octokit
         uses: octokit/request-action@v2.x
         with:
-          route: actions.listRepoWorkflows
+          route: GET /repos/{owner}/{repo}/actions/runs
 
-      - name: Get workflows for this branch
+      - name: Get workflow IDs
         id: workflows
         run: |
-          const workflowIds = ${{ toJson(steps.octokit.data.workflows.map(wf => wf.id)) }};
+          const workflowIds = JSON.stringify(steps.octokit.data.workflow_runs.map(wf => wf.id));
           console.log(`Workflow IDs: ${workflowIds}`);
           core.setOutput('workflowIds', workflowIds);
 
@@ -38,11 +38,17 @@ jobs:
         if: steps.check_comment.outputs.rebaseRequested == 'true'
         run: |
           const workflowIds = ${{ steps.workflows.outputs.workflowIds }};
-          for (const workflowId of workflowIds) {
-            await octokit.request('POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel', {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: workflowId
+          const workflowIdsArray = JSON.parse(workflowIds);
+          const octokit = new (require('@octokit/rest'))();
+          octokit.authenticate({
+            type: 'token',
+            token: process.env.GITHUB_TOKEN,
+          });
+          for (const workflowId of workflowIdsArray) {
+            await octokit.actions.cancelWorkflowRun({
+              owner: process.env.GITHUB_REPOSITORY_OWNER,
+              repo: process.env.GITHUB_REPOSITORY,
+              run_id: workflowId,
             });
           }
 
