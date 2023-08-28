@@ -1,0 +1,55 @@
+name: Auto-Rebase on Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for "/rebase please" comment
+        id: check_comment
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = context.payload.comment.body;
+            if (comment.includes('/rebase please')) {
+              console.log('Rebase requested');
+              core.setOutput('rebaseRequested', 'true');
+            }
+
+      - name: Get workflows for this branch
+        id: workflows
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const workflows = await github.actions.listRepoWorkflows({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            core.setOutput('workflowIds', workflows.data.workflows.map(wf => wf.id).join(','));
+
+      - name: Stop existing workflows
+        if: steps.check_comment.outputs.rebaseRequested == 'true'
+        run: |
+          const workflowIds = '${{ steps.workflows.outputs.workflowIds }}'.split(',');
+          for (const workflowId of workflowIds) {
+            await github.actions.cancelWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: workflowId
+            });
+          }
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Rebase if requested
+        if: steps.check_comment.outputs.rebaseRequested == 'true'
+        run: |
+          git fetch origin pull/${{ github.event.issue.number }}/head:pr/${{ github.event.issue.number }}/head
+          git rebase pr/${{ github.event.issue.number }}/head
+          git push origin HEAD:refs/heads/${{ github.head_ref }}
