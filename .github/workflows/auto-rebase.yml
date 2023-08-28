@@ -7,12 +7,8 @@ on:
 jobs:
   rebase:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Set up Octokit
-        id: octokit
-        uses: octokit/rest.js@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for "/rebase please" comment
         id: check_comment
         uses: actions/github-script@v5
@@ -25,23 +21,25 @@ jobs:
               core.setOutput('rebaseRequested', 'true');
             }
 
+      - name: Set up Octokit
+        id: octokit
+        uses: octokit/request-action@v2.x
+        with:
+          route: actions.listRepoWorkflows
+
       - name: Get workflows for this branch
         id: workflows
         run: |
-          const response = await octokit.actions.listRepoWorkflows({
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          });
-          const workflowIds = response.data.workflows.map(wf => wf.id).join(',');
+          const workflowIds = ${{ toJson(steps.octokit.data.workflows.map(wf => wf.id)) }};
           console.log(`Workflow IDs: ${workflowIds}`);
           core.setOutput('workflowIds', workflowIds);
 
       - name: Stop existing workflows
         if: steps.check_comment.outputs.rebaseRequested == 'true'
         run: |
-          const workflowIds = '${{ steps.workflows.outputs.workflowIds }}'.split(',');
+          const workflowIds = ${{ steps.workflows.outputs.workflowIds }};
           for (const workflowId of workflowIds) {
-            await octokit.actions.cancelWorkflowRun({
+            await octokit.request('POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel', {
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: workflowId
