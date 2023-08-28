@@ -117,9 +117,11 @@ pushReplacement(BuildContext context, Widget destination) {
       .pushReplacement(MaterialPageRoute(builder: (context) => destination));
 }
 
-push(BuildContext context, Widget destination) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => destination));
+push(BuildContext context, Widget destination, bool enabled) {
+  if (enabled) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => destination));
+  }
 }
 
 pushAndRemoveUntil(BuildContext context, Widget destination, bool predict) {
