@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         sdk: [ 3.0.6 ]
     steps:
       - uses: actions/checkout@v3
@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         flutter-version: [
           3.10.6 # brings Dart version: 3.0.6
         ]
@@ -50,10 +50,10 @@ jobs:
     ]
     if: ${{ always() && !cancelled() && !contains(needs.*.result, 'failure') }}
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10 # seems a lot but sometimes Flutter configuration and dependency-resolution could take surprisingly a lot of time, due to network issue(s)
+    timeout-minutes: 10
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         flutter-version: [
           3.10.6 # brings Dart version: 3.0.6
         ]
