@@ -6,6 +6,7 @@ import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/user.dart';
 
 class FireStoreUtils {
+  static const invalidEmailPwMsg = "Invalid email address or password.";
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static Reference storage = FirebaseStorage.instance.ref();
 
@@ -48,23 +49,27 @@ class FireStoreUtils {
       return user;
     } on auth.FirebaseAuthException catch (exception, s) {
       debugPrint('$exception$s');
-      switch ((exception).code) {
-        case 'invalid-email':
-          return 'Email address is malformed.';
-        case 'wrong-password':
-          return 'Wrong password.';
-        case 'user-not-found':
-          return 'No user corresponding to the given email address.';
-        case 'user-disabled':
-          return 'This user has been disabled.';
-        case 'too-many-requests':
-          return 'Too many attempts to sign in as this user.';
-      }
-      return 'Unexpected firebase error, Please try again.';
+      return resolveExceptionCode((exception).code);
     } catch (e, s) {
       debugPrint('$e$s');
       return 'Login failed, Please try again.';
     }
+  }
+
+  static String resolveExceptionCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return 'Email address is malformed.';
+      case 'wrong-password':
+        return invalidEmailPwMsg;
+      case 'user-not-found':
+        return invalidEmailPwMsg;
+      case 'user-disabled':
+        return 'This user has been disabled.';
+      case 'too-many-requests':
+        return 'Too many attempts to sign in as this user.';
+    }
+    return 'Unexpected firebase error, Please try again.';
   }
 
   /// save a new user document in the USERS table in firebase firestore
