@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 class User {
@@ -60,6 +61,11 @@ class User {
       'appIdentifier': appIdentifier,
       'isStartDateSet': isStartDateSet
     };
+  }
+
+  @override
+  String toString() {
+    return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "isPaid": "$isPaid", "appIdentifier": "$appIdentifier", "isStartDateSet": "$isStartDateSet"}';
   }
 
   void updateFromMap(Map<String, dynamic> userData) {

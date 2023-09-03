@@ -11,6 +11,10 @@ dependencies:
   cloud_firestore: ^4.0.4
   firebase_storage: ^11.0.4
 
+  email_validator: ^2.1.16
+
+  logger: ^2.0.1
+
   shared_preferences: ^2.0.15
   progress_dialog:
     git:

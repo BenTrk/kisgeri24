@@ -20,7 +20,7 @@ class WelcomeScreen extends StatelessWidget {
               listener: (context, state) {
                 switch (state.pressTarget) {
                   case WelcomePressTarget.login:
-                    push(context, const LoginScreen(), ENABLED);
+                    push(context, const LoginScreen(), enabled);
                     break;
                   case WelcomePressTarget.signup:
                     push(context, const SignUpScreen(),
