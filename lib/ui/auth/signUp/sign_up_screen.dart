@@ -13,8 +13,10 @@ import 'package:kisgeri24/ui/loading_cubit.dart';
 import 'package:kisgeri24/misc/toggle_buttons_signup.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../publics.dart';
+import 'package:kisgeri24/publics.dart';
+import 'package:kisgeri24/services/validator.dart';
 
+@Deprecated("This feature/screen is not needed anymore, only for testing.")
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 

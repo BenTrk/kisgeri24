@@ -9,6 +9,7 @@ import 'package:kisgeri24/classes/places.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/publics.dart';
+import 'package:kisgeri24/logging.dart' as log;
 
 class Init {
   //Compare starttime and starttime + category to start and end times
@@ -89,6 +90,7 @@ class Init {
 
   //ToDo: Use try catch for dates, do not initialize on start for stupid values!
   static Future<bool> checkDateTime(User user) async {
+    log.logger.d("Check date is requested for user: $user");
     DatabaseReference basicRef = FirebaseDatabase.instance.ref('BasicData');
     DatabaseReference resultsRef =
         FirebaseDatabase.instance.ref('Results').child(user.userID);
