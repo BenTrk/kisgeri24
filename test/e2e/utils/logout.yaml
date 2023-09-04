@@ -1,0 +1,15 @@
+appId: com.kisgeri24.flutterkisgeri24
+---
+- tapOn:
+    point: "93%,10%"      # click on extending menu
+- waitForAnimationToEnd:  # sometimes it is slow
+    timeout: 3000
+- tapOn:
+    point: "7%,10%"       # in some cases, the menu does not show any of the items in it, so by this workaround we close the menu just to reopen it
+- tapOn:
+    point: "93%,10%"
+- waitForAnimationToEnd:
+    timeout: 3000         # still, can be slow
+- tapOn:
+    point: "34%,10%"      # in 5 out of 5, after reopening the menu the logout button is there to be clicked
+- assertVisible: "Log In"
