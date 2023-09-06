@@ -30,8 +30,6 @@ class LogoutEvent extends AuthenticationEvent {
   LogoutEvent();
 }
 
-class FinishedOnBoardingEvent extends AuthenticationEvent {}
-
 class CheckFirstRunEvent extends AuthenticationEvent {}
 
 class CheckAuthenticationEvent extends AuthenticationEvent {}
