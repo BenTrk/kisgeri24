@@ -1,7 +1,6 @@
 part of 'authentication_bloc.dart';
 
 enum AuthState {
-  firstRun,
   authenticated,
   unauthenticated,
   outOfDateTimeRange,
@@ -22,8 +21,6 @@ class AuthenticationState {
   const AuthenticationState.unauthenticated({String? message})
       : this._(AuthState.unauthenticated,
             message: message ?? 'Unauthenticated');
-
-  const AuthenticationState.onboarding() : this._(AuthState.firstRun);
 
   const AuthenticationState.outOfDateTimeRange(
       {required User user, String? message})

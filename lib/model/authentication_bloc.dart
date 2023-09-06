@@ -1,47 +1,32 @@
 import 'package:bloc/bloc.dart';
-import 'package:kisgeri24/constants.dart';
+import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
 import 'package:kisgeri24/services/authenticate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kisgeri24/model/init.dart';
 
 part 'authentication_event.dart';
-
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   User? user;
-  late SharedPreferences prefs;
-  late bool finishedOnBoarding;
 
   AuthenticationBloc({this.user})
       : super(const AuthenticationState.unauthenticated()) {
     on<CheckFirstRunEvent>((event, emit) async {
-      prefs = await SharedPreferences.getInstance();
-      finishedOnBoarding = prefs.getBool(finishedOnBoardingConst) ?? false;
-      if (!finishedOnBoarding) {
-        emit(const AuthenticationState.onboarding());
+      user = await FireStoreUtils.getAuthUser();
+      if (user == null) {
+        emit(const AuthenticationState.unauthenticated());
+      } else if (user!.isPaid == false) {
+        emit(AuthenticationState.didNotPayYet(
+            user: user!, message: 'You did not pay the entry fee yet.'));
+      } else if (!user!.isStartDateSet) {
+        emit(AuthenticationState.didNotSetTime(
+            user: user!, message: 'You need to set the startdate first.'));
+      } else if (!await Init.checkDateTime(user!)) {
+        emit(AuthenticationState.outOfDateTimeRange(user: user!));
       } else {
-        user = await FireStoreUtils.getAuthUser();
-        if (user == null) {
-          emit(const AuthenticationState.unauthenticated());
-        } else if (user!.isPaid == false) {
-          emit(AuthenticationState.didNotPayYet(
-              user: user!, message: 'You did not pay the entry fee yet.'));
-        } else if (!user!.isStartDateSet) {
-          emit(AuthenticationState.didNotSetTime(
-              user: user!, message: 'You need to set the startdate first.'));
-        } else if (!await Init.checkDateTime(user!)) {
-          emit(AuthenticationState.outOfDateTimeRange(user: user!));
-        } else {
-          emit(AuthenticationState.authenticated(user!));
-        }
+        emit(AuthenticationState.authenticated(user!));
       }
-    });
-    on<FinishedOnBoardingEvent>((event, emit) async {
-      await prefs.setBool(finishedOnBoardingConst, true);
-      emit(const AuthenticationState.unauthenticated());
     });
     on<LoginWithEmailAndPasswordEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.loginWithEmailAndPassword(

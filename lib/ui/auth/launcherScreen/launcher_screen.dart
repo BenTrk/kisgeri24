@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/services/data.dart';
-import 'package:kisgeri24/ui/auth/onBoarding/on_boarding_screen.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/home/home_screen.dart';
 import '../../home/date_time_picker_screen.dart';
@@ -24,7 +22,6 @@ class _LauncherScreenState extends State<LauncherScreen> {
   }
 
   //Create the necessary screen as follows:
-  // In case first run of application: OnBoarding Screen
   // In case user is authenticated: Home Screen
   // In case user is unauthenticated: Welcome Screen
   @override
@@ -34,15 +31,6 @@ class _LauncherScreenState extends State<LauncherScreen> {
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           switch (state.authState) {
-            case AuthState.firstRun:
-              pushReplacement(
-                  context,
-                  OnBoardingScreen(
-                    images: imageList,
-                    titles: titlesList,
-                    subtitles: subtitlesList,
-                  ));
-              break;
             case AuthState.authenticated:
               pushReplacement(context, HomeScreen(user: state.user!));
               break;
