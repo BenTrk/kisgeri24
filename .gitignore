@@ -73,6 +73,8 @@ app.*.map.json
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
+**/GoogleService-Info.plist
+
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
 !**/ios/**/default.mode2v3
@@ -91,3 +93,4 @@ app.*.map.json
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+**/google-services.json
