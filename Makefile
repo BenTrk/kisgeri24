@@ -1,3 +1,12 @@
+CLEAN_COMMAND := flutter clean
+BUILD_APK_COMMAND := flutter build apk
+
+ifeq ($(OS),Windows_NT)
+	OS_NAME := Windows
+else
+	OS_NAME := $(shell uname -s)
+endif
+
 validate: check-format check-dart-code-analysis test
 
 check-format:
@@ -19,12 +28,6 @@ test:
 format:
 	dart format --output=write .
 
-ifeq ($(OS),Windows_NT)
-	OS_NAME := Windows
-else
-	OS_NAME := $(shell uname -s)
-endif
-
 GOOGLE_IOS_FILE := GoogleService-Info.plist
 GOOGLE_ANDROID_FILE := google-services.json
 ifeq ($(OS_NAME),Windows)
@@ -38,9 +41,6 @@ else
 	ANDROID_DEST_PATH := android/app
 	ANDROID_SRC_PATH := config/$(GOOGLE_ANDROID_FILE)
 endif
-
-CLEAN_COMMAND := flutter clean
-BUILD_APK_COMMAND := flutter build apk
 
 clean_build_ios:
 	@echo "Copying $(GOOGLE_IOS_FILE) to $(IOS_DEST_PATH)"

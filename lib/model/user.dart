@@ -21,6 +21,8 @@ class User {
 
   bool isStartDateSet;
 
+  String? tenantId;
+
   User({
     this.email = '',
     this.firstClimberName = '',
@@ -30,6 +32,7 @@ class User {
     this.category = '',
     this.isPaid = false,
     this.isStartDateSet = false,
+    this.tenantId,
   }) : appIdentifier =
             'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
 
@@ -46,6 +49,7 @@ class User {
         teamName: parsedJson['teamName'] ?? '',
         category: parsedJson['category'] ?? '',
         isPaid: parsedJson['isPaid'] ?? false,
+        tenantId: parsedJson['tenantId'],
         isStartDateSet: parsedJson['isStartDateSet'] ?? false);
   }
 
@@ -59,7 +63,8 @@ class User {
       'category': category,
       'isPaid': isPaid,
       'appIdentifier': appIdentifier,
-      'isStartDateSet': isStartDateSet
+      'isStartDateSet': isStartDateSet,
+      'tenantId': tenantId
     };
   }
 
@@ -94,6 +99,9 @@ class User {
     }
     if (userData.containsKey('startDate')) {
       isStartDateSet = userData['isStartDateSet'] ?? false;
+    }
+    if (userData.containsKey('tenantId')) {
+      tenantId = userData['tenantId'];
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/logging.dart' as log;
 import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/services/utils.dart';
 
 class FireStoreUtils {
   static const invalidEmailPwMsg = "Invalid email address or password.";
@@ -104,6 +105,7 @@ class FireStoreUtils {
     required String firstClimberName,
     required String secondClimberName,
     required String category,
+    String? tenantId,
   }) async {
     try {
       auth.UserCredential result = await auth.FirebaseAuth.instance
@@ -117,6 +119,7 @@ class FireStoreUtils {
           secondClimberName: secondClimberName,
           category: category,
           isPaid: const bool.fromEnvironment("REGISTER_WITH_PAID"),
+          tenantId: calculateTenantId(tenantId),
           isStartDateSet:
               const bool.fromEnvironment("REGISTER_WITH_START_DATE_SET"));
       log.logger
@@ -181,5 +184,17 @@ class FireStoreUtils {
         "Email reset is requested for Firebase Auth for email: $emailAddress");
     await auth.FirebaseAuth.instance
         .sendPasswordResetEmail(email: emailAddress);
+  }
+
+  static String? calculateTenantId(String? tenantId) {
+    log.logger.d("Calculating tenant ID (with the input of: $tenantId)");
+    String? result = tenantId;
+    if (isNullOrEmpty(result)) {
+      log.logger.d(
+          "Input tenant ID value was null, about to check if it is given at environment variable level using the TENANT_ID variable key.");
+      result = const String.fromEnvironment("TENANT_ID");
+    }
+    log.logger.d("Calculated tenant ID: $result");
+    return result;
   }
 }
