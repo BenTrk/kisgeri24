@@ -22,7 +22,7 @@ void main() async {
 
   runApp(MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(create: (_) => AuthenticationBloc()),
+      RepositoryProvider(create: (_) => AuthenticationBloc(), lazy: true),
       RepositoryProvider(create: (_) => LoadingCubit()),
     ],
     child: const MyApp(),

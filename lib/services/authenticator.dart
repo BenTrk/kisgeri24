@@ -1,52 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/logging.dart' as log;
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/model/user.dart' as kisgeri;
 import 'package:kisgeri24/services/utils.dart';
 
-class FireStoreUtils {
-  static const invalidEmailPwMsg = "Invalid email address or password.";
-  static FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static Reference storage = FirebaseStorage.instance.ref();
+class Auth {
+  final invalidEmailPwMsg = "Invalid email address or password.";
+  final firebase.FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
-  static Future<User?> getCurrentUser(String uid) async {
-    log.logger.d("Getting current user by its id: $uid");
-    DocumentSnapshot<Map<String, dynamic>> userDocument =
-        await firestore.collection(usersCollection).doc(uid).get();
-    if (userDocument.data() != null && userDocument.exists) {
-      User user = User.fromJson(userDocument.data()!);
-      log.logger.i("User exists: $user");
-      return user;
-    } else {
-      log.logger.i("User does not exists with id: $uid");
-      return null;
-    }
-  }
-
-  static Future<User> updateCurrentUser(User user) async {
-    log.logger.i("Updating/creating the following user: $user");
-    return await firestore
-        .collection(usersCollection)
-        .doc(user.userID)
-        .set(user.toJson())
-        .then((document) {
-      log.logger.i("User created.");
-      return user;
-    });
-  }
+  Auth(this.firebaseAuth, this.firestore);
 
   /// login with email and password with firebase
   /// @param email user email
   /// @param password user password
-  static Future<dynamic> loginWithEmailAndPassword(
-      String email, String password) async {
+  Future<dynamic> login(String email, String password) async {
     log.logger.d("Login requested for email: $email");
     try {
       log.logger.i("About to try to perform login for email: $email");
-      auth.UserCredential result = await auth.FirebaseAuth.instance
+      firebase.UserCredential result = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       log.logger.d(
           "Login operation ended up with the following UserCredential result: $result");
@@ -54,27 +27,27 @@ class FireStoreUtils {
           .collection(usersCollection)
           .doc(result.user?.uid ?? '')
           .get();
-      User? user;
+      kisgeri.User? user;
       if (documentSnapshot.exists) {
         log.logger.i("User exists and login was successful.");
-        user = User.fromJson(documentSnapshot.data() ?? {});
+        user = kisgeri.User.fromJson(documentSnapshot.data() ?? {});
         log.logger.d("Logged in user: $user");
       }
       return user;
-    } on auth.FirebaseAuthException catch (exception, s) {
+    } on firebase.FirebaseAuthException catch (exception, s) {
       log.logger.w("FirebaseAuthException happened during the login operation!",
           error: exception);
-      debugPrint('$exception$s');
+      log.logger.w('$exception$s');
       return resolveExceptionCode((exception).code);
     } catch (e, s) {
       log.logger
           .w("Unexpected error happened during the login operation!", error: e);
-      debugPrint('$e$s');
+      log.logger.w('$e$s');
       return 'Login failed, Please try again.';
     }
   }
 
-  static String resolveExceptionCode(String code) {
+  String resolveExceptionCode(String code) {
     switch (code) {
       case 'invalid-email':
         return 'Email address is malformed.';
@@ -90,15 +63,32 @@ class FireStoreUtils {
     return 'Unexpected firebase error, Please try again.';
   }
 
-  /// save a new user document in the USERS table in firebase firestore
-  /// returns an error message on failure or null on success
-  static Future<String?> createNewUser(User user) async => await firestore
-      .collection(usersCollection)
-      .doc(user.userID)
-      .set(user.toJson())
-      .then((value) => null, onError: (e) => e);
+  logout() async {
+    log.logger.i("About to perform logout for user.");
+    await firebaseAuth.signOut();
+  }
 
-  static signUpWithEmailAndPassword({
+  Future<kisgeri.User?> getAuthUser() async {
+    log.logger.d("Getting auth user.");
+    firebase.User? firebaseUser = firebaseAuth.currentUser;
+    if (firebaseUser != null) {
+      kisgeri.User? user = await _getCurrentUser(firebaseUser.uid);
+      log.logger.d("Current authenticated user is: $user");
+      return user;
+    } else {
+      log.logger.d("Current Firebase user cannot be found.");
+      return null;
+    }
+  }
+
+  resetPassword(String emailAddress) async {
+    log.logger.i("Email reset is requested for Firebase Auth for email: "
+        "$emailAddress");
+    await firebaseAuth.sendPasswordResetEmail(email: emailAddress);
+  }
+
+  @Deprecated("Kept for some time, shall be removed soon!")
+  signUpWithEmailAndPassword({
     required String emailAddress,
     required String password,
     required String teamName,
@@ -107,11 +97,13 @@ class FireStoreUtils {
     required String category,
     String? tenantId,
   }) async {
+    log.logger.w(
+        "signUpWithEmailAndPassword() is deprecated and will be removed soon!");
     try {
-      auth.UserCredential result = await auth.FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
+      firebase.UserCredential result =
+          await firebaseAuth.createUserWithEmailAndPassword(
               email: emailAddress, password: password);
-      User user = User(
+      kisgeri.User user = kisgeri.User(
           email: emailAddress,
           teamName: teamName,
           userID: result.user?.uid ?? '',
@@ -124,7 +116,7 @@ class FireStoreUtils {
               const bool.fromEnvironment("REGISTER_WITH_START_DATE_SET"));
       log.logger
           .i("About to request user creation using the following data: $user");
-      String? errorMessage = await createNewUser(user);
+      String? errorMessage = await _createNewUser(user);
       if (errorMessage == null) {
         log.logger.i("User (with email: $emailAddress) created!");
         return user;
@@ -132,10 +124,10 @@ class FireStoreUtils {
         log.logger.w("User cannot be created due to: $errorMessage");
         return 'Couldn\'t sign up for firebase, Please try again.';
       }
-    } on auth.FirebaseAuthException catch (error) {
+    } on firebase.FirebaseAuthException catch (error) {
       log.logger.w("User registration failed!",
           error: error, stackTrace: error.stackTrace);
-      debugPrint('$error${error.stackTrace}');
+      log.logger.d('$error${error.stackTrace}');
       String message = 'Couldn\'t sign up';
       switch (error.code) {
         case 'email-already-in-use':
@@ -156,37 +148,23 @@ class FireStoreUtils {
       }
       return message;
     } catch (e, s) {
-      debugPrint('FireStoreUtils.signUpWithEmailAndPassword $e $s');
+      log.logger.d('FireStoreUtils.signUpWithEmailAndPassword $e $s');
       return 'Couldn\'t sign up';
     }
   }
 
-  static logout() async {
-    log.logger.i("About to perform logout for user.");
-    await auth.FirebaseAuth.instance.signOut();
-  }
+  @Deprecated("Shall be removed along with the signUpWithEmailAndPassword()")
 
-  static Future<User?> getAuthUser() async {
-    log.logger.d("Getting auth user.");
-    auth.User? firebaseUser = auth.FirebaseAuth.instance.currentUser;
-    if (firebaseUser != null) {
-      User? user = await getCurrentUser(firebaseUser.uid);
-      log.logger.d("Current authenticated user is: $user");
-      return user;
-    } else {
-      log.logger.d("Current Firebase user cannot be found.");
-      return null;
-    }
-  }
+  /// save a new user document in the USERS table in firebase firestore
+  /// returns an error message on failure or null on success
+  Future<String?> _createNewUser(kisgeri.User user) async => await firestore
+      .collection(usersCollection)
+      .doc(user.userID)
+      .set(user.toJson())
+      .then((value) => null, onError: (e) => e);
 
-  static resetPassword(String emailAddress) async {
-    log.logger.i(
-        "Email reset is requested for Firebase Auth for email: $emailAddress");
-    await auth.FirebaseAuth.instance
-        .sendPasswordResetEmail(email: emailAddress);
-  }
-
-  static String? calculateTenantId(String? tenantId) {
+  @Deprecated("Also, once registration won't be feature, this can go as well")
+  String? calculateTenantId(String? tenantId) {
     log.logger.d("Calculating tenant ID (with the input of: $tenantId)");
     String? result = tenantId;
     if (isNullOrEmpty(result)) {
@@ -196,5 +174,19 @@ class FireStoreUtils {
     }
     log.logger.d("Calculated tenant ID: $result");
     return result;
+  }
+
+  Future<kisgeri.User?> _getCurrentUser(String uid) async {
+    log.logger.d("Getting current user by its id: $uid");
+    DocumentSnapshot<Map<String, dynamic>> userDocument =
+        await firestore.collection(usersCollection).doc(uid).get();
+    if (userDocument.data() != null && userDocument.exists) {
+      kisgeri.User user = kisgeri.User.fromJson(userDocument.data()!);
+      log.logger.i("User exists: $user");
+      return user;
+    } else {
+      log.logger.i("User does not exists with id: $uid");
+      return null;
+    }
   }
 }

@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:kisgeri24/model/init.dart';
 import 'package:kisgeri24/model/user.dart';
-import 'package:kisgeri24/services/authenticate.dart';
+import 'package:kisgeri24/services/firebase_service.dart';
+import 'package:kisgeri24/services/authenticator.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -12,8 +13,10 @@ class AuthenticationBloc
 
   AuthenticationBloc({this.user})
       : super(const AuthenticationState.unauthenticated()) {
+    Auth authenticator = Auth(FirebaseSingletonProvider.instance.authInstance,
+        FirebaseSingletonProvider.instance.firestoreInstance);
     on<CheckFirstRunEvent>((event, emit) async {
-      user = await FireStoreUtils.getAuthUser();
+      user = await authenticator.getAuthUser();
       if (user == null) {
         emit(const AuthenticationState.unauthenticated());
       } else if (user!.isPaid == false) {
@@ -29,8 +32,7 @@ class AuthenticationBloc
       }
     });
     on<LoginWithEmailAndPasswordEvent>((event, emit) async {
-      dynamic result = await FireStoreUtils.loginWithEmailAndPassword(
-          event.email, event.password);
+      dynamic result = await authenticator.login(event.email, event.password);
       if (result != null &&
           result is User &&
           result.isPaid &&
@@ -55,10 +57,8 @@ class AuthenticationBloc
             message: 'Login failed, Please try again.'));
       }
     });
-
-    //might need to add other states too.
     on<SignupWithEmailAndPasswordEvent>((event, emit) async {
-      dynamic result = await FireStoreUtils.signUpWithEmailAndPassword(
+      dynamic result = await authenticator.signUpWithEmailAndPassword(
         emailAddress: event.emailAddress,
         password: event.password,
         teamName: event.teamName,
@@ -91,13 +91,13 @@ class AuthenticationBloc
       }
     });
     on<LogoutEvent>((event, emit) async {
-      await FireStoreUtils.logout();
+      await authenticator.logout();
       user = null;
       emit(const AuthenticationState.unauthenticated());
     });
 
     on<CheckAuthenticationEvent>((event, emit) async {
-      User? user = await FireStoreUtils.getAuthUser();
+      User? user = await authenticator.getAuthUser();
       if (user != null) {
         if (await Init.checkDateTime(user)) {
           emit(AuthenticationState.authenticated(user));
