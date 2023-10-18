@@ -28,6 +28,9 @@ test:
 format:
 	dart format --output=write .
 
+generate-unit-test-mocks:
+	dart run build_runner build --delete-conflicting-outputs
+
 GOOGLE_IOS_FILE := GoogleService-Info.plist
 GOOGLE_ANDROID_FILE := google-services.json
 ifeq ($(OS_NAME),Windows)

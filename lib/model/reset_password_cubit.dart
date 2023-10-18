@@ -1,14 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:kisgeri24/services/authenticate.dart';
+import 'package:kisgeri24/services/authenticator.dart';
 
 part 'reset_password_state.dart';
 
 class ResetPasswordCubit extends Cubit<ResetPasswordState> {
-  ResetPasswordCubit() : super(ResetPasswordInitial());
+  final Auth auth;
+
+  ResetPasswordCubit(this.auth) : super(ResetPasswordInitial());
 
   resetPassword(String email) async {
-    await FireStoreUtils.resetPassword(email);
+    await auth.resetPassword(email);
     emit(ResetPasswordDone());
   }
 

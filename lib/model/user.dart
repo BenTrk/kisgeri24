@@ -68,6 +68,12 @@ class User {
     };
   }
 
+  bool equals(User? user) =>
+      user != null &&
+      user.toJson().entries.every((entry) =>
+          toJson().containsKey(entry.key) &&
+          toJson()[entry.key] == entry.value);
+
   @override
   String toString() {
     return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "isPaid": "$isPaid", "appIdentifier": "$appIdentifier", "isStartDateSet": "$isStartDateSet"}';
