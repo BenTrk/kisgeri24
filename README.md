@@ -1,5 +1,5 @@
 
-## KisGeri24 mobile app (v0.2.0)
+## KisGeri24 mobile app (v0.3.0)
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white) ![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
 ___  
 ### Requirements:
