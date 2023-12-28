@@ -7,7 +7,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 @GenerateNiceMocks([MockSpec<FirebaseAuth>(), MockSpec<User>()])
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kisgeri24/model/user.dart' as kisgeri;
+import 'package:kisgeri24/data/models/user.dart' as kisgeri;
 import 'package:kisgeri24/services/authenticator.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

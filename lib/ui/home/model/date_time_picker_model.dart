@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kisgeri24/services/helper.dart';
 
 import '../../../constants.dart';
-import '../../../model/user.dart';
+import '../../../data/models/user.dart';
 
 class DateTimePickerModel {
   static FirebaseFirestore firestore = FirebaseFirestore.instance;

@@ -6,7 +6,7 @@ import 'package:kisgeri24/services/helper.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants.dart';
-import '../../../model/user.dart';
+import '../data/models/user.dart';
 import '../publics.dart';
 
 class DatabaseWrites {

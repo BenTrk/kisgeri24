@@ -7,7 +7,7 @@ import 'package:kisgeri24/classes/acivities.dart';
 import 'package:kisgeri24/classes/place.dart';
 import 'package:kisgeri24/classes/places.dart';
 import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/data/models/user.dart';
 import 'package:kisgeri24/publics.dart';
 import 'package:kisgeri24/logging.dart' as log;
 
