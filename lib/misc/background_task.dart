@@ -8,7 +8,7 @@ import 'package:kisgeri24/model/init.dart';
 
 import '../classes/results.dart';
 import '../model/authentication_bloc.dart';
-import '../model/user.dart';
+import '../data/models/user.dart';
 
 class BackgroundTask {
   User user;

@@ -10,7 +10,7 @@ import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/cards/activities_card.dart';
 import 'package:kisgeri24/misc/custom_menu.dart';
 import 'package:kisgeri24/model/init.dart';
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/data/models/user.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';

@@ -1,7 +1,7 @@
 import 'package:kisgeri24/misc/database_writes.dart';
 
 import '../../classes/results.dart';
-import '../../model/user.dart';
+import '../../data/models/user.dart';
 import '../../publics.dart';
 
 class ClimbsAndMoreModel {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/data/models/user.dart';
 import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';

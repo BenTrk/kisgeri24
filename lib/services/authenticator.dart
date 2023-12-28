@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/logging.dart' as log;
-import 'package:kisgeri24/model/user.dart' as kisgeri;
+import 'package:kisgeri24/data/models/user.dart' as kisgeri;
 import 'package:kisgeri24/services/utils.dart';
 
 class Auth {
@@ -110,7 +110,6 @@ class Auth {
           firstClimberName: firstClimberName,
           secondClimberName: secondClimberName,
           category: category,
-          isPaid: const bool.fromEnvironment("REGISTER_WITH_PAID"),
           tenantId: calculateTenantId(tenantId),
           isStartDateSet:
               const bool.fromEnvironment("REGISTER_WITH_START_DATE_SET"));

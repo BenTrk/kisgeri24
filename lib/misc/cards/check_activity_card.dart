@@ -3,7 +3,7 @@ import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/data/models/user.dart';
 import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
 
 class CheckActivitiesCard extends StatefulWidget {
