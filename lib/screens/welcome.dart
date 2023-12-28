@@ -11,12 +11,67 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Title_text',
-      debugShowMaterialGrid: false,
+      title: 'Welcome screen',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
-          useMaterial3: true,
-          scaffoldBackgroundColor: const Color(0xff181305)),
+        // This needs to be moved to a separate file
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: const MaterialColor(0xffFFBA00, <int, Color>{
+            50: Color(0xffFFBA00),
+            100: Color(0xffFFBA00),
+            200: Color(0xffFFBA00),
+            300: Color(0xffFFBA00),
+            400: Color(0xffFFBA00),
+            500: Color(0xffFFBA00),
+            600: Color(0xffFFBA00),
+            700: Color(0xffFFBA00),
+            800: Color(0xffFFBA00),
+            900: Color(0xffFFBA00),
+          }),
+          backgroundColor: const Color(0xff181305),
+          brightness: Brightness.dark,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            // Figma: Bold (strong)
+            fontFamily: "Lato",
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Color(0xffF9F2E0),
+          ),
+          bodyMedium: TextStyle(
+            // Figma: Body
+            fontFamily: "Lato",
+            fontWeight: FontWeight.normal,
+            fontSize: 16,
+            height: 1.4,
+            color: Color(0xffF9F2E0),
+          ),
+          bodySmall: TextStyle(
+            // Figma: Smaller text
+            fontFamily: "Lato",
+            fontWeight: FontWeight.normal,
+            fontSize: 14,
+            color: Color(0xffF9F2E0),
+          ),
+          displayLarge: TextStyle(
+            // Figma: Header 1
+            fontFamily: "Oswald",
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            letterSpacing: -0.2,
+            color: Color(0xffF9F2E0),
+          ),
+          displayMedium: TextStyle(
+            // Figma: Header 3
+            fontFamily: "Oswald",
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+            letterSpacing: -0.2,
+            color: Color(0xffF9F2E0),
+          ),
+        ),
+      ),
       home: const MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
     );
   }
@@ -53,47 +108,47 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'Készen álltok egy újabb kihívásra?',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Color(0xffF9F2E0),
-              ),
+              style: Theme.of(context).textTheme.displayMedium,
+              textAlign: TextAlign.center,
             ),
             const Image(
               image: AssetImage('assets/images/kisgeri_logo.png'),
               semanticLabel: "Kisgeri logo",
               isAntiAlias: true,
-            ),
-            const Text(
-              'Nyomkodd a gombot és nő a szám :O ',
-              style: TextStyle(
-                color: Color(0xffF9F2E0),
-              ),
+              fit: BoxFit.contain,
+              width: 400,
+              height: 400,
             ),
             Text(
-              '$_counter',
-              style: const TextStyle(
-                color: Color(0xffF9F2E0),
-              ),
-              textDirection: TextDirection.rtl,
+              'Kövessétek nyomon csapatotok teljesítményét!',
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 25), // TODO noob padding
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: const Color(0xff181305),
-          backgroundColor: const Color(0xffFFBA00),
-          disabledForegroundColor: Colors.grey,
-        ),
-        onPressed: _incrementCounter,
-        child: const Text(
-          "Belépés",
-          style: TextStyle(
-            color: Color(0xffF9F2E0),
+      floatingActionButton: SizedBox(
+        width: 200,
+        height: 50,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xff181305),
+            backgroundColor: const Color(0xffFFBA00),
+            disabledForegroundColor: Colors.grey,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          onPressed: _incrementCounter,
+          child: const Text(
+            "Belépés",
+            style: TextStyle(
+              color: Color(0xff181305),
+            ),
           ),
         ),
       ),
