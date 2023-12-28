@@ -266,6 +266,22 @@ class MockFirebaseFirestore extends _i1.Mock implements _i4.FirebaseFirestore {
       );
 
   @override
+  String get databaseURL => (super.noSuchMethod(
+        Invocation.getter(#databaseURL),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
+
+  @override
+  set databaseURL(String? _databaseURL) => super.noSuchMethod(
+        Invocation.setter(
+          #databaseURL,
+          _databaseURL,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   set settings(_i3.Settings? settings) => super.noSuchMethod(
         Invocation.setter(
           #settings,
@@ -2113,6 +2129,18 @@ class MockFirebaseAuth extends _i1.Mock implements _i7.FirebaseAuth {
             #forceResendingToken: forceResendingToken,
             #multiFactorSession: multiFactorSession,
           },
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> revokeTokenWithAuthorizationCode(
+          String? authorizationCode) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #revokeTokenWithAuthorizationCode,
+          [authorizationCode],
         ),
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),

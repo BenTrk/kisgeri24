@@ -1,9 +1,8 @@
-import 'package:kisgeri24/model/user.dart';
+import 'package:kisgeri24/data/models/user.dart';
 
 final User testUser = User(
     email: "someUser@email.com",
     isStartDateSet: true,
-    isPaid: true,
     category: "24H",
     firstClimberName: "First Test Climber",
     secondClimberName: "Second Test Climber",

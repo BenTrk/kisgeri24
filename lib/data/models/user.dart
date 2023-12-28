@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:kisgeri24/data/models/entity.dart';
 
-class User {
+class User extends Entity {
   String email;
 
   String firstClimberName;
@@ -15,13 +16,15 @@ class User {
 
   String category;
 
-  bool isPaid;
-
   String appIdentifier;
 
   bool isStartDateSet;
 
   String? tenantId;
+
+  String yearId;
+
+  bool enabled;
 
   User({
     this.email = '',
@@ -30,15 +33,16 @@ class User {
     this.userID = '',
     this.teamName = '',
     this.category = '',
-    this.isPaid = false,
     this.isStartDateSet = false,
     this.tenantId,
+    this.yearId = '',
+    this.enabled = false,
   }) : appIdentifier =
             'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
 
   String getTeamName() => teamName;
 
-  bool getStartDate() => isStartDateSet;
+  bool isEnabled() => enabled;
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
@@ -48,8 +52,9 @@ class User {
         userID: parsedJson['id'] ?? parsedJson['userID'] ?? '',
         teamName: parsedJson['teamName'] ?? '',
         category: parsedJson['category'] ?? '',
-        isPaid: parsedJson['isPaid'] ?? false,
         tenantId: parsedJson['tenantId'],
+        yearId: parsedJson['yearId'] ?? '',
+        enabled: parsedJson['isEnabled'],
         isStartDateSet: parsedJson['isStartDateSet'] ?? false);
   }
 
@@ -61,10 +66,11 @@ class User {
       'id': userID,
       'teamName': teamName,
       'category': category,
-      'isPaid': isPaid,
       'appIdentifier': appIdentifier,
       'isStartDateSet': isStartDateSet,
-      'tenantId': tenantId
+      'tenantId': tenantId,
+      'isEnabled': enabled,
+      'yearId': yearId
     };
   }
 
@@ -76,7 +82,7 @@ class User {
 
   @override
   String toString() {
-    return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "isPaid": "$isPaid", "appIdentifier": "$appIdentifier", "isStartDateSet": "$isStartDateSet"}';
+    return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "appIdentifier": "$appIdentifier", "isStartDateSet": "$isStartDateSet"}';
   }
 
   void updateFromMap(Map<String, dynamic> userData) {
@@ -100,14 +106,17 @@ class User {
     if (userData.containsKey('category')) {
       category = userData['category'];
     }
-    if (userData.containsKey('isPaid')) {
-      isPaid = userData['isPaid'];
-    }
     if (userData.containsKey('startDate')) {
       isStartDateSet = userData['isStartDateSet'] ?? false;
     }
     if (userData.containsKey('tenantId')) {
       tenantId = userData['tenantId'];
+    }
+    if (userData.containsKey('isEnabled')) {
+      enabled = userData['isEnabled'];
+    }
+    if (userData.containsKey('yearId')) {
+      yearId = userData['yearId'];
     }
   }
 }

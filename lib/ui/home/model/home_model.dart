@@ -8,7 +8,7 @@ import '../../../classes/places.dart';
 import 'package:kisgeri24/model/init.dart';
 
 import '../../../misc/background_task.dart';
-import '../../../model/user.dart';
+import '../../../data/models/user.dart';
 
 class HomeModel {
   DatabaseWrites databaseWrites = DatabaseWrites();

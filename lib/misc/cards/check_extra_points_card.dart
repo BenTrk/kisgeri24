@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/constants.dart';
 
-import '../../model/user.dart';
+import '../../data/models/user.dart';
 
 class CheckExtraPointsCard extends StatefulWidget {
   final TeamResult teamResult;

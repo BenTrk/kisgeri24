@@ -4,7 +4,7 @@ import 'package:kisgeri24/constants.dart';
 
 import 'package:kisgeri24/misc/database_writes.dart';
 import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
-import '../../model/user.dart';
+import '../../data/models/user.dart';
 
 class CheckClimbedPlaceCard extends StatefulWidget {
   final ClimbedRoute climbedRoute;

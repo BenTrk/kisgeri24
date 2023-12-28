@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/misc/database_writes.dart';
 
-import '../../model/user.dart';
+import '../../data/models/user.dart';
 import '../../publics.dart';
 
 class CustomCard extends StatefulWidget {
