@@ -87,19 +87,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  Color? _changingColor = Colors.orange[200];
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      if ((_counter % 2) == 0) {
-        _changingColor = Colors.blue[200];
-      } else {
-        _changingColor = Colors.orange[200];
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +130,9 @@ class _MyHomePageState extends State<MyHomePage> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          onPressed: _incrementCounter,
+          onPressed: () { // TODO navigate to login screen
+            Navigator.pushNamed(context, '/'); 
+          },
           child: const Text(
             "Belépés",
             style: TextStyle(
