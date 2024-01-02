@@ -1,19 +1,18 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:expandable_menu/expandable_menu.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/ui/options/options_screen.dart';
-import 'package:kisgeri24/ui/sponsors/sponsors_bedrull_screen.dart';
-
-import '../constants.dart';
-import '../model/authentication_bloc.dart';
-import '../data/models/user.dart';
-import '../services/helper.dart';
-import '../ui/climbs & more/climbs_and_more_screen.dart';
-import '../ui/home/home_screen.dart';
-import '../ui/sponsors/sponsors_deichatlon_screen.dart';
-import '../ui/sponsors/sponsors_randomsponsor_screen.dart';
+import "package:expandable_menu/expandable_menu.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_screen.dart";
+import "package:kisgeri24/ui/home/home_screen.dart";
+import "package:kisgeri24/ui/options/options_screen.dart";
+import "package:kisgeri24/ui/sponsors/sponsors_bedrull_screen.dart";
+import "package:kisgeri24/ui/sponsors/sponsors_deichatlon_screen.dart";
+import "package:kisgeri24/ui/sponsors/sponsors_randomsponsor_screen.dart";
 
 class CustomMenu extends StatefulWidget {
   final User user;
@@ -52,10 +51,10 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.home),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed Home');
+                  log("Pressed Home");
                   if (!isStartTimeSet) {
                     showSnackBar(
-                        context, 'You did not set the start time yet.');
+                        context, "You did not set the start time yet.",);
                   } else {
                     pushReplacement(context, HomeScreen(user: user));
                   }
@@ -68,11 +67,11 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.query_stats),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed Stats');
+                  log("Pressed Stats");
                   if (!isStartTimeSet) {
-                    log('Boyaa');
+                    log("Boyaa");
                     showSnackBar(
-                        context, 'You did not set the start time yet.');
+                        context, "You did not set the start time yet.",);
                   } else {
                     pushReplacement(context, ClimbsAndMoreScreen(user: user));
                   }
@@ -85,7 +84,7 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.manage_accounts),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed ManageAccounts');
+                  log("Pressed ManageAccounts");
                   pushReplacement(context, OptionsScreen(user: user));
                 },
               ),
@@ -96,7 +95,7 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.paid),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed Sponsor');
+                  log("Pressed Sponsor");
                   pushReplacement(context, SponsorsBedRullScreen(user: user));
                 },
               ),
@@ -107,9 +106,9 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.paid),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed Sponsor');
+                  log("Pressed Sponsor");
                   pushReplacement(
-                      context, SponsorsDeichatlonScreen(user: user));
+                      context, SponsorsDeichatlonScreen(user: user),);
                 },
               ),
             ),
@@ -119,9 +118,9 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.paid),
                 color: Colors.white,
                 onPressed: () {
-                  log('Pressed Sponsor');
+                  log("Pressed Sponsor");
                   pushReplacement(
-                      context, SponsorsRandomSponsorScreen(user: user));
+                      context, SponsorsRandomSponsorScreen(user: user),);
                 },
               ),
             ),
@@ -131,12 +130,12 @@ class _CustomMenuState extends State<CustomMenu> {
                 icon: const Icon(Icons.exit_to_app),
                 color: Colors.white,
                 onPressed: () {
-                  log('Logout');
+                  log("Logout");
                   context.read<AuthenticationBloc>().add(LogoutEvent());
                 },
               ),
             ),
           ],
-        ));
+        ),);
   }
 }

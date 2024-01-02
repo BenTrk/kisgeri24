@@ -1,33 +1,33 @@
-import 'dart:async';
-import 'dart:developer';
+import "dart:async";
+import "dart:developer";
 
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:kisgeri24/classes/acivities.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/misc/cards/activities_card.dart';
-import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/model/init.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/home/model/home_model.dart';
-import 'package:kisgeri24/data/models/sector.dart';
-import 'package:kisgeri24/classes/places.dart';
-import 'package:kisgeri24/data/models/route.dart' as kisgeri;
-import 'package:kisgeri24/misc/background_task.dart';
-import 'package:kisgeri24/misc/cards/card.dart';
-import 'package:kisgeri24/publics.dart';
-import 'date_time_picker_screen.dart';
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:flutter_local_notifications/flutter_local_notifications.dart";
+import "package:kisgeri24/classes/acivities.dart";
+import "package:kisgeri24/classes/places.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/route.dart" as kisgeri;
+import "package:kisgeri24/data/models/sector.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/background_task.dart";
+import "package:kisgeri24/misc/cards/activities_card.dart";
+import "package:kisgeri24/misc/cards/card.dart";
+import "package:kisgeri24/misc/custom_menu.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/model/init.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
+import "package:kisgeri24/ui/home/model/home_model.dart";
 
 //User is not refreshed!
 class HomeScreen extends StatefulWidget {
   final User user;
 
-  const HomeScreen({Key? key, required this.user}) : super(key: key);
+  const HomeScreen({super.key, required this.user});
 
   @override
   State createState() => _HomeState();
@@ -37,7 +37,7 @@ enum SelectedItem { places, activities }
 
 class _HomeState extends State<HomeScreen> {
   late User user;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   //Places state vars
   Sector? selectedPlace;
@@ -74,8 +74,8 @@ class _HomeState extends State<HomeScreen> {
     });
   }
 
-  void checkIfInRange(User user) async {
-    bool isIn = await Init.checkDateTime(user);
+  Future<void> checkIfInRange(User user) async {
+    final bool isIn = await Init.checkDateTime(user);
     if (isIn) {
       setState(() {
         isTimeToClimb = true;
@@ -88,7 +88,7 @@ class _HomeState extends State<HomeScreen> {
     super.initState();
     user = widget.user;
     checkIfInRange(user);
-    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    resultsRef = FirebaseDatabase.instance.ref("Results").child(user.userID);
     streamSubscription = resultsRef.onValue.listen((event) {
       Init.getResults(user, event.snapshot);
       if (!isTimeToClimb) {
@@ -110,7 +110,7 @@ class _HomeState extends State<HomeScreen> {
             pushAndRemoveUntil(context, const WelcomeScreen(), false);
           } else if (state.authState == AuthState.didNotSetTime) {
             pushAndRemoveUntil(
-                context, DateTimePickerScreen(user: user), false);
+                context, DateTimePickerScreen(user: user), false,);
           } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
 
           //implemented, remove to test it out!
@@ -134,14 +134,13 @@ class _HomeState extends State<HomeScreen> {
                     SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //Menu inside :)
                           HomeScreenTitleWidget(user: user),
 
                           const Padding(
                             padding: EdgeInsets.only(
-                                left: 25.0, right: 25.0, bottom: 10),
+                                left: 25.0, right: 25.0, bottom: 10,),
                             child: Divider(
                               color: Color.fromRGBO(255, 186, 0, 1),
                             ),
@@ -160,12 +159,12 @@ class _HomeState extends State<HomeScreen> {
                                             style: const TextStyle(
                                                 color: Color(colorPrimary),
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.w600)),
+                                                fontWeight: FontWeight.w600,),),
                                         Text(!results.pausedHandler.isPaused
-                                            ? 'End time: ${Init.getEndDate(user, results.start)}'
-                                            : "On Pause!"),
-                                        Text('Points: ${results.points}'),
-                                      ]),
+                                            ? "End time: ${Init.getEndDate(user, results.start)}"
+                                            : "On Pause!",),
+                                        Text("Points: ${results.points}"),
+                                      ],),
                                     ),
                                   ),
                                   Row(
@@ -175,7 +174,7 @@ class _HomeState extends State<HomeScreen> {
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                                const Color(colorPrimary)),
+                                                const Color(colorPrimary),),
                                         onPressed: () {
                                           !results.pausedHandler.isPausedUsed
                                               ? pauseCards()
@@ -183,12 +182,12 @@ class _HomeState extends State<HomeScreen> {
                                         },
                                         child: Text(
                                             results.pausedHandler.isPaused
-                                                ? 'Time Paused'
-                                                : 'Pause Time',
+                                                ? "Time Paused"
+                                                : "Pause Time",
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.w600)),
+                                                fontWeight: FontWeight.w600,),),
                                       ),
 
                                       const SizedBox(
@@ -221,11 +220,11 @@ class _HomeState extends State<HomeScreen> {
                                         children: const [
                                           Padding(
                                             padding: EdgeInsets.all(2.0),
-                                            child: Text('Places'),
+                                            child: Text("Places"),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.all(2.0),
-                                            child: Text('Activities'),
+                                            child: Text("Activities"),
                                           ),
                                         ],
                                       ),
@@ -239,8 +238,7 @@ class _HomeState extends State<HomeScreen> {
                             height: 20,
                           ),
 
-                          isPlaceSelected || isCategorySelected
-                              ? Row(
+                          if (isPlaceSelected || isCategorySelected) Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Padding(
@@ -264,10 +262,8 @@ class _HomeState extends State<HomeScreen> {
                                       ),
                                     ),
                                   ],
-                                )
-                              : const SizedBox(),
-                          isTimeToClimb
-                              ? SizedBox(
+                                ) else const SizedBox(),
+                          if (isTimeToClimb) SizedBox(
                                   width:
                                       0.9 * MediaQuery.of(context).size.width,
                                   height: 250,
@@ -283,24 +279,23 @@ class _HomeState extends State<HomeScreen> {
                                       : DisplayActivitiesWidget(
                                           user: user,
                                         ),
-                                )
-                              : const Text('It\'s not the time to climb yet.')
+                                ) else const Text("It's not the time to climb yet."),
                         ],
                       ),
                     ),
                   ],
                 ),
               );
-            }));
+            },),);
   }
 
-  void startBackGroundTasksForNotifications(User user) async {
+  Future<void> startBackGroundTasksForNotifications(User user) async {
     //For iOS it has to be set! Create an App... part: https://learn.microsoft.com/en-us/dotnet/maui/ios/capabilities?tabs=vs
     final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    const initializationSettingsAndroid = AndroidInitializationSettings('logo');
+    const initializationSettingsAndroid = AndroidInitializationSettings("logo");
     const initializationSettingsIOS = DarwinInitializationSettings();
     const initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS,);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     BackgroundTask(user: user)
@@ -320,17 +315,17 @@ class _HomeState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Attention!'),
+          title: const Text("Attention!"),
           content: const Text(
-              'Are you sure you want to proceed? This will pause your climbing time and you won\'t be able to document climbs.'
-              '1 hour later you can continue climbing. You can use this function only once during the competition.'),
+              "Are you sure you want to proceed? This will pause your climbing time and you won't be able to document climbs."
+              "1 hour later you can continue climbing. You can use this function only once during the competition."),
           actions: [
             // Button to cancel the action and pop the dialog
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('No'),
+              child: const Text("No"),
             ),
             // Button to proceed with the action
             TextButton(
@@ -340,7 +335,7 @@ class _HomeState extends State<HomeScreen> {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: const Text('Yes'),
+              child: const Text("Yes"),
             ),
           ],
         );
@@ -367,22 +362,22 @@ class DisplayActivitiesWidget extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Text("Error: ${snapshot.error}");
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.activityList.length,
               itemBuilder: (context, index) {
-                Activity activity = snapshot.data!.activityList[index];
+                final Activity activity = snapshot.data!.activityList[index];
                 return ActivitiesCard(
                   title: activity.name,
                   valueMap: activity.points,
                   user: user,
-                  category: 'Climbers',
+                  category: "Climbers",
                 );
               },
             );
           }
-        });
+        },);
   }
 }
 
@@ -413,12 +408,12 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+            return Text("Error: ${snapshot.error}");
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.placeList.length,
               itemBuilder: (context, index) {
-                Sector place = snapshot.data!.placeList[index];
+                final Sector place = snapshot.data!.placeList[index];
                 return GestureDetector(
                   onTap: () => onPlaceSelected(place),
                   child: Card(
@@ -434,7 +429,7 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
                           title: Text(
                             place.name,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 20),
+                                color: Colors.white, fontSize: 20,),
                           ),
                         ),
                         const SizedBox(
@@ -455,7 +450,7 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
       return ListView.builder(
         itemCount: selectedPlace!.routes!.length,
         itemBuilder: (context, index) {
-          kisgeri.Route route = selectedPlace!.routes![index];
+          final kisgeri.Route route = selectedPlace!.routes![index];
           return CustomCard(
             title: route.name,
             diffchanger: route.diffchanger,
@@ -488,13 +483,12 @@ class HomeScreenTitleWidget extends StatelessWidget {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(
-                        top: 48.0, right: 24.0, left: 24.0),
+                        top: 48.0, right: 24.0, left: 24.0,),
                     child: Row(children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Image.asset(
-                          'assets/images/welcome_image.png',
-                          alignment: Alignment.center,
+                          "assets/images/welcome_image.png",
                           width: 75.0,
                           height: 75.0,
                           fit: BoxFit.cover,
@@ -510,7 +504,7 @@ class HomeScreenTitleWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ])),
+                    ],),),
                 CustomMenu(contextFrom: context, user: user),
               ],
             ),

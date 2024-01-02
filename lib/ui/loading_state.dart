@@ -1,4 +1,4 @@
-part of 'loading_cubit.dart';
+part of "loading_cubit.dart";
 
 @immutable
 abstract class LoadingState {}

@@ -1,6 +1,6 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
 class Results {
   num points;
@@ -21,12 +21,12 @@ class Results {
     DidActivities? climberTwoActivities,
     TeamResults? teamResults,
     PausedHandler? pausedHandler,
-  })  : climberOneResults = climberOneResults ?? ClimbedPlaces(climberName: ''),
-        climberTwoResults = climberTwoResults ?? ClimbedPlaces(climberName: ''),
+  })  : climberOneResults = climberOneResults ?? ClimbedPlaces(climberName: ""),
+        climberTwoResults = climberTwoResults ?? ClimbedPlaces(climberName: ""),
         climberOneActivities =
-            climberOneActivities ?? DidActivities(climberName: ''),
+            climberOneActivities ?? DidActivities(climberName: ""),
         climberTwoActivities =
-            climberTwoActivities ?? DidActivities(climberName: ''),
+            climberTwoActivities ?? DidActivities(climberName: ""),
         teamResults = teamResults ?? TeamResults(),
         pausedHandler = pausedHandler ??
             PausedHandler(isPaused: false, isPausedUsed: false);
@@ -37,12 +37,12 @@ class Results {
   }
 
   static Results updatePauseHandler(
-      Results results, PausedHandler pausedHandler) {
+      Results results, PausedHandler pausedHandler,) {
     results.pausedHandler = pausedHandler;
     return results;
   }
 
-  getStart() {
+  String getStart() {
     return start;
   }
 
@@ -113,7 +113,7 @@ class DidActivities {
 
   bool getIsActivityThere(String activityName) {
     bool isThere = false;
-    for (var element in activitiesList) {
+    for (final element in activitiesList) {
       if (element.name == activityName) {
         isThere = true;
       }
@@ -123,7 +123,7 @@ class DidActivities {
 
   DidActivity getActivity(String activityName) {
     DidActivity didActivity = DidActivity();
-    for (var element in activitiesList) {
+    for (final element in activitiesList) {
       if (element.name == activityName) {
         didActivity = element;
       }
@@ -151,18 +151,18 @@ class DidActivities {
   }
 
   static DidActivities fromSnapshot(value, name) {
-    List<DidActivity> activityList = [];
-    Map activityMap = value as Map<dynamic, dynamic>;
+    final List<DidActivity> activityList = [];
+    final Map activityMap = value as Map<dynamic, dynamic>;
 
     activityMap.forEach((key, value) {
-      String activityName = key as String;
+      final String activityName = key as String;
       num points = 0;
-      Map insideMap = value as Map<dynamic, dynamic>;
+      final Map insideMap = value as Map<dynamic, dynamic>;
       insideMap.forEach((key, value) {
         points = value;
       });
 
-      DidActivity activity = DidActivity(name: activityName, points: points);
+      final DidActivity activity = DidActivity(name: activityName, points: points);
       activityList.add(activity);
     });
 
@@ -177,7 +177,7 @@ class DidActivity {
   DidActivity({
     String? name,
     num? points,
-  })  : name = name ?? '',
+  })  : name = name ?? "",
         points = points ?? 0;
 
   // Override == operator to check for equality of properties
@@ -202,12 +202,12 @@ class TeamResults {
       : teamResultList = teamResultList ?? [];
 
   static TeamResults fromJSON(value) {
-    TeamResults teamResults = TeamResults();
-    Map teamResultMap = value as Map<dynamic, dynamic>;
+    final TeamResults teamResults = TeamResults();
+    final Map teamResultMap = value as Map<dynamic, dynamic>;
     teamResultMap.forEach((key, value) {
-      String action = key as String;
-      num points = value;
-      TeamResult teamResult = TeamResult(action: action, points: points);
+      final String action = key as String;
+      final num points = value;
+      final TeamResult teamResult = TeamResult(action: action, points: points);
       teamResults.teamResultList.add(teamResult);
     });
     return teamResults;
@@ -215,7 +215,7 @@ class TeamResults {
 
   num getPoints() {
     num points = 0;
-    for (var element in teamResultList) {
+    for (final element in teamResultList) {
       points = points + element.points;
     }
     return points;
@@ -229,7 +229,7 @@ class TeamResult {
   TeamResult({
     String? action,
     num? points,
-  })  : action = action ?? '',
+  })  : action = action ?? "",
         points = points ?? 0;
 }
 
@@ -244,8 +244,8 @@ class ClimbedPlaces {
 
   bool getIsClimbThere(String routeName) {
     bool isThere = false;
-    for (var element in climbedPlaceList) {
-      for (var element in element.climbedRouteList) {
+    for (final element in climbedPlaceList) {
+      for (final element in element.climbedRouteList) {
         if (element.name == routeName) {
           isThere = true;
         }
@@ -254,10 +254,10 @@ class ClimbedPlaces {
     return isThere;
   }
 
-  getClimbedPlace(String placeName) {
-    ClimbedPlace climbedPlace = ClimbedPlace(name: '', climbedRouteList: []);
-    log('list length: ${climbedPlaceList.length}');
-    for (var element in climbedPlaceList) {
+  ClimbedPlace getClimbedPlace(String placeName) {
+    ClimbedPlace climbedPlace = ClimbedPlace(name: "", climbedRouteList: []);
+    log("list length: ${climbedPlaceList.length}");
+    for (final element in climbedPlaceList) {
       if (placeName == element.name) {
         climbedPlace = element;
       }
@@ -266,10 +266,10 @@ class ClimbedPlaces {
     return climbedPlace;
   }
 
-  getRoute(String routeName) {
+  ClimbedRoute getRoute(String routeName) {
     ClimbedRoute route = ClimbedRoute();
-    for (var element in climbedPlaceList) {
-      for (var element in element.climbedRouteList) {
+    for (final element in climbedPlaceList) {
+      for (final element in element.climbedRouteList) {
         if (element.name == routeName) {
           route = element;
         }
@@ -300,15 +300,15 @@ class ClimbedPlace {
   });
 
   static ClimbedPlace fromSnapshot(value, placeName) {
-    List<ClimbedRoute> climbedRouteList = [];
+    final List<ClimbedRoute> climbedRouteList = [];
 
-    Map routeMap = value as Map<dynamic, dynamic>;
+    final Map routeMap = value as Map<dynamic, dynamic>;
     routeMap.forEach((key, value) {
       final ClimbedRoute climbedRoute = ClimbedRoute.fromSnapshot(value);
       climbedRouteList.add(climbedRoute);
     });
 
-    ClimbedPlace place =
+    final ClimbedPlace place =
         ClimbedPlace(name: placeName, climbedRouteList: climbedRouteList);
     return place;
   }
@@ -335,27 +335,27 @@ class ClimbedRoute {
     String? name,
     double? points,
     String? best,
-  })  : name = name ?? '',
+  })  : name = name ?? "",
         points = points ?? 0,
-        best = best ?? '';
+        best = best ?? "";
 
   static ClimbedRoute fromSnapshot(value) {
-    Map routeMap = value as Map<dynamic, dynamic>;
-    String name = '';
+    final Map routeMap = value as Map<dynamic, dynamic>;
+    String name = "";
     double points = 0;
-    String best = '';
+    String best = "";
 
     routeMap.forEach((key, value) {
-      if (key == 'name') {
+      if (key == "name") {
         name = value;
-      } else if (key == 'points') {
+      } else if (key == "points") {
         points = double.parse(value.toString());
-      } else if (key == 'best') {
+      } else if (key == "best") {
         best = value;
       }
     });
 
-    ClimbedRoute route = ClimbedRoute(name: name, points: points, best: best);
+    final ClimbedRoute route = ClimbedRoute(name: name, points: points, best: best);
     return route;
   }
 
@@ -372,7 +372,7 @@ class ClimbedRoute {
   @override
   int get hashCode => Object.hash(name, points, best);
 
-  getName() {
+  String getName() {
     return name;
   }
 }

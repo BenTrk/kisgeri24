@@ -1,9 +1,9 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import "package:bloc/bloc.dart";
+import "package:flutter/material.dart";
 
-part 'login_event.dart';
+part "login_event.dart";
 
-part 'login_state.dart';
+part "login_state.dart";
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
@@ -12,7 +12,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         event.key.currentState!.save();
         emit(ValidLoginFields());
       } else {
-        emit(LoginFailureState(errorMessage: 'Please fill required fields.'));
+        emit(LoginFailureState(errorMessage: "Please fill required fields."));
       }
     });
   }

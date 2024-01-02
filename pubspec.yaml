@@ -3,59 +3,62 @@ description: Kisgeri24 Climbing Competition Application
 version: 1.0.0+1
 publish_to: "none"
 environment:
-  sdk: "3.2.4"
+  sdk: "3.12.1"
 
 dependencies:
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
-  cloud_firestore: ^4.14.0
-  firebase_storage: ^11.6.0
+  firebase_core: ^4.10.0
+  firebase_auth: ^6.5.2
+  cloud_firestore: ^6.5.0
+  firebase_storage: ^13.4.2
 
-  email_validator: ^2.1.16
+  auto_size_text: ^3.0.0
 
-  logger: ^2.0.1
+  custom_sliding_segmented_control: ^1.8.5
 
-  shared_preferences: ^2.0.15
+  email_validator: ^3.0.0
+
+  logger: ^2.7.0
+
+  shared_preferences: ^2.5.5
   progress_dialog:
     git:
       url: https://github.com/mostafaAbdelazim/progress_dialog.git
-  flutter_facebook_auth: ^6.0.0
-  http: ^1.1.0
-  image_picker: ^1.0.1
-  cached_network_image: ^3.2.2
-  smooth_page_indicator: ^1.0.0+2
+  flutter_facebook_auth: ^7.1.7
+  http: ^1.6.0
+  image_picker: ^1.2.2
+  cached_network_image: ^3.4.1
+  smooth_page_indicator: ^2.0.1
   the_apple_sign_in: ^1.1.1
-  bloc: ^8.1.0
-  flutter_bloc: ^8.1.1
-  url_launcher: ^6.1.6
-  file_picker: ^5.2.2
+  bloc: ^9.2.1
+  flutter_bloc: ^9.1.1
+  url_launcher: ^6.3.2
+  file_picker: ^11.0.2
 
   flutter:
     sdk: flutter
-  background_fetch: ^1.2.0
-  equatable: ^2.0.3
+  background_fetch: ^1.7.0
+  equatable: ^2.0.8
+  timer_count_down: ^2.2.2
+  responsive_sizer: ^3.3.1
 
-  cupertino_icons: ^1.0.5
-  firebase_database: ^10.4.0
+  cupertino_icons: ^1.0.9
+  firebase_database: ^12.4.2
 
   flutter_cupertino_datetime_picker: ^3.0.0
-  intl: ^0.18.1
+  intl: ^0.20.2
   numberpicker: ^2.1.2
-  date_time_picker_widget: ^2.0.0
   expandable_menu: ^0.0.5
-  popup_menu: ^2.0.0
-  pie_menu: ^1.3.0
-  star_menu: ^3.1.4
-  flutter_local_notifications: ^15.1.0+1
-  flutter_feather_icons: ^2.0.0+1
+  popup_menu: ^2.1.0
+  pie_menu: ^3.7.0
+  star_menu: ^4.0.1
+  flutter_local_notifications: ^22.0.0
 
 dev_dependencies:
-  build_runner: ^2.4.6
-  flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^3.0.1
-  lint: ^2.0.0
-  mockito: ^5.4.2
-  test: ^1.24.1
+  build_runner: ^2.15.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
+  lint: ^2.8.0
+  mockito: ^5.6.4
 
 flutter_launcher_icons:
   android: "ic_launcher_icon"

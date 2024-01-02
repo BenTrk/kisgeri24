@@ -5,7 +5,7 @@ ___
 ### Requirements:
 #### For development:
 - Flutter: 3.16.7
-- Dart: 3.2.4
+- Dart: 3.12.1
 #### For testing:
 - Maestro: 1.32.0
 

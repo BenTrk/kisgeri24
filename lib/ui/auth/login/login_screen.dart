@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/model/login_bloc.dart';
-import 'package:kisgeri24/ui/auth/resetPasswordScreen/reset_password_screen.dart';
-import 'package:kisgeri24/ui/home/date_time_picker_screen.dart';
-import 'package:kisgeri24/ui/home/home_screen.dart';
-import 'package:kisgeri24/ui/loading_cubit.dart';
-
-import 'package:kisgeri24/services/validator.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/model/login_bloc.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/services/validator.dart";
+import "package:kisgeri24/ui/auth/resetPasswordScreen/reset_password_screen.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
+import "package:kisgeri24/ui/home/home_screen.dart";
+import "package:kisgeri24/ui/loading_cubit.dart";
 
 const bool enabled = true;
 const bool disabled = !enabled;
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State createState() {
@@ -26,7 +25,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
-  String? email, password;
+  String? email;
+  String? password;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _LoginScreen extends State<LoginScreen> {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             iconTheme: IconThemeData(
-                color: isDarkMode(context) ? Colors.white : Colors.black),
+                color: isDarkMode(context) ? Colors.white : Colors.black,),
             elevation: 0.0,
           ),
           body: MultiBlocListener(
@@ -57,7 +57,7 @@ class _LoginScreen extends State<LoginScreen> {
             ),
           ),
         );
-      }),
+      },),
     );
   }
 
@@ -67,7 +67,6 @@ class _LoginScreen extends State<LoginScreen> {
       autovalidateMode: _validate,
       child: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const LogoImageWidget(),
             Padding(
@@ -84,9 +83,9 @@ class _LoginScreen extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   cursorColor: const Color(colorPrimary),
                   decoration: getInputDecoration(
-                      hint: 'Email Address',
+                      hint: "Email Address",
                       darkMode: isDarkMode(context),
-                      errorColor: Theme.of(context).colorScheme.error)),
+                      errorColor: Theme.of(context).colorScheme.error,),),
             ),
             Padding(
               padding:
@@ -105,9 +104,9 @@ class _LoginScreen extends State<LoginScreen> {
                   style: const TextStyle(fontSize: 18.0),
                   cursorColor: const Color(colorPrimary),
                   decoration: getInputDecoration(
-                      hint: 'Password',
+                      hint: "Password",
                       darkMode: isDarkMode(context),
-                      errorColor: Theme.of(context).colorScheme.error)),
+                      errorColor: Theme.of(context).colorScheme.error,),),
             ),
 
             /// forgot password text, navigates user to ResetPasswordScreen
@@ -126,7 +125,7 @@ class _LoginScreen extends State<LoginScreen> {
         if (state is ValidLoginFields) {
           await context
               .read<LoadingCubit>()
-              .showLoading(context, 'Logging in, Please wait...', false);
+              .showLoading(context, "Logging in, Please wait...", false);
           if (!mounted) return;
           context.read<AuthenticationBloc>().add(
                 LoginWithEmailAndPasswordEvent(
@@ -149,14 +148,14 @@ class _LoginScreen extends State<LoginScreen> {
           pushAndRemoveUntil(context, HomeScreen(user: state.user!), false);
         } else if (state.authState == AuthState.didNotPayYet) {
           showSnackBar(
-              context, state.message ?? 'You did not pay the entry fee yet.');
+              context, state.message ?? "You did not pay the entry fee yet.",);
         } else if (state.authState == AuthState.didNotSetTime) {
           pushAndRemoveUntil(
-              context, DateTimePickerScreen(user: state.user!), false);
+              context, DateTimePickerScreen(user: state.user!), false,);
         } else {
           if (!mounted) return;
           showSnackBar(
-              context, state.message ?? 'Couldn\'t login, Please try again.');
+              context, state.message ?? "Couldn't login, Please try again.",);
         }
       },
     );
@@ -188,7 +187,7 @@ class LogInButtonWidget extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Log In',
+          "Log In",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -218,12 +217,12 @@ class ForgotPasswordWidget extends StatelessWidget {
           child: GestureDetector(
             onTap: () => push(context, const ResetPasswordScreen(), enabled),
             child: const Text(
-              'Forgot password?',
+              "Forgot password?",
               style: TextStyle(
                   color: Color(colorPrimary),
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
-                  letterSpacing: 1),
+                  letterSpacing: 1,),
             ),
           ),
         ),
@@ -242,8 +241,7 @@ class LogoImageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, right: 24.0, left: 24.0),
       child: Image.asset(
-        'assets/images/welcome_image.png',
-        alignment: Alignment.center,
+        "assets/images/welcome_image.png",
         width: 150.0,
         height: 150.0,
         fit: BoxFit.cover,

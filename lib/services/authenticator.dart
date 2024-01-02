@@ -21,7 +21,7 @@ class Auth {
       final firebase.UserCredential result = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
       log.logger.d(
-          "Login operation ended up with the following UserCredential result: $result");
+          "Login operation ended up with the following UserCredential result: $result",);
       final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
           await firestore
               .collection(usersCollection)
@@ -36,7 +36,7 @@ class Auth {
       return user;
     } on firebase.FirebaseAuthException catch (exception, s) {
       log.logger.w("FirebaseAuthException happened during the login operation!",
-          error: exception);
+          error: exception,);
       log.logger.w("$exception$s");
       return resolveExceptionCode(exception.code);
     } catch (e, s) {
@@ -98,11 +98,11 @@ class Auth {
     String? tenantId,
   }) async {
     log.logger.w(
-        "signUpWithEmailAndPassword() is deprecated and will be removed soon!");
+        "signUpWithEmailAndPassword() is deprecated and will be removed soon!",);
     try {
       final firebase.UserCredential result =
           await firebaseAuth.createUserWithEmailAndPassword(
-              email: emailAddress, password: password);
+              email: emailAddress, password: password,);
       final kisgeri.User user = kisgeri.User(
           email: emailAddress,
           teamName: teamName,
@@ -111,7 +111,7 @@ class Auth {
           secondClimberName: secondClimberName,
           category: category,
           tenantId: calculateTenantId(tenantId),
-          startTime: const int.fromEnvironment("START_TIME_EPOCH"));
+          startTime: const int.fromEnvironment("START_TIME_EPOCH"),);
       log.logger
           .i("About to request user creation using the following data: $user");
       final String? errorMessage = await _createNewUser(user);
@@ -124,7 +124,7 @@ class Auth {
       }
     } on firebase.FirebaseAuthException catch (error) {
       log.logger.w("User registration failed!",
-          error: error, stackTrace: error.stackTrace);
+          error: error, stackTrace: error.stackTrace,);
       log.logger.d("$error${error.stackTrace}");
       String message = "Couldn't sign up";
       switch (error.code) {

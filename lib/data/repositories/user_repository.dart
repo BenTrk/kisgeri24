@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/data/repositories/crud_repository.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/data/repositories/crud_repository.dart";
 
 class UserRepository extends CrudRepository<User> {
   final FirebaseFirestore firestore;
@@ -38,10 +38,10 @@ class UserRepository extends CrudRepository<User> {
 
   @override
   Future<User?> getById(String id) async {
-    DocumentSnapshot<Map<String, dynamic>> userDocument =
+    final DocumentSnapshot<Map<String, dynamic>> userDocument =
         await firestore.collection(usersCollection).doc(id).get();
     if (userDocument.data() != null && userDocument.exists) {
-      User user = User.fromJson(userDocument.data()!);
+      final User user = User.fromJson(userDocument.data()!);
       return user;
     } else {
       return null;

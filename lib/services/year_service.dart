@@ -19,25 +19,25 @@ class YearService {
         .where((element) => element.tenantId != "")
         .toList(growable: false);
 
-    List<YearDto> dtos = yearEntities
+    final List<YearDto> dtos = yearEntities
         .map((e) => yearConverter.convert(e))
         .toList(growable: false);
 
     logger.d(
-        "The following years are about to return: ${dtos.map((e) => e.year)}");
+        "The following years are about to return: ${dtos.map((e) => e.year)}",);
     return dtos;
   }
 
   Future<Year> getYearByTenantId(String tenantId) async {
-    logger.d('Collecting year for tenant: $tenantId..');
-    Year? year = await repository.getByTenant(tenantId);
+    logger.d("Collecting year for tenant: $tenantId..");
+    final Year? year = await repository.getByTenant(tenantId);
     if (year == null) {
-      NotFoundException notFound =
-          NotFoundException('No year found for tenant: $tenantId');
+      final NotFoundException notFound =
+          NotFoundException("No year found for tenant: $tenantId");
       logger.w(notFound.message, error: notFound);
       throw notFound;
     }
-    logger.d('The following year is about to return: ${year.year}');
+    logger.d("The following year is about to return: ${year.year}");
     return year;
   }
 }

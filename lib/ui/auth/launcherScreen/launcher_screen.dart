@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/home/home_screen.dart';
-import '../../home/date_time_picker_screen.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
+import "package:kisgeri24/ui/home/home_screen.dart";
 
 class LauncherScreen extends StatefulWidget {
-  const LauncherScreen({Key? key}) : super(key: key);
+  const LauncherScreen({super.key});
 
   @override
   State<LauncherScreen> createState() => _LauncherScreenState();
@@ -33,20 +33,15 @@ class _LauncherScreenState extends State<LauncherScreen> {
           switch (state.authState) {
             case AuthState.authenticated:
               pushReplacement(context, HomeScreen(user: state.user!));
-              break;
             case AuthState.unauthenticated:
               pushReplacement(context, const WelcomeScreen());
-              break;
             case AuthState.didNotSetTime:
               pushReplacement(context, DateTimePickerScreen(user: state.user!));
-              break;
             case AuthState.outOfDateTimeRange:
               //Maybe a copy with no database saves and a mock screen?
               pushReplacement(context, HomeScreen(user: state.user!));
-              break;
             case AuthState.didNotPayYet:
               pushReplacement(context, const WelcomeScreen());
-              break;
           }
         },
         child: const Center(

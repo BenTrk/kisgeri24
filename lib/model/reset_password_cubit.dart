@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/services/authenticator.dart';
+import "package:bloc/bloc.dart";
+import "package:flutter/material.dart";
+import "package:kisgeri24/services/authenticator.dart";
 
-part 'reset_password_state.dart';
+part "reset_password_state.dart";
 
 class ResetPasswordCubit extends Cubit<ResetPasswordState> {
   final Auth auth;
@@ -19,7 +19,7 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       key.currentState!.save();
       emit(ValidResetPasswordField());
     } else {
-      emit(ResetPasswordFailureState(errorMessage: 'Invalid email address.'));
+      emit(ResetPasswordFailureState(errorMessage: "Invalid email address."));
     }
   }
 }

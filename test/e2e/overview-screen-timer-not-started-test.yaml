@@ -1,0 +1,21 @@
+appId: com.kisgeri24.flutterkisgeri24
+---
+- launchApp
+## GIVEN the application in a logged out state for a user, who hasn't set its start time
+
+## WHEN arriving at the Overview screen
+
+## AND the expected elements are there
+- assertVisible: "KISGERI24"
+- assertVisible: "INDULHAT A VERSENY!"
+- assertVisible: "UTAK"
+- assertVisible: "KIHÍVÁSOK"
+- assertVisible: "ÁTTEKINTŐ"
+- assertVisible: "TELJESÍTMÉNY"
+- assertVisible: "NAPIREND"
+
+## AND clicking on the 'KIHÍVÁSOK' sliding button
+- tapOn: "KIHÍVÁSOK"
+
+## THEN the expected elements are there
+# TODO: figure out how to check the challenges

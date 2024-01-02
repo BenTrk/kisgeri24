@@ -1,4 +1,4 @@
-part of 'welcome_bloc.dart';
+part of "welcome_bloc.dart";
 
 enum WelcomePressTarget { login, signup }
 

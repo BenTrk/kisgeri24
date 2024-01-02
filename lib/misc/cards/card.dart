@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/misc/database_writes.dart';
-
-import '../../data/models/user.dart';
-import '../../publics.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/database_writes.dart";
+import "package:kisgeri24/publics.dart";
 
 class CustomCard extends StatefulWidget {
   final String title;
@@ -71,10 +70,10 @@ class _CustomCardState extends State<CustomCard> with TickerProviderStateMixin {
                   style: const TextStyle(
                       color: Color(colorPrimary),
                       fontSize: 16,
-                      fontWeight: FontWeight.w600)),
-              subtitle: Text('Difficulty: $difficulty',
+                      fontWeight: FontWeight.w600,),),
+              subtitle: Text("Difficulty: $difficulty",
                   style: const TextStyle(
-                      color: Color(colorPrimary), fontSize: 14)),
+                      color: Color(colorPrimary), fontSize: 14,),),
             ),
             if (isRowVisible)
               Row(
@@ -155,24 +154,24 @@ class _CustomCardState extends State<CustomCard> with TickerProviderStateMixin {
                               ),
                               const SizedBox(width: 8),
                               TextButton(
-                                  child: const Text('Climbed It',
+                                  child: const Text("Climbed It",
                                       style: TextStyle(
                                           color: Color(colorPrimary),
-                                          fontSize: 14)),
+                                          fontSize: 14,),),
                                   onPressed: () {
                                     if (!results.pausedHandler.isPaused) {
-                                      List<String> names = [
+                                      final List<String> names = [
                                         user.firstClimberName,
-                                        user.secondClimberName
+                                        user.secondClimberName,
                                       ];
                                       databaseWrites.writeClimbToDatabase(
                                           context,
                                           user,
                                           names[selectedItem.index],
                                           title,
-                                          styles[selectedStyle.index]);
+                                          styles[selectedStyle.index],);
                                     }
-                                  }),
+                                  },),
                               const SizedBox(width: 8),
                             ],
                           ),
@@ -182,7 +181,7 @@ class _CustomCardState extends State<CustomCard> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-          ]),
+          ],),
         ),
       ),
     );

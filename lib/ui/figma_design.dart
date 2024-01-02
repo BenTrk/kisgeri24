@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import "package:flutter/material.dart" hide Colors, Icons;
+import "package:flutter/material.dart" as material show Icons;
 
 class Figma {
   // Colors
@@ -130,7 +130,7 @@ class Buttons {
       },
     ),
     padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),),
     shape: MaterialStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -153,7 +153,7 @@ class Buttons {
           return BorderSide(color: Figma.colors.errorColor);
         }
         return BorderSide(
-            color: Figma.colors.primaryColor); // Default to primary color
+            color: Figma.colors.primaryColor,); // Default to primary color
       },
     ),
     foregroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -199,7 +199,7 @@ class Buttons {
       },
     ),
     padding: MaterialStateProperty.all(
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),),
     shape: MaterialStateProperty.all(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -211,23 +211,23 @@ class Buttons {
 class Icons {
   Icons();
 
-  final IconData arrowLeft = FeatherIcons.arrowLeft;
-  final IconData bell = FeatherIcons.bell;
-  final IconData calendar = FeatherIcons.calendar;
-  final IconData checkCircle = FeatherIcons.checkCircle;
-  final IconData checkSquare = FeatherIcons.checkSquare;
-  final IconData chevronDown = FeatherIcons.chevronDown;
-  final IconData edit = FeatherIcons.edit;
-  final IconData filter = FeatherIcons.filter;
-  final IconData home = FeatherIcons.home;
-  final IconData image = FeatherIcons.image;
-  final IconData menu = FeatherIcons.menu;
-  final IconData moreHorizontal = FeatherIcons.moreHorizontal;
-  final IconData pieChart = FeatherIcons.pieChart;
-  final IconData plusCircle = FeatherIcons.plusCircle;
-  final IconData plusSquare = FeatherIcons.plusSquare;
-  final IconData repeat = FeatherIcons.repeat;
-  final IconData search = FeatherIcons.search;
-  final IconData settings = FeatherIcons.settings;
-  final IconData user = FeatherIcons.user;
+  final IconData arrowLeft = material.Icons.arrow_back;
+  final IconData bell = material.Icons.notifications_outlined;
+  final IconData calendar = material.Icons.calendar_today_outlined;
+  final IconData checkCircle = material.Icons.check_circle_outline;
+  final IconData checkSquare = material.Icons.check_box_outlined;
+  final IconData chevronDown = material.Icons.keyboard_arrow_down;
+  final IconData edit = material.Icons.edit_outlined;
+  final IconData filter = material.Icons.filter_list;
+  final IconData home = material.Icons.home_outlined;
+  final IconData image = material.Icons.image_outlined;
+  final IconData menu = material.Icons.menu;
+  final IconData moreHorizontal = material.Icons.more_horiz;
+  final IconData pieChart = material.Icons.pie_chart_outline;
+  final IconData plusCircle = material.Icons.add_circle_outline;
+  final IconData plusSquare = material.Icons.add_box_outlined;
+  final IconData repeat = material.Icons.repeat;
+  final IconData search = material.Icons.search;
+  final IconData settings = material.Icons.settings_outlined;
+  final IconData user = material.Icons.person_outline;
 }

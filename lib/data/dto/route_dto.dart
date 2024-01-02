@@ -8,7 +8,7 @@ class RouteDto {
   final RouteEquipment _equipment;
 
   RouteDto(
-      this._name, this._ordinal, this._grade, this._points, this._equipment);
+      this._name, this._ordinal, this._grade, this._points, this._equipment,);
 
   RouteEquipment get equipment => _equipment;
 

@@ -1,8 +1,8 @@
-import 'package:bloc/bloc.dart';
+import "package:bloc/bloc.dart";
 
-part 'welcome_event.dart';
+part "welcome_event.dart";
 
-part 'welcome_state.dart';
+part "welcome_state.dart";
 
 class WelcomeBloc extends Bloc<WelcomeEvent, WelcomeInitial> {
   WelcomeBloc() : super(WelcomeInitial()) {

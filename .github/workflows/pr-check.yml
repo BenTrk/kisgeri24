@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6.0.3
       - name: Git fetch # by default, GH Actions only fetches the ref that triggered the workflow, thus we need to fetch all the branches
         run: git fetch
       - name: Check number of commits

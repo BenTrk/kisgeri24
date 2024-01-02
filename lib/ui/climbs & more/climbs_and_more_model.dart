@@ -1,8 +1,7 @@
-import 'package:kisgeri24/misc/database_writes.dart';
-
-import '../../classes/results.dart';
-import '../../data/models/user.dart';
-import '../../publics.dart';
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/database_writes.dart";
+import "package:kisgeri24/publics.dart";
 
 class ClimbsAndMoreModel {
   DatabaseWrites databaseWrites = DatabaseWrites();
@@ -28,18 +27,18 @@ class ClimbsAndMoreModel {
   }
 
   void removeClimbOrActivity(
-      climbOrActivity, User user, String climberName, String placeName) {
+      climbOrActivity, User user, String climberName, String placeName,) {
     switch (climbOrActivity.runtimeType) {
       case (ClimbedRoute):
         {
           databaseWrites.removeClimbedRoute(
-              climbOrActivity as ClimbedRoute, climberName, user, placeName);
+              climbOrActivity as ClimbedRoute, climberName, user, placeName,);
           break;
         }
       case (DidActivity):
         {
           databaseWrites.removeDidActivity(
-              climbOrActivity as DidActivity, climberName, user);
+              climbOrActivity as DidActivity, climberName, user,);
           break;
         }
     }

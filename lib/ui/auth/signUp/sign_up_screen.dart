@@ -1,24 +1,23 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/model/sign_up_bloc.dart';
-import 'package:kisgeri24/ui/home/home_screen.dart';
-import 'package:kisgeri24/ui/loading_cubit.dart';
-import 'package:kisgeri24/misc/toggle_buttons_signup.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:kisgeri24/publics.dart';
-import 'package:kisgeri24/services/validator.dart';
+import "package:flutter/foundation.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/misc/toggle_buttons_signup.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/model/sign_up_bloc.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/services/validator.dart";
+import "package:kisgeri24/ui/home/home_screen.dart";
+import "package:kisgeri24/ui/loading_cubit.dart";
+import "package:url_launcher/url_launcher.dart";
 
 @Deprecated("This feature/screen is not needed anymore, only for testing.")
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State createState() => _SignUpState();
@@ -27,12 +26,12 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey();
-  String? firstClimberName,
-      secondClimberName,
-      email,
-      password,
-      confirmPassword,
-      teamName;
+  String? firstClimberName;
+  String? secondClimberName;
+  String? email;
+  String? password;
+  String? confirmPassword;
+  String? teamName;
   bool isPaid = false;
   AutovalidateMode _validate = AutovalidateMode.disabled;
   bool acceptEULA = false;
@@ -56,7 +55,7 @@ class _SignUpState extends State<SignUpScreen> {
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
                 iconTheme: IconThemeData(
-                    color: isDarkMode(context) ? Colors.white : Colors.black),
+                    color: isDarkMode(context) ? Colors.white : Colors.black,),
               ),
               body: SingleChildScrollView(
                 padding:
@@ -84,7 +83,6 @@ class _SignUpState extends State<SignUpScreen> {
       key: _key,
       autovalidateMode: _validate,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const ImageWidget(),
           Padding(
@@ -97,9 +95,9 @@ class _SignUpState extends State<SignUpScreen> {
               },
               textInputAction: TextInputAction.next,
               decoration: getInputDecoration(
-                  hint: 'First Climber\'s Name',
+                  hint: "First Climber's Name",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           Padding(
@@ -112,9 +110,9 @@ class _SignUpState extends State<SignUpScreen> {
               },
               textInputAction: TextInputAction.next,
               decoration: getInputDecoration(
-                  hint: 'Second Climber\'s Name',
+                  hint: "Second Climber's Name",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           Padding(
@@ -127,9 +125,9 @@ class _SignUpState extends State<SignUpScreen> {
                 email = val;
               },
               decoration: getInputDecoration(
-                  hint: 'Email',
+                  hint: "Email",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           Padding(
@@ -142,9 +140,9 @@ class _SignUpState extends State<SignUpScreen> {
               },
               textInputAction: TextInputAction.next,
               decoration: getInputDecoration(
-                  hint: 'Team\'s Name',
+                  hint: "Team's Name",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           Padding(
@@ -159,9 +157,9 @@ class _SignUpState extends State<SignUpScreen> {
               },
               cursorColor: const Color(colorPrimary),
               decoration: getInputDecoration(
-                  hint: 'Password',
+                  hint: "Password",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           Padding(
@@ -179,9 +177,9 @@ class _SignUpState extends State<SignUpScreen> {
               },
               cursorColor: const Color(colorPrimary),
               decoration: getInputDecoration(
-                  hint: 'Confirm Password',
+                  hint: "Confirm Password",
                   darkMode: isDarkMode(context),
-                  errorColor: Theme.of(context).colorScheme.error),
+                  errorColor: Theme.of(context).colorScheme.error,),
             ),
           ),
           getCategory(),
@@ -218,14 +216,14 @@ class _SignUpState extends State<SignUpScreen> {
         text: TextSpan(
           children: [
             const TextSpan(
-              text: 'By creating an account you agree to our ',
+              text: "By creating an account you agree to our ",
               style: TextStyle(color: Colors.grey),
             ),
             TextSpan(
               style: const TextStyle(
                 color: Colors.blueAccent,
               ),
-              text: 'Terms of Use',
+              text: "Terms of Use",
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
                   if (await canLaunchUrl(Uri.parse(eula))) {
@@ -257,7 +255,7 @@ class _SignUpState extends State<SignUpScreen> {
           ),
         ),
         child: const Text(
-          'Sign Up',
+          "Sign Up",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -274,7 +272,7 @@ class _SignUpState extends State<SignUpScreen> {
   Padding getCategory() {
     return const Padding(
         padding: EdgeInsets.only(top: 10.0, right: 8.0, left: 8.0),
-        child: (CustomToggleButtons()));
+        child: CustomToggleButtons(),);
   }
 
   BlocListener<SignUpBloc, SignUpState> loginUserLoginListener() {
@@ -282,7 +280,7 @@ class _SignUpState extends State<SignUpScreen> {
       listener: (context, state) async {
         if (state is ValidFields) {
           await context.read<LoadingCubit>().showLoading(
-              context, 'Creating new account, Please wait...', false);
+              context, "Creating new account, Please wait...", false,);
           if (!mounted) return;
           context.read<AuthenticationBloc>().add(
               SignupWithEmailAndPasswordEvent(
@@ -291,7 +289,7 @@ class _SignUpState extends State<SignUpScreen> {
                   teamName: teamName!,
                   firstClimberName: firstClimberName!,
                   secondClimberName: secondClimberName!,
-                  category: category));
+                  category: category,),);
         } else if (state is SignUpFailureState) {
           showSnackBar(context, state.errorMessage);
         }
@@ -308,7 +306,7 @@ class _SignUpState extends State<SignUpScreen> {
           pushAndRemoveUntil(context, HomeScreen(user: state.user!), false);
         } else {
           showSnackBar(
-              context, state.message ?? 'Couldn\'t sign up, Please try again.');
+              context, state.message ?? "Couldn't sign up, Please try again.",);
         }
       },
     );
@@ -331,8 +329,7 @@ class ImageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 24.0, left: 24.0),
       child: Image.asset(
-        'assets/images/welcome_image.png',
-        alignment: Alignment.center,
+        "assets/images/welcome_image.png",
         width: 150.0,
         height: 150.0,
         fit: BoxFit.cover,

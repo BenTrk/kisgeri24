@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:kisgeri24/data/models/sector.dart';
-import 'package:kisgeri24/data/models/route.dart';
+import "package:flutter/foundation.dart";
+import "package:kisgeri24/data/models/route.dart";
+import "package:kisgeri24/data/models/sector.dart";
 
-@Deprecated('Places got replaced by Sectors')
+@Deprecated("Places got replaced by Sectors")
 class Places {
   List<Sector> placeList;
 
@@ -20,15 +20,15 @@ class Places {
   @override
   int get hashCode => placeList.hashCode;
 
-  getPlaceName(int position) {
+  String getPlaceName(int position) {
     return placeList[position].name;
   }
 
-  getRoute(String routeName) {
+  Route getRoute(String routeName) {
     Route route = Route();
-    for (var element in placeList) {
+    for (final element in placeList) {
       if (element.routes != null) {
-        for (var element in element.routes!) {
+        for (final element in element.routes!) {
           if (element.name == routeName) {
             route = element;
           }
@@ -39,11 +39,11 @@ class Places {
   }
 
   String getPlaceWhereThisRoute(String routeName) {
-    String placeName = '';
-    for (var element in placeList) {
-      String placeNameNow = element.name;
+    String placeName = "";
+    for (final element in placeList) {
+      final String placeNameNow = element.name;
       if (element.routes != null) {
-        for (var element in element.routes!) {
+        for (final element in element.routes!) {
           if (element.name == routeName) {
             placeName = placeNameNow;
           }

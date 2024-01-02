@@ -1,21 +1,21 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import "package:bloc/bloc.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:image_picker/image_picker.dart";
 
-part 'sign_up_event.dart';
+part "sign_up_event.dart";
 
-part 'sign_up_state.dart';
+part "sign_up_state.dart";
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   SignUpBloc() : super(SignUpInitial()) {
-    ImagePicker imagePicker = ImagePicker();
+    final ImagePicker imagePicker = ImagePicker();
 
     on<RetrieveLostDataEvent>((event, emit) async {
       final LostDataResponse response = await imagePicker.retrieveLostData();
       if (response.file != null) {
         emit(PictureSelectedState(
-            imageData: await response.file!.readAsBytes()));
+            imageData: await response.file!.readAsBytes(),),);
       }
     });
 
@@ -26,14 +26,14 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
           emit(ValidFields());
         } else {
           emit(SignUpFailureState(
-              errorMessage: 'Please accept our terms of use.'));
+              errorMessage: "Please accept our terms of use.",),);
         }
       } else {
-        emit(SignUpFailureState(errorMessage: 'Please fill required fields.'));
+        emit(SignUpFailureState(errorMessage: "Please fill required fields."));
       }
     });
 
     on<ToggleEulaCheckboxEvent>(
-        (event, emit) => emit(EulaToggleState(event.eulaAccepted)));
+        (event, emit) => emit(EulaToggleState(event.eulaAccepted)),);
   }
 }

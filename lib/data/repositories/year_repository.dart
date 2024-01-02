@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kisgeri24/data/exception/multiple_element_error.dart';
-import 'package:kisgeri24/data/models/year.dart';
-import 'package:kisgeri24/data/repositories/crud_repository.dart';
-import 'package:kisgeri24/logging.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:kisgeri24/data/exception/multiple_element_error.dart";
+import "package:kisgeri24/data/models/year.dart";
+import "package:kisgeri24/data/repositories/crud_repository.dart";
+import "package:kisgeri24/logging.dart";
 
 class YearRepository extends CrudRepository<Year> {
   final FirebaseFirestore firestore;
@@ -16,15 +16,15 @@ class YearRepository extends CrudRepository<Year> {
 
   @override
   Future<List<Year>> fetchAll() async {
-    logger.d('About to fetch and list years');
-    QuerySnapshot<Map<String, dynamic>> yearsSnapshot =
-        await firestore.collection('years').get();
-    List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
-      Map<String, dynamic> data = yearDoc.data();
-      data.putIfAbsent('id', () => yearDoc.id);
+    logger.d("About to fetch and list years");
+    final QuerySnapshot<Map<String, dynamic>> yearsSnapshot =
+        await firestore.collection("years").get();
+    final List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
+      final Map<String, dynamic> data = yearDoc.data();
+      data.putIfAbsent("id", () => yearDoc.id);
       return Year.fromJson(data);
     }).toList();
-    logger.d('The following years are present: ${yearList.map((e) => e.year)}');
+    logger.d("The following years are present: ${yearList.map((e) => e.year)}");
     return yearList;
   }
 
@@ -45,12 +45,12 @@ class YearRepository extends CrudRepository<Year> {
 
   @override
   Future<Year?> getById(String id) async {
-    QuerySnapshot<Map<String, dynamic>> yearsSnapshot =
-        await firestore.collection('years').where('id', isEqualTo: id).get();
+    final QuerySnapshot<Map<String, dynamic>> yearsSnapshot =
+        await firestore.collection("years").where("id", isEqualTo: id).get();
     if (yearsSnapshot.size > 0) {
-      List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
-        Map<String, dynamic> data = yearDoc.data();
-        data.putIfAbsent('id', () => yearDoc.id);
+      final List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
+        final Map<String, dynamic> data = yearDoc.data();
+        data.putIfAbsent("id", () => yearDoc.id);
         return Year.fromJson(data);
       }).toList();
       if (yearList.length > 1) {
@@ -62,19 +62,19 @@ class YearRepository extends CrudRepository<Year> {
   }
 
   Future<Year?> getByTenant(String tenantId) async {
-    QuerySnapshot<Map<String, dynamic>> yearsSnapshot = await firestore
-        .collection('years')
-        .where('tenantId', isEqualTo: tenantId)
+    final QuerySnapshot<Map<String, dynamic>> yearsSnapshot = await firestore
+        .collection("years")
+        .where("tenantId", isEqualTo: tenantId)
         .get();
     if (yearsSnapshot.size > 0) {
-      List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
-        Map<String, dynamic> data = yearDoc.data();
-        data.putIfAbsent('id', () => yearDoc.id);
+      final List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
+        final Map<String, dynamic> data = yearDoc.data();
+        data.putIfAbsent("id", () => yearDoc.id);
         return Year.fromJson(data);
       }).toList();
       if (yearList.length > 1) {
         throw MultipleElementException(
-            "Multiple Year found with tenantId: $tenantId");
+            "Multiple Year found with tenantId: $tenantId",);
       }
       return yearList.first;
     }

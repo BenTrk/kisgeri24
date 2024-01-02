@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/constants.dart';
-
-import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
-import '../../data/models/user.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/database_writes.dart";
+import "package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart";
 
 class CheckClimbedPlaceCard extends StatefulWidget {
   final ClimbedRoute climbedRoute;
@@ -60,15 +59,14 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 8),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Icon(Icons.rocket_launch,
-                              color: Color(colorPrimary)),
+                              color: Color(colorPrimary),),
                           Text(climbedRoute.name,
                               style: const TextStyle(
                                   color: Color(colorPrimary),
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w600)),
+                                  fontWeight: FontWeight.w600,),),
                         ],
                       ),
                     ),
@@ -76,11 +74,11 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                            'Points earned: ${climbedRoute.points}, doing it ${climbedRoute.best}',
+                            "Points earned: ${climbedRoute.points}, doing it ${climbedRoute.best}",
                             style: TextStyle(
                                 color: Colors.grey.shade800,
                                 fontSize: 16,
-                                fontWeight: FontWeight.w500)),
+                                fontWeight: FontWeight.w500,),),
                       ],
                     ),
                     Row(
@@ -88,11 +86,11 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 8, right: 8, bottom: 8),
+                              left: 8, right: 8, bottom: 8,),
                           child: IconButton(
                             onPressed: () {
                               removeIt(context, climbedRoute, user, climberName,
-                                  placeName);
+                                  placeName,);
                               setState(() {
                                 isActive =
                                     false; // Set isActive to false when the remove button is pressed
@@ -106,7 +104,7 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               )
@@ -121,7 +119,6 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.rocket_launch, color: Colors.grey.shade200),
                       Text(climbedRoute.name,
@@ -130,11 +127,11 @@ class _CheckClimbedPlaceCardState extends State<CheckClimbedPlaceCard> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             decoration: TextDecoration.lineThrough,
-                          )),
+                          ),),
                     ],
                   ),
                 ),
-              ));
+              ),);
   }
 }
 
@@ -147,7 +144,7 @@ removeIt(
 ) {
   /** ToDo */
 
-  ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
+  final ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   climbsAndMoreModel.removeClimbOrActivity(
-      climbOrActivity, user, climberName, placeName);
+      climbOrActivity, user, climberName, placeName,);
 }

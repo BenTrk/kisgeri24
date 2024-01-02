@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/publics.dart';
-import 'package:kisgeri24/ui/home/home_screen_utils.dart';
-import 'package:numberpicker/numberpicker.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/home/model/date_time_picker_model.dart';
-import 'package:kisgeri24/misc/toggle_buttons_date_selector.dart';
-import 'home_screen.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/custom_menu.dart";
+import "package:kisgeri24/misc/toggle_buttons_date_selector.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/home/home_screen.dart";
+import "package:kisgeri24/ui/home/home_screen_utils.dart";
+import "package:kisgeri24/ui/home/model/date_time_picker_model.dart";
+import "package:numberpicker/numberpicker.dart";
 
 class DateTimePickerScreen extends StatefulWidget {
   final User user;
-  const DateTimePickerScreen({Key? key, required this.user}) : super(key: key);
+  const DateTimePickerScreen({super.key, required this.user});
 
   @override
   State createState() => _DateTimePickerState();
@@ -24,9 +24,9 @@ class DateTimePickerScreen extends StatefulWidget {
 class _DateTimePickerState extends State<DateTimePickerScreen> {
   late User user;
   //ValueNotifier<String> dateTime = ValueNotifier<String>(defaultDateTime.toString());
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var teamHours = 07;
-  var teamMinutes = 15;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  int teamHours = 07;
+  int teamMinutes = 15;
 
   @override
   void initState() {
@@ -52,14 +52,13 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
             SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //Menu inside :)
                   LogoImageWidget(user: user),
                   const Padding(
                     padding: EdgeInsets.all(16),
                     child: Text(
-                      'Looks like your team did not pick a start date yet. Let\'s solve this problem!',
+                      "Looks like your team did not pick a start date yet. Let's solve this problem!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
@@ -86,16 +85,15 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            const Text('Hours:',
+                            const Text("Hours:",
                                 style: TextStyle(
-                                    color: Color(colorPrimary), fontSize: 16)),
+                                    color: Color(colorPrimary), fontSize: 16,),),
                             Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: NumberPicker(
                                 textStyle:
                                     const TextStyle(color: Color(colorPrimary)),
                                 value: teamHours,
-                                axis: Axis.vertical,
                                 minValue: 0,
                                 maxValue: 24,
                                 itemHeight: 40,
@@ -106,7 +104,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   border: Border.all(
                                       color:
                                           const Color.fromRGBO(255, 186, 0, 1),
-                                      width: 2),
+                                      width: 2,),
                                 ),
                               ),
                             ),
@@ -117,16 +115,15 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            const Text('Minutes:',
+                            const Text("Minutes:",
                                 style: TextStyle(
-                                    color: Color(colorPrimary), fontSize: 16)),
+                                    color: Color(colorPrimary), fontSize: 16,),),
                             Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: NumberPicker(
                                 textStyle:
                                     const TextStyle(color: Color(colorPrimary)),
                                 value: teamMinutes,
-                                axis: Axis.vertical,
                                 minValue: 0,
                                 maxValue: 45,
                                 itemHeight: 40,
@@ -138,7 +135,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                                   border: Border.all(
                                       color:
                                           const Color.fromRGBO(255, 186, 0, 1),
-                                      width: 2),
+                                      width: 2,),
                                 ),
                               ),
                             ),
@@ -156,14 +153,14 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
                           style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: const Color(colorPrimary),
-                              minimumSize: const Size(150, 40)),
+                              minimumSize: const Size(150, 40),),
                           onPressed: _showAlertDialog,
                           child: const Text(
-                            'All Set!',
+                            "All Set!",
                             style: TextStyle(fontSize: 24),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -184,23 +181,23 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
             DateTimePickerModel().setDateTime(teamHours, teamMinutes, teamDate);
 
         return AlertDialog(
-          title: const Text('Are you sure?'),
+          title: const Text("Are you sure?"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Is $dateTime really your start time?'),
+                Text("Is $dateTime really your start time?"),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('No'),
+              child: const Text("No"),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
             ),
             TextButton(
-              child: const Text('Yes'),
+              child: const Text("Yes"),
               onPressed: () {
                 //Move to the HomePage! Disable database writes while not in competition
                 user.startTime = HomeScreenUtils.getEpochFromDateTime(dateTime);
@@ -239,8 +236,7 @@ class LogoImageWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.only(top: 10.0, right: 24.0, left: 24.0),
                   child: Image.asset(
-                    'assets/images/welcome_image.png',
-                    alignment: Alignment.center,
+                    "assets/images/welcome_image.png",
                     width: 150.0,
                     height: 150.0,
                     fit: BoxFit.cover,

@@ -1,15 +1,15 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kisgeri24/classes/acivities.dart';
-import 'package:kisgeri24/data/models/sector.dart';
-import 'package:kisgeri24/classes/places.dart';
-import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/publics.dart';
-import 'package:kisgeri24/logging.dart' as log;
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
+import "package:kisgeri24/classes/acivities.dart";
+import "package:kisgeri24/classes/places.dart";
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/data/models/sector.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/logging.dart" as log;
+import "package:kisgeri24/publics.dart";
 
 class Init {
   //Compare starttime and starttime + category to start and end times
@@ -19,7 +19,7 @@ class Init {
     Duration duration = Duration.zero;
     DateTime userStartDateTime;
 
-    String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
+    final String userStartTime = startTime.replaceFirst(RegExp(" - "), "T");
     if (userStartTime == "") {
       //?
       userStartDateTime = DateTime(2017, 9, 7, 17, 30);
@@ -32,13 +32,13 @@ class Init {
     return duration;
   }
 
-  static getTenMinutesLeftDurationInMinutes(int category) {
+  static int getTenMinutesLeftDurationInMinutes(int category) {
     category = category * 60; //so it is in minutes
     category = category - 10; //so it is 10 minutes before the end
     return category;
   }
 
-  static getOneHourLeftDurationInHours(int category) {
+  static int getOneHourLeftDurationInHours(int category) {
     category = category - 1;
     return category;
   }
@@ -47,18 +47,18 @@ class Init {
     String category = user.category;
     int categoryTime = 0;
 
-    category = category.replaceAll('H', '');
+    category = category.replaceAll("H", "");
     categoryTime = int.parse(category);
 
     return categoryTime;
   }
 
   static String getEndDate(User user, String startTime) {
-    String userCategory = user.category;
+    final String userCategory = user.category;
     Duration duration = Duration.zero;
     DateTime userStartDateTime;
 
-    String userStartTime = startTime.replaceFirst(RegExp(' - '), 'T');
+    final String userStartTime = startTime.replaceFirst(RegExp(" - "), "T");
     if (userStartTime == "") {
       userStartDateTime = DateTime.now();
     } else {
@@ -66,45 +66,45 @@ class Init {
     }
 
     switch (userCategory) {
-      case ('6H'):
+      case ("6H"):
         {
           duration = const Duration(hours: 6);
           break;
         }
-      case ('12H'):
+      case ("12H"):
         {
           duration = const Duration(hours: 12);
           break;
         }
-      case ('24H'):
+      case ("24H"):
         {
           duration = const Duration(hours: 24);
           break;
         }
     }
 
-    DateTime userEndDateTime = userStartDateTime.add(duration);
+    final DateTime userEndDateTime = userStartDateTime.add(duration);
 
-    return DateFormat('hh:mm - dd-MM').format(userEndDateTime);
+    return DateFormat("hh:mm - dd-MM").format(userEndDateTime);
   }
 
   //ToDo: Use try catch for dates, do not initialize on start for stupid values!
   static Future<bool> checkDateTime(User user) async {
     log.logger.d("Check date is requested for user: $user");
-    DatabaseReference basicRef = FirebaseDatabase.instance.ref('BasicData');
-    DatabaseReference resultsRef =
-        FirebaseDatabase.instance.ref('Results').child(user.userID);
+    final DatabaseReference basicRef = FirebaseDatabase.instance.ref("BasicData");
+    final DatabaseReference resultsRef =
+        FirebaseDatabase.instance.ref("Results").child(user.userID);
     DateTime compStartDateTime = DateTime(1969, 07, 20, 20, 17);
     DateTime userStartDateTime = DateTime(1969, 07, 20, 20, 17);
-    String userCategory = user.category;
-    Duration duration = const Duration(hours: 0);
+    final String userCategory = user.category;
+    Duration duration = const Duration();
     bool isInRange = false;
 
     final snapshot = await basicRef.get();
     if (snapshot.exists) {
-      String compStartTime = snapshot.child('compStartTime').value.toString();
+      String compStartTime = snapshot.child("compStartTime").value.toString();
 
-      compStartTime = compStartTime.replaceFirst(RegExp(' - '), 'T');
+      compStartTime = compStartTime.replaceFirst(RegExp(" - "), "T");
       compStartDateTime = DateTime.parse(compStartTime);
     } else {
       return isInRange;
@@ -113,32 +113,32 @@ class Init {
     final snapshotResult = await resultsRef.get();
 
     if (snapshotResult.exists) {
-      String userStartTime = snapshotResult.child('start').value.toString();
-      userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
+      String userStartTime = snapshotResult.child("start").value.toString();
+      userStartTime = userStartTime.replaceFirst(RegExp(" - "), "T");
       userStartDateTime = DateTime.parse(userStartTime);
     } else {
       return isInRange;
     }
 
     switch (userCategory) {
-      case ('6H'):
+      case ("6H"):
         {
           duration = const Duration(hours: 6);
           break;
         }
-      case ('12H'):
+      case ("12H"):
         {
           duration = const Duration(hours: 12);
           break;
         }
-      case ('24H'):
+      case ("24H"):
         {
           duration = const Duration(hours: 24);
           break;
         }
     }
 
-    DateTime userEndDateTime = userStartDateTime.add(duration);
+    final DateTime userEndDateTime = userStartDateTime.add(duration);
 
     if (DateTime.now().isBefore(compStartDateTime) ||
         DateTime.now().isAfter(userEndDateTime)) {
@@ -151,24 +151,24 @@ class Init {
   }
 
   static getPauseOver(User user, BuildContext context) async {
-    DatabaseReference resultsRef =
-        FirebaseDatabase.instance.ref('Results').child(user.userID);
-    String formattedDateTime =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now());
+    final DatabaseReference resultsRef =
+        FirebaseDatabase.instance.ref("Results").child(user.userID);
+    final String formattedDateTime =
+        DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
 
-    await resultsRef.update({'pauseHandler/pauseOverTime': formattedDateTime});
+    await resultsRef.update({"pauseHandler/pauseOverTime": formattedDateTime});
 
-    DataSnapshot dataSnapshot = await resultsRef.get();
+    final DataSnapshot dataSnapshot = await resultsRef.get();
     Init.getResults(user, dataSnapshot);
   }
 
   //maybe Future<Results>?
   static getResults(User user, DataSnapshot dataSnapshot) async {
     num points = 0.0;
-    String start = '';
+    String start = "";
 
-    List<ClimbedPlace> firstClimberList = [];
-    List<ClimbedPlace> secondClimberList = [];
+    final List<ClimbedPlace> firstClimberList = [];
+    final List<ClimbedPlace> secondClimberList = [];
     ClimbedPlaces climbedPlacesClimberOne =
         ClimbedPlaces(climberName: user.firstClimberName);
     ClimbedPlaces climbedPlacesClimberTwo =
@@ -182,17 +182,17 @@ class Init {
     PausedHandler pausedHandler =
         PausedHandler(isPausedUsed: false, isPaused: false);
 
-    TeamResults teamResults = TeamResults();
+    final TeamResults teamResults = TeamResults();
 
     try {
-      Map<dynamic, dynamic> data = dataSnapshot.value as Map;
+      final Map<dynamic, dynamic> data = dataSnapshot.value! as Map;
       data.forEach((key, value) {
-        if (key == 'points') {
+        if (key == "points") {
           points = value;
         } else if (key == "start") {
           start = value;
         } else if (key == "pauseHandler") {
-          Map pauseMap = value as Map<dynamic, dynamic>;
+          final Map pauseMap = value as Map<dynamic, dynamic>;
           DateTime pauseOverTime = DateTime.now();
           bool isPaused = false;
           bool isPausedUsed = false;
@@ -221,15 +221,15 @@ class Init {
           pausedHandler = PausedHandler(
               isPausedUsed: isPausedUsed,
               isPaused: isPaused,
-              pauseOverTime: pauseOverTime);
+              pauseOverTime: pauseOverTime,);
         } else if (key == "Climbs") {
           firstClimberList.clear();
           secondClimberList.clear();
-          Map climbersMap = value as Map<dynamic, dynamic>;
+          final Map climbersMap = value as Map<dynamic, dynamic>;
           climbersMap.forEach((nameKey, value) {
-            Map placeMap = value as Map<dynamic, dynamic>;
-            String climberNameHere = nameKey;
-            String placeName = '';
+            final Map placeMap = value as Map<dynamic, dynamic>;
+            final String climberNameHere = nameKey;
+            String placeName = "";
             placeMap.forEach((key, value) {
               placeName = key;
               final ClimbedPlace climbedPlace =
@@ -244,12 +244,12 @@ class Init {
           });
           climbedPlacesClimberOne = ClimbedPlaces(
               climberName: user.firstClimberName,
-              climbedPlaceList: firstClimberList);
+              climbedPlaceList: firstClimberList,);
           climbedPlacesClimberTwo = ClimbedPlaces(
               climberName: user.secondClimberName,
-              climbedPlaceList: secondClimberList);
+              climbedPlaceList: secondClimberList,);
         } else if (key == "Activities") {
-          Map activitiesMap = value as Map<dynamic, dynamic>;
+          final Map activitiesMap = value as Map<dynamic, dynamic>;
           activitiesMap.forEach((key, value) {
             if (key == user.firstClimberName) {
               didActivitiesClimberOne = DidActivities.fromSnapshot(value, key);
@@ -260,9 +260,9 @@ class Init {
         }
         //Important! Currently, since adding extra Team points are done by hand in Firebase, the sum points have to be update as well!
         else if (key == "Teams") {
-          Map teamsMap = value as Map<dynamic, dynamic>;
+          final Map teamsMap = value as Map<dynamic, dynamic>;
           teamsMap.forEach((key, value) {
-            TeamResults teamResultsInside = TeamResults.fromJSON(value);
+            final TeamResults teamResultsInside = TeamResults.fromJSON(value);
             teamResults.teamResultList.addAll(teamResultsInside.teamResultList);
           });
         }
@@ -276,20 +276,20 @@ class Init {
           climberOneActivities: didActivitiesClimberOne,
           climberTwoActivities: didActivitiesClimberTwo,
           pausedHandler: pausedHandler,
-          teamResults: teamResults);
+          teamResults: teamResults,);
     } catch (error) {
       // Handle any potential errors here
     }
   }
 
   static Future<Places> getPlacesWithRoutes() async {
-    List<Sector> placesList = [];
-    DatabaseReference routesRef = FirebaseDatabase.instance.ref('Routes');
+    final List<Sector> placesList = [];
+    final DatabaseReference routesRef = FirebaseDatabase.instance.ref("Routes");
 
     try {
-      DatabaseEvent event = await routesRef.once();
-      DataSnapshot snapshot = event.snapshot;
-      final Map data = snapshot.value as Map<dynamic, dynamic>;
+      final DatabaseEvent event = await routesRef.once();
+      final DataSnapshot snapshot = event.snapshot;
+      final Map data = snapshot.value! as Map<dynamic, dynamic>;
 
       data.forEach((key, value) {
         final Sector place = Sector.fromSnapshot(key as String, value);
@@ -303,13 +303,13 @@ class Init {
   }
 
   static Future<Activities> getActivities() async {
-    List<Category> categoryList = [];
-    DatabaseReference activitiesRef =
-        FirebaseDatabase.instance.ref('Activities');
+    final List<Category> categoryList = [];
+    final DatabaseReference activitiesRef =
+        FirebaseDatabase.instance.ref("Activities");
     try {
-      DatabaseEvent event = await activitiesRef.once();
-      DataSnapshot snapshot = event.snapshot;
-      final Map data = snapshot.value as Map<dynamic, dynamic>;
+      final DatabaseEvent event = await activitiesRef.once();
+      final DataSnapshot snapshot = event.snapshot;
+      final Map data = snapshot.value! as Map<dynamic, dynamic>;
 
       data.forEach((key, value) {
         final Category category = Category.fromSnapshot(key as String, value);
@@ -323,13 +323,13 @@ class Init {
   }
 
   static Future<Category> getOnlyClimbersActivities() async {
-    List<Activity> activityList = [];
-    DatabaseReference activitiesRef =
-        FirebaseDatabase.instance.ref('Activities');
+    final List<Activity> activityList = [];
+    final DatabaseReference activitiesRef =
+        FirebaseDatabase.instance.ref("Activities");
     try {
-      DatabaseEvent event = await activitiesRef.child('Climbers').once();
-      DataSnapshot snapshot = event.snapshot;
-      final Map data = snapshot.value as Map<dynamic, dynamic>;
+      final DatabaseEvent event = await activitiesRef.child("Climbers").once();
+      final DataSnapshot snapshot = event.snapshot;
+      final Map data = snapshot.value! as Map<dynamic, dynamic>;
 
       data.forEach((key, value) {
         final Activity activity = Activity.fromSnapshot(key as String, value);
@@ -339,6 +339,6 @@ class Init {
       // Handle any potential errors here
     }
 
-    return Category(name: 'Climbers', activityList: activityList);
+    return Category(name: "Climbers", activityList: activityList);
   }
 }

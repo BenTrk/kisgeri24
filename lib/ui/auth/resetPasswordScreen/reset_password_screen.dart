@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/model/reset_password_cubit.dart';
-import 'package:kisgeri24/services/firebase_service.dart';
-import 'package:kisgeri24/services/authenticator.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/services/validator.dart';
-import 'package:kisgeri24/ui/loading_cubit.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/model/reset_password_cubit.dart";
+import "package:kisgeri24/services/authenticator.dart";
+import "package:kisgeri24/services/firebase_service.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/services/validator.dart";
+import "package:kisgeri24/ui/loading_cubit.dart";
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -18,35 +18,35 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
-  String _emailAddress = '';
+  String _emailAddress = "";
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ResetPasswordCubit>(
       create: (context) => ResetPasswordCubit(Auth(
           FirebaseSingletonProvider.instance.authInstance,
-          FirebaseSingletonProvider.instance.firestoreInstance)),
+          FirebaseSingletonProvider.instance.firestoreInstance,),),
       child: Builder(
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               iconTheme: IconThemeData(
-                  color: isDarkMode(context) ? Colors.white : Colors.black),
+                  color: isDarkMode(context) ? Colors.white : Colors.black,),
               elevation: 0.0,
             ),
             body: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
               listenWhen: (old, current) => old != current,
               listener: (context, state) async {
                 if (state is ResetPasswordDone) {
-                  context.read<LoadingCubit>().hideLoading();
+                  await context.read<LoadingCubit>().hideLoading();
                   showSnackBar(context,
-                      'Reset password email has been sent, Please check your email.');
+                      "Reset password email has been sent, Please check your email.",);
                   Navigator.pop(context);
                 } else if (state is ValidResetPasswordField) {
                   await context
                       .read<LoadingCubit>()
-                      .showLoading(context, 'Sending Email...', false);
+                      .showLoading(context, "Sending Email...", false);
                   if (!mounted) return;
                   context
                       .read<ResetPasswordCubit>()
@@ -101,9 +101,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         keyboardType: TextInputType.emailAddress,
         cursorColor: const Color(colorPrimary),
         decoration: getInputDecoration(
-            hint: 'E-mail',
+            hint: "E-mail",
             darkMode: isDarkMode(context),
-            errorColor: Theme.of(context).colorScheme.error),
+            errorColor: Theme.of(context).colorScheme.error,),
       ),
     );
   }
@@ -134,7 +134,7 @@ class ButtonToResetPassword extends StatelessWidget {
           ),
         ),
         child: const Text(
-          'Send Email',
+          "Send Email",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -158,11 +158,11 @@ class ResetPasswordWidget extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
       child: Text(
-        'Reset Password',
+        "Reset Password",
         style: TextStyle(
             color: Color(colorPrimary),
             fontSize: 25.0,
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.bold,),
       ),
     );
   }

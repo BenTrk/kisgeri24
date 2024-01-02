@@ -1,12 +1,10 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/constants.dart';
-
-import 'package:kisgeri24/misc/database_writes.dart';
-
-import '../../data/models/user.dart';
-import '../../publics.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/database_writes.dart";
+import "package:kisgeri24/publics.dart";
 
 class ActivitiesCard extends StatefulWidget {
   final String title;
@@ -34,7 +32,7 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
   late User user;
   bool isTeam = false;
   SelectedItem selectedItem = SelectedItem.climberOne;
-  String pointsSelected = '0';
+  String pointsSelected = "0";
   String? selectedItemKey;
   String? selectedItemValue;
   DatabaseWrites databaseWrites = DatabaseWrites();
@@ -45,7 +43,7 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
     user = widget.user;
     title = widget.title;
     valueMap = widget.valueMap;
-    if (widget.category == 'Teams') {
+    if (widget.category == "Teams") {
       isTeam = true;
     } else {
       isTeam = false;
@@ -73,13 +71,12 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
                   style: const TextStyle(
                       color: Color(colorPrimary),
                       fontSize: 16,
-                      fontWeight: FontWeight.w600)),
+                      fontWeight: FontWeight.w600,),),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                !isTeam
-                    ? Padding(
+                if (!isTeam) Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Column(
                           children: [
@@ -137,15 +134,15 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
                                 ),
                                 const SizedBox(width: 8),
                                 TextButton(
-                                  child: const Text('Did it!',
+                                  child: const Text("Did it!",
                                       style: TextStyle(
                                           color: Color(colorPrimary),
-                                          fontSize: 14)),
+                                          fontSize: 14,),),
                                   onPressed: () {
                                     if (!results.pausedHandler.isPaused) {
-                                      List<String> names = [
+                                      final List<String> names = [
                                         user.firstClimberName,
-                                        user.secondClimberName
+                                        user.secondClimberName,
                                       ];
                                       if (selectedItemValue != null) {
                                         databaseWrites.writeActivityToDatabase(
@@ -153,7 +150,7 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
                                             user,
                                             names[selectedItem.index],
                                             title,
-                                            valueMap[selectedItemValue]!);
+                                            valueMap[selectedItemValue]!,);
                                       }
                                     } //else say nooooo
                                   },
@@ -163,8 +160,7 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
                             ),
                           ],
                         ),
-                      )
-                    : Padding(
+                      ) else Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Container(
                           decoration: BoxDecoration(
@@ -173,11 +169,11 @@ class _ActivitiesCardState extends State<ActivitiesCard> {
                           ),
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: Text('Points will be given by judges.',
+                            child: Text("Points will be given by judges.",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
+                                    color: Colors.white, fontSize: 14,),),
                           ),
-                        ))
+                        ),),
               ],
             ),
           ],

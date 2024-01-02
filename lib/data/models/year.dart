@@ -1,6 +1,6 @@
-import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/init_values.dart';
-import 'package:kisgeri24/logging.dart';
+import "package:kisgeri24/data/models/entity.dart";
+import "package:kisgeri24/logging.dart";
+import "package:kisgeri24/misc/init_values.dart";
 
 class Year extends Entity {
   String id;
@@ -18,22 +18,22 @@ class Year extends Entity {
   Year.all(this.id, this.year, this.tenantId, this.compStart, this.compEnd);
 
   factory Year.fromJson(Map<String, dynamic> parsedJson) {
-    logger.d('Creating Year instance based on the input JSON: $parsedJson');
+    logger.d("Creating Year instance based on the input JSON: $parsedJson");
     return Year.all(
-        parsedJson['id'] ?? unsetString,
-        parsedJson['year'] ?? unsetString,
-        parsedJson['tenantId'] ?? unsetString,
-        parsedJson['compStart'],
-        parsedJson['compEnd']);
+        parsedJson["id"] ?? unsetString,
+        parsedJson["year"] ?? unsetString,
+        parsedJson["tenantId"] ?? unsetString,
+        parsedJson["compStart"],
+        parsedJson["compEnd"],);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'year': year,
-      'tenantId': tenantId,
-      'compStart': compStart,
-      'compEnd': compEnd
+      "id": id,
+      "year": year,
+      "tenantId": tenantId,
+      "compStart": compStart,
+      "compEnd": compEnd,
     };
   }
 
@@ -41,19 +41,19 @@ class Year extends Entity {
       user != null &&
       user.toJson().entries.every((entry) =>
           toJson().containsKey(entry.key) &&
-          toJson()[entry.key] == entry.value);
+          toJson()[entry.key] == entry.value,);
 
   @override
   String toString() {
-    return 'Year{id: $id, year: $year, tenantId: $tenantId compStart: $compStart, compEnd: $compEnd}';
+    return "Year{id: $id, year: $year, tenantId: $tenantId compStart: $compStart, compEnd: $compEnd}";
   }
 
   void updateFromMap(Map<String, dynamic> yearData) {
-    if (yearData.containsKey('compStart')) {
-      year = yearData['compStart'];
+    if (yearData.containsKey("compStart")) {
+      year = yearData["compStart"];
     }
-    if (yearData.containsKey('compEnd')) {
-      year = yearData['compEnd'];
+    if (yearData.containsKey("compEnd")) {
+      year = yearData["compEnd"];
     }
   }
 }

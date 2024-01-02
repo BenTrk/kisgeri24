@@ -1,32 +1,32 @@
-import 'dart:async';
-import 'dart:developer';
+import "dart:async";
+import "dart:developer";
 
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/classes/acivities.dart';
-import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/misc/cards/check_activity_card.dart';
-import 'package:kisgeri24/misc/cards/check_climb_card.dart';
-import 'package:kisgeri24/misc/cards/check_extra_points_card.dart';
-import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/model/init.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/publics.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
-import 'package:kisgeri24/ui/home/date_time_picker_screen.dart';
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/classes/acivities.dart";
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/cards/check_activity_card.dart";
+import "package:kisgeri24/misc/cards/check_climb_card.dart";
+import "package:kisgeri24/misc/cards/check_extra_points_card.dart";
+import "package:kisgeri24/misc/custom_menu.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/model/init.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
 
 typedef RemoveClimbedRouteCallback = void Function(
-    Object climbOrActivity, User user, String climberName, String placeName);
+    Object climbOrActivity, User user, String climberName, String placeName,);
 
 class ClimbsAndMoreScreen extends StatefulWidget {
   final User user;
 
-  const ClimbsAndMoreScreen({Key? key, required this.user}) : super(key: key);
+  const ClimbsAndMoreScreen({super.key, required this.user});
 
   @override
   State createState() => _ClimbsAndMoreScreenState();
@@ -38,7 +38,7 @@ enum SelectedItem { places, activities }
 
 class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
   late User user;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool isPlaceSelected = false;
   ClimbedPlace? selectedPlace;
   Category? selectedCategory;
@@ -84,7 +84,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
     user = widget.user;
     climbers = [user.firstClimberName, user.secondClimberName];
     climbedPlaces = results.climberOneResults;
-    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    resultsRef = FirebaseDatabase.instance.ref("Results").child(user.userID);
     streamSubscription = resultsRef.onValue.listen((event) {
       Init.getResults(user, event.snapshot);
     });
@@ -98,7 +98,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
             pushAndRemoveUntil(context, const WelcomeScreen(), false);
           } else if (state.authState == AuthState.didNotSetTime) {
             pushAndRemoveUntil(
-                context, DateTimePickerScreen(user: user), false);
+                context, DateTimePickerScreen(user: user), false,);
           } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
         },
         child: StreamBuilder(
@@ -115,12 +115,11 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                     SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ClimbsAndMoreScreenTitleWidget(user: user),
                           const Padding(
                             padding: EdgeInsets.only(
-                                left: 25.0, right: 25.0, bottom: 10),
+                                left: 25.0, right: 25.0, bottom: 10,),
                             child: Divider(
                               color: Color.fromRGBO(255, 186, 0, 1),
                             ),
@@ -133,11 +132,11 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                                     style: const TextStyle(
                                         color: Color(colorPrimary),
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
+                                        fontWeight: FontWeight.w600,),),
                                 Text(
-                                    'End time: ${Init.getEndDate(user, results.start)}'),
-                                Text('Points: ${results.points}'),
-                              ]),
+                                    "End time: ${Init.getEndDate(user, results.start)}",),
+                                Text("Points: ${results.points}"),
+                              ],),
                             ),
                           ),
                           const SizedBox(
@@ -206,11 +205,11 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                                 children: const [
                                   Padding(
                                     padding: EdgeInsets.all(2.0),
-                                    child: Text('Places'),
+                                    child: Text("Places"),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.all(2.0),
-                                    child: Text('Activities'),
+                                    child: Text("Activities"),
                                   ),
                                 ],
                               ),
@@ -219,8 +218,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                           const SizedBox(
                             height: 16,
                           ),
-                          isPlaceSelected || isCategorySelected
-                              ? Row(
+                          if (isPlaceSelected || isCategorySelected) Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Padding(
@@ -244,8 +242,7 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                                       ),
                                     ),
                                   ],
-                                )
-                              : const SizedBox(),
+                                ) else const SizedBox(),
                           SizedBox(
                               width: 0.9 * MediaQuery.of(context).size.width,
                               height: 300,
@@ -261,19 +258,19 @@ class _ClimbsAndMoreScreenState extends State<ClimbsAndMoreScreen> {
                                           ? 0
                                           : 1,
                                       user: user,
-                                      climbedPlaces: climbedPlaces)
+                                      climbedPlaces: climbedPlaces,)
                                   : DisplayDidActivities(
                                       climberName:
                                           climbers[selectedClimber.index],
                                       user: user,
-                                    )),
+                                    ),),
                         ],
                       ),
                     ),
                   ],
                 ),
               );
-            }));
+            },),);
   }
 }
 
@@ -282,10 +279,10 @@ class DisplayDidActivities extends StatefulWidget {
   final User user;
 
   const DisplayDidActivities({
-    Key? key,
+    super.key,
     required this.climberName,
     required this.user,
-  }) : super(key: key);
+  });
 
   @override
   _DisplayDidActivitiesState createState() => _DisplayDidActivitiesState();
@@ -326,7 +323,7 @@ class _DisplayDidActivitiesState extends State<DisplayDidActivities> {
           itemBuilder: (context, index) {
             if (index < didActivities.activitiesList.length) {
               // Display CheckActivitiesCard
-              DidActivity didActivity = didActivities.activitiesList[index];
+              final DidActivity didActivity = didActivities.activitiesList[index];
               return CheckActivitiesCard(
                 key: ValueKey(widget.climberName),
                 didActivity: didActivity,
@@ -335,22 +332,22 @@ class _DisplayDidActivitiesState extends State<DisplayDidActivities> {
               );
             } else {
               // Display CheckExtraPointsCard
-              int teamResultIndex = index - didActivities.activitiesList.length;
-              TeamResult teamResult =
+              final int teamResultIndex = index - didActivities.activitiesList.length;
+              final TeamResult teamResult =
                   teamResults.teamResultList[teamResultIndex];
               return CheckExtraPointsCard(
                 teamResult: teamResult,
                 user: widget.user,
               );
             }
-          });
+          },);
     } else {
-      log('none');
+      log("none");
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'No activities yet for ${widget.climberName}.',
+            "No activities yet for ${widget.climberName}.",
             style: TextStyle(
               color: Colors.grey.shade700,
               fontSize: 16,
@@ -385,13 +382,13 @@ class DisplayClimbedRoutes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> names = [user.firstClimberName, user.secondClimberName];
-    String selectedClimberName = names[climberName];
+    final List<String> names = [user.firstClimberName, user.secondClimberName];
+    final String selectedClimberName = names[climberName];
     if (selectedPlace == null && climbedPlaces.climbedPlaceList.isNotEmpty) {
       return ListView.builder(
         itemCount: climbedPlaces.climbedPlaceList.length,
         itemBuilder: (context, index) {
-          ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
+          final ClimbedPlace place = climbedPlaces.climbedPlaceList[index];
           return GestureDetector(
             onTap: () => onPlaceSelected(place),
             child: Card(
@@ -422,13 +419,13 @@ class DisplayClimbedRoutes extends StatelessWidget {
     } else if (selectedPlace != null &&
         climbedPlaces.climbedPlaceList.isNotEmpty) {
       // Display the list of routes for the selected Place here
-      ClimbedPlace routesPlace =
+      final ClimbedPlace routesPlace =
           climbedPlaces.getClimbedPlace(selectedPlace!.name);
-      log('routename:${routesPlace.name} ${selectedPlace!.name}');
+      log("routename:${routesPlace.name} ${selectedPlace!.name}");
       return ListView.builder(
         itemCount: routesPlace.climbedRouteList.length,
         itemBuilder: (context, index) {
-          ClimbedRoute route = routesPlace.climbedRouteList[index];
+          final ClimbedRoute route = routesPlace.climbedRouteList[index];
           return CheckClimbedPlaceCard(
             climbedRoute: route,
             user: user,
@@ -441,12 +438,12 @@ class DisplayClimbedRoutes extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('No climbs yet for $selectedClimberName.',
+          Text("No climbs yet for $selectedClimberName.",
               style: TextStyle(
                 color: Colors.grey.shade700,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-              )),
+              ),),
         ],
       );
     }
@@ -473,13 +470,12 @@ class ClimbsAndMoreScreenTitleWidget extends StatelessWidget {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(
-                        top: 48.0, right: 24.0, left: 24.0),
+                        top: 48.0, right: 24.0, left: 24.0,),
                     child: Row(children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Image.asset(
-                          'assets/images/welcome_image.png',
-                          alignment: Alignment.center,
+                          "assets/images/welcome_image.png",
                           width: 75.0,
                           height: 75.0,
                           fit: BoxFit.cover,
@@ -495,7 +491,7 @@ class ClimbsAndMoreScreenTitleWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ])),
+                    ],),),
                 CustomMenu(
                   user: user,
                   contextFrom: context,

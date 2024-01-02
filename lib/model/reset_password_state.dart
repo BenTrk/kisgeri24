@@ -1,4 +1,4 @@
-part of 'reset_password_cubit.dart';
+part of "reset_password_cubit.dart";
 
 abstract class ResetPasswordState {}
 

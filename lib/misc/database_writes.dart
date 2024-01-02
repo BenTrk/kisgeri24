@@ -1,30 +1,29 @@
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/data/models/route.dart' as kisgeri;
-import 'package:kisgeri24/services/helper.dart';
-import 'package:intl/intl.dart';
-
-import '../../../constants.dart';
-import '../data/models/user.dart';
-import '../publics.dart';
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/route.dart" as kisgeri;
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
 
 class DatabaseWrites {
-  DatabaseReference ref = FirebaseDatabase.instance.ref('Results');
+  DatabaseReference ref = FirebaseDatabase.instance.ref("Results");
 
-  void writePauseInformation(DateTime pauseOverTime, User user) async {
-    DatabaseReference resultsRef =
-        FirebaseDatabase.instance.ref('Results').child(user.userID);
+  Future<void> writePauseInformation(DateTime pauseOverTime, User user) async {
+    final DatabaseReference resultsRef =
+        FirebaseDatabase.instance.ref("Results").child(user.userID);
     final snapshotResult = await resultsRef.get();
-    String userStartTime = snapshotResult.child('start').value.toString();
-    userStartTime = userStartTime.replaceFirst(RegExp(' - '), 'T');
+    String userStartTime = snapshotResult.child("start").value.toString();
+    userStartTime = userStartTime.replaceFirst(RegExp(" - "), "T");
     DateTime userStartDateTime = DateTime.parse(userStartTime);
     userStartDateTime = userStartDateTime.add(const Duration(hours: 1));
 
-    String formattedStartTime =
-        DateFormat('yyyy-MM-dd - HH:mm').format(userStartDateTime);
-    String formattedDateTime =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').format(pauseOverTime);
+    final String formattedStartTime =
+        DateFormat("yyyy-MM-dd - HH:mm").format(userStartDateTime);
+    final String formattedDateTime =
+        DateFormat("yyyy-MM-ddTHH:mm:ss").format(pauseOverTime);
 
     await ref.child(user.userID).update({
       "pauseHandler/pauseOverTime": formattedDateTime,
@@ -34,68 +33,68 @@ class DatabaseWrites {
   }
 
   writeClimbToDatabase(BuildContext context, User user, String climber,
-      String route, String style) async {
+      String route, String style,) async {
     //if -1, then something went wrong!
-    num points = calculateRoutePoints(route, style);
-    String place = places.getPlaceWhereThisRoute(route);
+    final num points = calculateRoutePoints(route, style);
+    final String place = places.getPlaceWhereThisRoute(route);
 
-    String bestStyle = getBest(style, climber, route);
+    final String bestStyle = getBest(style, climber, route);
     if (compareStyles(style, bestStyle) >= 0) {
       await ref.child(user.userID).update({
         "Climbs/$climber/$place/$route/best": style,
         "Climbs/$climber/$place/$route/points": points,
         "Climbs/$climber/$place/$route/name": route,
         "points": calculatePoints(
-            points, getIsClimbThere(route, climber), climber, route),
+            points, getIsClimbThere(route, climber), climber, route,),
       }).then(
-          (document) => showSnackBar(context, 'Climb added to the database!'));
+          (document) => showSnackBar(context, "Climb added to the database!"),);
     }
   }
 
   writeActivityToDatabase(BuildContext context, User user, String climber,
-      String activity, num points) async {
+      String activity, num points,) async {
     //if -1, then something went wrong!
-    bool isBestActivity = getBestActivity(climber, activity, points);
+    final bool isBestActivity = getBestActivity(climber, activity, points);
 
     if (isBestActivity) {
       await ref.child(user.userID).update({
         "Activities/$climber/$activity/points": points,
         "points": calculateActivityPoints(
-            points, getIsActivityThere(activity, climber), climber, activity),
+            points, getIsActivityThere(activity, climber), climber, activity,),
       }).then((document) =>
-          showSnackBar(context, 'Activity added to the database!'));
+          showSnackBar(context, "Activity added to the database!"),);
     }
   }
 
-  void removeClimbedRoute(ClimbedRoute climb, String climberName, User user,
-      String placeName) async {
+  Future<void> removeClimbedRoute(ClimbedRoute climb, String climberName, User user,
+      String placeName,) async {
     await ref
         .child(user.userID)
-        .child('Climbs')
+        .child("Climbs")
         .child(climberName)
         .child(placeName)
         .child(climb.name)
         .remove();
     //Points, you jackass :)
-    num newPoints = results.points - climb.points;
+    final num newPoints = results.points - climb.points;
     await ref.child(user.userID).update({"points": newPoints});
   }
 
-  void removeDidActivity(
-      DidActivity activity, String climberName, User user) async {
+  Future<void> removeDidActivity(
+      DidActivity activity, String climberName, User user,) async {
     await ref
         .child(user.userID)
-        .child('Activities')
+        .child("Activities")
         .child(climberName)
         .child(activity.name)
         .remove();
     //Points, you jackass :)
-    num newPoints = results.points - activity.points;
+    final num newPoints = results.points - activity.points;
     await ref.child(user.userID).update({"points": newPoints});
   }
 }
 
-getIsActivityThere(String activityName, String climberName) {
+bool getIsActivityThere(String activityName, String climberName) {
   if (climberName == results.climberOneActivities.climberName) {
     return results.climberOneActivities.getIsActivityThere(activityName);
   } else {
@@ -103,12 +102,12 @@ getIsActivityThere(String activityName, String climberName) {
   }
 }
 
-calculateActivityPoints(
-    num points, isActivityThere, String climber, String activityName) {
-  DidActivities didActivities = results.getDidActivitiesForAClimber(climber);
+num calculateActivityPoints(
+    num points, isActivityThere, String climber, String activityName,) {
+  final DidActivities didActivities = results.getDidActivitiesForAClimber(climber);
   if (isActivityThere) {
-    num activityPointsBefore = didActivities.getActivity(activityName).points;
-    num teamPoints = results.points;
+    final num activityPointsBefore = didActivities.getActivity(activityName).points;
+    final num teamPoints = results.points;
     return (teamPoints - activityPointsBefore) + points;
   } else {
     return results.points + points;
@@ -117,7 +116,7 @@ calculateActivityPoints(
 
 bool getBestActivity(String climberName, String activityName, num points) {
   if (climberName == results.climberOneActivities.climberName) {
-    num activityPointsBefore =
+    final num activityPointsBefore =
         results.climberOneActivities.getActivity(activityName).points;
     if (points > activityPointsBefore) {
       return true;
@@ -125,7 +124,7 @@ bool getBestActivity(String climberName, String activityName, num points) {
       return false;
     }
   } else {
-    num activityPointsBefore =
+    final num activityPointsBefore =
         results.climberTwoActivities.getActivity(activityName).points;
     if (points > activityPointsBefore) {
       return true;
@@ -145,12 +144,12 @@ bool getIsClimbThere(String routeName, String climberName) {
 
 String getBest(String style, String climber, String route) {
   String bestStyle = style;
-  ClimbedPlaces climbedPlaces = results.getClimbedPlacesForAClimber(climber);
-  for (var element in climbedPlaces.climbedPlaceList) {
-    for (var element in element.climbedRouteList) {
+  final ClimbedPlaces climbedPlaces = results.getClimbedPlacesForAClimber(climber);
+  for (final element in climbedPlaces.climbedPlaceList) {
+    for (final element in element.climbedRouteList) {
       if (element.name == route) {
-        String styleInDB = element.best;
-        int comparison = compareStyles(style, styleInDB);
+        final String styleInDB = element.best;
+        final int comparison = compareStyles(style, styleInDB);
         switch (comparison) {
           case (-1):
             {
@@ -189,19 +188,19 @@ int compareStyles(String style1, String style2) {
 }
 
 num calculateRoutePoints(String route, String style) {
-  kisgeri.Route routeHere = places.getRoute(route);
-  num pointsHere = routeHere.points;
+  final kisgeri.Route routeHere = places.getRoute(route);
+  final num pointsHere = routeHere.points;
 
   switch (style) {
-    case ('Top-Rope'):
+    case ("Top-Rope"):
       {
         return pointsHere * 0.5;
       }
-    case ('Lead'):
+    case ("Lead"):
       {
         return pointsHere;
       }
-    case ('Clean'):
+    case ("Clean"):
       {
         return pointsHere * 2;
       }
@@ -211,11 +210,11 @@ num calculateRoutePoints(String route, String style) {
 }
 
 num calculatePoints(
-    num points, bool isClimbThere, String climber, String routeName) {
-  ClimbedPlaces climbedPlaces = results.getClimbedPlacesForAClimber(climber);
+    num points, bool isClimbThere, String climber, String routeName,) {
+  final ClimbedPlaces climbedPlaces = results.getClimbedPlacesForAClimber(climber);
   if (isClimbThere) {
-    num routePointsBefore = climbedPlaces.getRoute(routeName).points;
-    num teamPoints = results.points;
+    final num routePointsBefore = climbedPlaces.getRoute(routeName).points;
+    final num teamPoints = results.points;
     return (teamPoints - routePointsBefore) + points;
   } else {
     return results.points + points;

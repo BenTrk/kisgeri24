@@ -5,6 +5,6 @@ class NotFoundException implements Exception {
 
   @override
   String toString() {
-    return 'NotFoundException{message: $message}';
+    return "NotFoundException{message: $message}";
   }
 }

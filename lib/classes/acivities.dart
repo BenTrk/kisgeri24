@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import "package:flutter/foundation.dart";
 
 class Activities {
   List<Category> categoryList;
@@ -17,7 +17,7 @@ class Activities {
   @override
   int get hashCode => categoryList.hashCode;
 
-  getCategoryName(int position) {
+  String getCategoryName(int position) {
     return categoryList[position].name;
   }
 }
@@ -32,15 +32,15 @@ class Category {
   }) : activityList = activityList ?? [];
 
   static Category fromSnapshot(String name, Map<dynamic, dynamic> value) {
-    String categoryName = name;
-    List<Activity> activityList = [];
+    final String categoryName = name;
+    final List<Activity> activityList = [];
 
     value.forEach((key, value) {
       final Activity activity = Activity.fromSnapshot(key as String, value);
       activityList.add(activity);
     });
 
-    Category category =
+    final Category category =
         Category(name: categoryName, activityList: activityList);
     return category;
   }
@@ -69,7 +69,7 @@ class Activity {
 
   static Activity fromSnapshot(String name, Map<dynamic, dynamic> value) {
     name = name;
-    Map<String, int> points = {};
+    final Map<String, int> points = {};
     value.forEach((key, value) {
       points[key] = value;
     });

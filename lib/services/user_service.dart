@@ -16,16 +16,16 @@ class UserService {
   final Converter<UserDto, kisgeri.User> userDtoConverter;
 
   UserService(this.repository, this.firebaseAuth, this.userConverter,
-      this.userDtoConverter);
+      this.userDtoConverter,);
 
   Future<UserDto?> getCurrentUser() async {
-    firebase.User? currentUser = firebaseAuth.currentUser;
+    final firebase.User? currentUser = firebaseAuth.currentUser;
     if (currentUser != null) {
-      kisgeri.User? user = await repository.getById(currentUser.uid);
+      final kisgeri.User? user = await repository.getById(currentUser.uid);
       logger.d("Current authenticated user is: $user");
       if (user == null) {
         logger.w(
-            "User with ID [${currentUser.uid}] cannot be found, therefore cannot be logged in!");
+            "User with ID [${currentUser.uid}] cannot be found, therefore cannot be logged in!",);
         return null;
       }
       return userConverter.convert(user);
@@ -36,14 +36,14 @@ class UserService {
   }
 
   Future<void> updateUser(UserDto user) async {
-    repository.getById(user.userID).then((value) {
+    await repository.getById(user.userID).then((value) {
       if (value != null) {
         logger.i(
-            "Updating User from: ${value.toString()}, to: ${user.toString()}");
+            "Updating User from: $value, to: $user",);
         repository.update(userDtoConverter.convert(user));
       } else {
         logger.w(
-            "User with ID [${user.userID}] cannot be found, therefore cannot be updated!");
+            "User with ID [${user.userID}] cannot be found, therefore cannot be updated!",);
       }
     });
   }

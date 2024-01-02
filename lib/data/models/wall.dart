@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/route.dart';
+import "package:flutter/foundation.dart";
+import "package:kisgeri24/data/models/entity.dart";
+import "package:kisgeri24/data/models/route.dart";
 
 class Wall extends Entity {
   String name;
@@ -26,7 +26,7 @@ class Wall extends Entity {
       }
     });
 
-    Wall place = Wall(name: placeName, ordinal: ordinal, routes: routeList);
+    final Wall place = Wall(name: placeName, ordinal: ordinal, routes: routeList);
     return place;
   }
 
@@ -43,6 +43,6 @@ class Wall extends Entity {
 
   @override
   String toString() {
-    return 'Wall{name: $name, routes: $routes}';
+    return "Wall{name: $name, routes: $routes}";
   }
 }

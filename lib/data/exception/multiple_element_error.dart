@@ -5,6 +5,6 @@ class MultipleElementException implements Exception {
 
   @override
   String toString() {
-    return 'MultipleElementException: $message';
+    return "MultipleElementException: $message";
   }
 }

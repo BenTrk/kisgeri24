@@ -1,24 +1,23 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/model/init.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/publics.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/home/date_time_picker_screen.dart';
-
-import 'options_model.dart';
+import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/custom_menu.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/model/init.dart";
+import "package:kisgeri24/publics.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
+import "package:kisgeri24/ui/options/options_model.dart";
 
 class OptionsScreen extends StatefulWidget {
   final User user;
 
-  const OptionsScreen({Key? key, required this.user}) : super(key: key);
+  const OptionsScreen({super.key, required this.user});
 
   @override
   State createState() => _OptionsScreenState();
@@ -30,7 +29,7 @@ enum SelectedItem { places, activities }
 
 class _OptionsScreenState extends State<OptionsScreen> {
   late User user;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late DatabaseReference resultsRef;
   StreamSubscription<DatabaseEvent>? streamSubscription;
 
@@ -38,14 +37,14 @@ class _OptionsScreenState extends State<OptionsScreen> {
   bool isChangePassword = false;
   bool isDeleteUser = false;
 
-  String passwordToDelete = '';
-  String emailToDelete = '';
+  String passwordToDelete = "";
+  String emailToDelete = "";
 
   @override
   void initState() {
     super.initState();
     user = widget.user;
-    resultsRef = FirebaseDatabase.instance.ref('Results').child(user.userID);
+    resultsRef = FirebaseDatabase.instance.ref("Results").child(user.userID);
     streamSubscription = resultsRef.onValue.listen((event) {
       Init.getResults(user, event.snapshot);
     });
@@ -93,7 +92,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
             pushAndRemoveUntil(context, const WelcomeScreen(), false);
           } else if (state.authState == AuthState.didNotSetTime) {
             pushAndRemoveUntil(
-                context, DateTimePickerScreen(user: user), false);
+                context, DateTimePickerScreen(user: user), false,);
           } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
         },
         child: StreamBuilder(
@@ -110,12 +109,11 @@ class _OptionsScreenState extends State<OptionsScreen> {
                     SingleChildScrollView(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           OptionsScreenTitleWidget(user: user),
                           const Padding(
                             padding: EdgeInsets.only(
-                                left: 25.0, right: 25.0, bottom: 10),
+                                left: 25.0, right: 25.0, bottom: 10,),
                             child: Divider(
                               color: Color.fromRGBO(255, 186, 0, 1),
                             ),
@@ -128,10 +126,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                     style: const TextStyle(
                                         color: Color(colorPrimary),
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
-                                Text('Started at: ${results.start}'),
-                                Text('Category: ${user.category}'),
-                              ]),
+                                        fontWeight: FontWeight.w600,),),
+                                Text("Started at: ${results.start}"),
+                                Text("Category: ${user.category}"),
+                              ],),
                             ),
                           ),
                           const SizedBox(
@@ -148,22 +146,22 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                         children: [
                                           ElevatedButton(
                                               onPressed: () => enableTextField(
-                                                  "changeEmail"),
+                                                  "changeEmail",),
                                               style: ElevatedButton.styleFrom(
                                                 fixedSize: Size.fromWidth(
                                                     MediaQuery.of(context)
                                                             .size
                                                             .width /
-                                                        2),
+                                                        2,),
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        vertical: 16),
+                                                        vertical: 16,),
                                                 backgroundColor:
                                                     const Color(colorPrimary),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          25.0),
+                                                          25.0,),
                                                   side: const BorderSide(
                                                     color: Color(colorPrimary),
                                                   ),
@@ -174,9 +172,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(Icons.email),
-                                                  Text('Change email'),
+                                                  Text("Change email"),
                                                 ],
-                                              ))
+                                              ),),
                                         ],
                                       ),
                                       const SizedBox(
@@ -199,16 +197,16 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                 BorderRadius.circular(20.0),
                                             borderSide: BorderSide.none,
                                           ),
-                                          hintText: 'Enter email',
+                                          hintText: "Enter email",
                                           hintStyle: isChangeEmail
                                               ? const TextStyle(
-                                                  color: Colors.white)
+                                                  color: Colors.white,)
                                               : const TextStyle(
-                                                  color: Colors.grey),
+                                                  color: Colors.grey,),
                                         ),
                                       ),
                                     ],
-                                  ))),
+                                  ),),),
                           const SizedBox(
                             height: 10,
                           ),
@@ -223,22 +221,22 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                         children: [
                                           ElevatedButton(
                                               onPressed: () => enableTextField(
-                                                  "changePassword"),
+                                                  "changePassword",),
                                               style: ElevatedButton.styleFrom(
                                                 fixedSize: Size.fromWidth(
                                                     MediaQuery.of(context)
                                                             .size
                                                             .width /
-                                                        2),
+                                                        2,),
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                        vertical: 16),
+                                                        vertical: 16,),
                                                 backgroundColor:
                                                     const Color(colorPrimary),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          25.0),
+                                                          25.0,),
                                                   side: const BorderSide(
                                                     color: Color(colorPrimary),
                                                   ),
@@ -249,9 +247,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Icon(Icons.password),
-                                                  Text('Reset password'),
+                                                  Text("Reset password"),
                                                 ],
-                                              ))
+                                              ),),
                                         ],
                                       ),
                                       const SizedBox(
@@ -274,16 +272,16 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                 BorderRadius.circular(20.0),
                                             borderSide: BorderSide.none,
                                           ),
-                                          hintText: 'Enter email',
+                                          hintText: "Enter email",
                                           hintStyle: isChangePassword
                                               ? const TextStyle(
-                                                  color: Colors.white)
+                                                  color: Colors.white,)
                                               : const TextStyle(
-                                                  color: Colors.grey),
+                                                  color: Colors.grey,),
                                         ),
                                       ),
                                     ],
-                                  ))),
+                                  ),),),
                           const SizedBox(
                             height: 10,
                           ),
@@ -304,10 +302,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                   MediaQuery.of(context)
                                                           .size
                                                           .width /
-                                                      2),
+                                                      2,),
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      vertical: 16),
+                                                      vertical: 16,),
                                               backgroundColor:
                                                   const Color(colorPrimary),
                                               shape: RoundedRectangleBorder(
@@ -323,9 +321,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(Icons.delete_forever),
-                                                Text('Delete user'),
+                                                Text("Delete user"),
                                               ],
-                                            ))
+                                            ),),
                                       ],
                                     ),
                                     const SizedBox(
@@ -349,12 +347,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                               BorderRadius.circular(20.0),
                                           borderSide: BorderSide.none,
                                         ),
-                                        hintText: 'Enter email',
+                                        hintText: "Enter email",
                                         hintStyle: isDeleteUser
                                             ? const TextStyle(
-                                                color: Colors.white)
+                                                color: Colors.white,)
                                             : const TextStyle(
-                                                color: Colors.grey),
+                                                color: Colors.grey,),
                                       ),
                                     ),
                                     const SizedBox(
@@ -378,12 +376,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                               BorderRadius.circular(20.0),
                                           borderSide: BorderSide.none,
                                         ),
-                                        hintText: 'Enter password',
+                                        hintText: "Enter password",
                                         hintStyle: isDeleteUser
                                             ? const TextStyle(
-                                                color: Colors.white)
+                                                color: Colors.white,)
                                             : const TextStyle(
-                                                color: Colors.grey),
+                                                color: Colors.grey,),
                                       ),
                                     ),
                                     const SizedBox(
@@ -391,15 +389,15 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                     ),
                                     ElevatedButton(
                                         onPressed: () => deleteUser(
-                                            emailToDelete, passwordToDelete),
+                                            emailToDelete, passwordToDelete,),
                                         style: ElevatedButton.styleFrom(
                                           fixedSize: Size.fromWidth(
                                               MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  3.5),
+                                                  3.5,),
                                           padding: const EdgeInsets.symmetric(
-                                              vertical: 10),
+                                              vertical: 10,),
                                           backgroundColor: isDeleteUser
                                               ? const Color(colorPrimary)
                                               : Colors.grey,
@@ -413,19 +411,19 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                                     )
                                                   : const BorderSide(
                                                       color: Colors.grey,
-                                                    )),
+                                                    ),),
                                         ),
-                                        child: const Text('Delete!'))
+                                        child: const Text("Delete!"),),
                                   ],
-                                )),
-                          )
+                                ),),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
               );
-            }));
+            },),);
   }
 
   changeEmail(String email) {
@@ -438,16 +436,16 @@ class _OptionsScreenState extends State<OptionsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Are you sure?'),
+          title: const Text("Are you sure?"),
           content: Text(
-              'This action will change your email address to $email. Would you like to continue?'),
+              "This action will change your email address to $email. Would you like to continue?",),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 enableTextField("none");
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('No'),
+              child: const Text("No"),
             ),
             TextButton(
               onPressed: () {
@@ -455,7 +453,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                 OptionsModel.changeEmail(context, email);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Yes'),
+              child: const Text("Yes"),
             ),
           ],
         );
@@ -468,16 +466,16 @@ class _OptionsScreenState extends State<OptionsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Are you sure?'),
+          title: const Text("Are you sure?"),
           content: const Text(
-              'This action will reset your password. Would you like to continue?'),
+              "This action will reset your password. Would you like to continue?",),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 enableTextField("none");
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('No'),
+              child: const Text("No"),
             ),
             TextButton(
               onPressed: () {
@@ -485,7 +483,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                 OptionsModel.changePassword(context, email);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Yes'),
+              child: const Text("Yes"),
             ),
           ],
         );
@@ -494,30 +492,30 @@ class _OptionsScreenState extends State<OptionsScreen> {
   }
 
   showDeleteUserDialog(
-      BuildContext context, String emailToDelete, String passwordToDelete) {
+      BuildContext context, String emailToDelete, String passwordToDelete,) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Are you sure?'),
+          title: const Text("Are you sure?"),
           content: const Text(
-              'This action will delete your user and remove you from the competition. Would you like to continue?'),
+              "This action will delete your user and remove you from the competition. Would you like to continue?",),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 enableTextField("none");
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('No'),
+              child: const Text("No"),
             ),
             TextButton(
               onPressed: () {
                 enableTextField("none");
                 OptionsModel.deleteUser(
-                    context, emailToDelete, passwordToDelete);
+                    context, emailToDelete, passwordToDelete,);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: const Text('Yes'),
+              child: const Text("Yes"),
             ),
           ],
         );
@@ -558,13 +556,12 @@ class OptionsScreenTitleWidget extends StatelessWidget {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(
-                        top: 48.0, right: 24.0, left: 24.0),
+                        top: 48.0, right: 24.0, left: 24.0,),
                     child: Row(children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Image.asset(
-                          'assets/images/welcome_image.png',
-                          alignment: Alignment.center,
+                          "assets/images/welcome_image.png",
                           width: 75.0,
                           height: 75.0,
                           fit: BoxFit.cover,
@@ -580,7 +577,7 @@ class OptionsScreenTitleWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ])),
+                    ],),),
                 CustomMenu(
                   user: user,
                   contextFrom: context,

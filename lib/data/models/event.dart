@@ -1,6 +1,6 @@
-import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/init_values.dart';
-import 'package:kisgeri24/logging.dart';
+import "package:kisgeri24/data/models/entity.dart";
+import "package:kisgeri24/logging.dart";
+import "package:kisgeri24/misc/init_values.dart";
 
 class Event extends Entity {
   String id;
@@ -16,37 +16,37 @@ class Event extends Entity {
   String? details;
 
   Event(this.id, this.yearId, this.name, this.startTime, this.endTime,
-      this.details) {
+      this.details,) {
     if (yearId.isEmpty) {
-      throw ArgumentError('Year has to be specified for an event!');
+      throw ArgumentError("Year has to be specified for an event!");
     }
     if (name.isEmpty) {
-      throw ArgumentError('The name of the event cannot be empty!');
+      throw ArgumentError("The name of the event cannot be empty!");
     }
     if (startTime == 0) {
-      throw ArgumentError('The event\'s start time has to be given!');
+      throw ArgumentError("The event's start time has to be given!");
     }
   }
 
   factory Event.fromJson(Map<String, dynamic> parsedJson) {
-    logger.d('Creating Event instance based on the input JSON: $parsedJson');
+    logger.d("Creating Event instance based on the input JSON: $parsedJson");
     return Event(
-        parsedJson['id'] ?? unsetString,
-        parsedJson['yearId'] ?? unsetString,
-        parsedJson['name'] ?? unsetString,
-        parsedJson['startTime'] ?? unsetInt,
-        parsedJson['endTime'] ?? unsetInt,
-        parsedJson['details'] ?? unsetString);
+        parsedJson["id"] ?? unsetString,
+        parsedJson["yearId"] ?? unsetString,
+        parsedJson["name"] ?? unsetString,
+        parsedJson["startTime"] ?? unsetInt,
+        parsedJson["endTime"] ?? unsetInt,
+        parsedJson["details"] ?? unsetString,);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'yearId': yearId,
-      'name': name,
-      'startTime': startTime,
-      'endTime': endTime,
-      'details': details
+      "id": id,
+      "yearId": yearId,
+      "name": name,
+      "startTime": startTime,
+      "endTime": endTime,
+      "details": details,
     };
   }
 
@@ -54,11 +54,11 @@ class Event extends Entity {
       event != null &&
       event.toJson().entries.every((entry) =>
           toJson().containsKey(entry.key) &&
-          toJson()[entry.key] == entry.value);
+          toJson()[entry.key] == entry.value,);
 
   @override
   String toString() {
-    return 'Event{id: $id, yearId: $yearId, name: $name, startTime: $startTime, endTime: $endTime, details: $details}';
+    return "Event{id: $id, yearId: $yearId, name: $name, startTime: $startTime, endTime: $endTime, details: $details}";
   }
 
   @override
@@ -83,7 +83,7 @@ class Event extends Entity {
       details.hashCode;
 
   static Event createWithExtraIdField(Map<String, dynamic> data, String id) {
-    Event event = Event.fromJson(data);
+    final Event event = Event.fromJson(data);
     event.id = id;
     return event;
   }

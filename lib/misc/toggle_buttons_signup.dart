@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:kisgeri24/publics.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/publics.dart";
 
 class CustomToggleButtons extends StatefulWidget {
   const CustomToggleButtons({super.key});
@@ -50,7 +50,7 @@ class CustomToggleButtonsState extends State<CustomToggleButtons> {
               Text(categories[1]),
               Text(
                 categories[2],
-              )
+              ),
             ],
             // endregion
           ),

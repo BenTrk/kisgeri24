@@ -1,4 +1,4 @@
-part of 'authentication_bloc.dart';
+part of "authentication_bloc.dart";
 
 enum AuthState {
   authenticated,
@@ -20,21 +20,21 @@ class AuthenticationState {
 
   const AuthenticationState.unauthenticated({String? message})
       : this._(AuthState.unauthenticated,
-            message: message ?? 'Unauthenticated');
+            message: message ?? "Unauthenticated",);
 
   const AuthenticationState.outOfDateTimeRange(
-      {required User user, String? message})
+      {required User user, String? message,})
       : this._(AuthState.outOfDateTimeRange,
             user: user,
-            message: message ?? 'This is not the time to climb yet.');
+            message: message ?? "This is not the time to climb yet.",);
 
   const AuthenticationState.didNotPayYet({required User user, message})
       : this._(AuthState.didNotPayYet,
             user: user,
-            message: message ?? 'You did not pay the entry fee yet.');
+            message: message ?? "You did not pay the entry fee yet.",);
 
   const AuthenticationState.didNotSetTime({required User user, message})
       : this._(AuthState.didNotSetTime,
             user: user,
-            message: message ?? 'You need to set the start date first.');
+            message: message ?? "You need to set the start date first.",);
 }

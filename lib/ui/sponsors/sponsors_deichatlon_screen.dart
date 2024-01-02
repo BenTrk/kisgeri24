@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kisgeri24/misc/custom_menu.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/services/helper.dart';
-import 'package:kisgeri24/model/authentication_bloc.dart';
-import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
-import 'package:kisgeri24/ui/home/date_time_picker_screen.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/custom_menu.dart";
+import "package:kisgeri24/model/authentication_bloc.dart";
+import "package:kisgeri24/services/helper.dart";
+import "package:kisgeri24/ui/auth/welcome/welcome_screen.dart";
+import "package:kisgeri24/ui/home/date_time_picker_screen.dart";
 
 class SponsorsDeichatlonScreen extends StatefulWidget {
   final User user;
 
-  const SponsorsDeichatlonScreen({Key? key, required this.user})
-      : super(key: key);
+  const SponsorsDeichatlonScreen({super.key, required this.user});
 
   @override
   State createState() => _SponsorsDeichatlonScreenState();
@@ -23,10 +22,10 @@ enum SelectedItem { places, activities }
 
 class _SponsorsDeichatlonScreenState extends State<SponsorsDeichatlonScreen> {
   late User user;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String passwordToDelete = '';
-  String emailToDelete = '';
+  String passwordToDelete = "";
+  String emailToDelete = "";
 
   @override
   void initState() {
@@ -42,7 +41,7 @@ class _SponsorsDeichatlonScreenState extends State<SponsorsDeichatlonScreen> {
             pushAndRemoveUntil(context, const WelcomeScreen(), false);
           } else if (state.authState == AuthState.didNotSetTime) {
             pushAndRemoveUntil(
-                context, DateTimePickerScreen(user: user), false);
+                context, DateTimePickerScreen(user: user), false,);
           } //add check for dateOutOfRange or create new screen for that. Add it to launcher.
         },
         child: Scaffold(
@@ -52,7 +51,6 @@ class _SponsorsDeichatlonScreenState extends State<SponsorsDeichatlonScreen> {
               SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SponsorsDeichatlonScreenTitleWidget(user: user),
                     const Padding(
@@ -69,7 +67,7 @@ class _SponsorsDeichatlonScreenState extends State<SponsorsDeichatlonScreen> {
                           padding: const EdgeInsets.all(20.0),
                           child: Expanded(
                             child: Text(
-                              'Sponsor page for Deichatlon, the best sports shop in the world.',
+                              "Sponsor page for Deichatlon, the best sports shop in the world.",
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontSize: 16,
@@ -85,7 +83,7 @@ class _SponsorsDeichatlonScreenState extends State<SponsorsDeichatlonScreen> {
               ),
             ],
           ),
-        ));
+        ),);
   }
 }
 
@@ -109,13 +107,12 @@ class SponsorsDeichatlonScreenTitleWidget extends StatelessWidget {
               children: [
                 Padding(
                     padding: const EdgeInsets.only(
-                        top: 48.0, right: 24.0, left: 24.0),
+                        top: 48.0, right: 24.0, left: 24.0,),
                     child: Row(children: [
                       Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Image.asset(
-                          'assets/images/welcome_image.png',
-                          alignment: Alignment.center,
+                          "assets/images/welcome_image.png",
                           width: 75.0,
                           height: 75.0,
                           fit: BoxFit.cover,
@@ -131,7 +128,7 @@ class SponsorsDeichatlonScreenTitleWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ])),
+                    ],),),
                 CustomMenu(
                   user: user,
                   contextFrom: context,

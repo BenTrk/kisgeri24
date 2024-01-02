@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/constants.dart';
-
-import 'package:kisgeri24/misc/database_writes.dart';
-import 'package:kisgeri24/data/models/user.dart';
-import 'package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/classes/results.dart";
+import "package:kisgeri24/constants.dart";
+import "package:kisgeri24/data/models/user.dart";
+import "package:kisgeri24/misc/database_writes.dart";
+import "package:kisgeri24/ui/climbs%20&%20more/climbs_and_more_model.dart";
 
 class CheckActivitiesCard extends StatefulWidget {
   final DidActivity didActivity;
@@ -64,26 +63,25 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8, top: 8),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Icon(Icons.rocket_launch,
-                            color: Color(colorPrimary)),
+                            color: Color(colorPrimary),),
                         Text(title,
                             style: const TextStyle(
                                 color: Color(colorPrimary),
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600)),
+                                fontWeight: FontWeight.w600,),),
                       ],
                     ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Points earned: $points',
+                      Text("Points earned: $points",
                           style: TextStyle(
                               color: Colors.grey.shade800,
                               fontSize: 16,
-                              fontWeight: FontWeight.w500)),
+                              fontWeight: FontWeight.w500,),),
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 8, right: 8, bottom: 8),
@@ -118,7 +116,6 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard> {
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.rocket_launch, color: Colors.grey.shade200),
                     Text(title,
@@ -127,7 +124,7 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           decoration: TextDecoration.lineThrough,
-                        )),
+                        ),),
                   ],
                 ),
               ),
@@ -138,7 +135,7 @@ class _CheckActivitiesCardState extends State<CheckActivitiesCard> {
 
 removeIt(BuildContext context, climbOrActivity, User user, String climberName) {
   /** ToDo */
-  ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
+  final ClimbsAndMoreModel climbsAndMoreModel = ClimbsAndMoreModel();
   climbsAndMoreModel.removeClimbOrActivity(
-      climbOrActivity, user, climberName, '');
+      climbOrActivity, user, climberName, "",);
 }

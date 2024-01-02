@@ -1,14 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:kisgeri24/constants.dart';
-import 'package:progress_dialog/progress_dialog.dart';
+import "package:cached_network_image/cached_network_image.dart";
+import "package:flutter/material.dart";
+import "package:kisgeri24/constants.dart";
+import "package:progress_dialog/progress_dialog.dart";
 
 //helper method to show progress
 late ProgressDialog progressDialog;
 
 showProgress(BuildContext context, String message, bool isDismissible) async {
-  progressDialog = ProgressDialog(context,
-      type: ProgressDialogType.Normal, isDismissible: isDismissible);
+  progressDialog = ProgressDialog(context, isDismissible: isDismissible,);
   progressDialog.style(
       message: message,
       borderRadius: 10.0,
@@ -23,7 +22,7 @@ showProgress(BuildContext context, String message, bool isDismissible) async {
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
       messageTextStyle: const TextStyle(
-          color: Colors.white, fontSize: 19.0, fontWeight: FontWeight.w600));
+          color: Colors.white, fontSize: 19.0, fontWeight: FontWeight.w600,),);
   await progressDialog.show();
 }
 
@@ -38,13 +37,13 @@ hideProgress() async {
 //helper method to show alert dialog
 showAlertDialog(BuildContext context, String title, String content) {
   // set up the AlertDialog
-  Widget okButton = TextButton(
+  final Widget okButton = TextButton(
     child: const Text("OK"),
     onPressed: () {
       Navigator.pop(context);
     },
   );
-  AlertDialog alert = AlertDialog(
+  final AlertDialog alert = AlertDialog(
     title: Text(title),
     content: Text(content),
     actions: [
@@ -75,7 +74,7 @@ push(BuildContext context, Widget destination, bool enabled) {
 
 pushAndRemoveUntil(BuildContext context, Widget destination, bool predict) {
   final navigator = Navigator.of(context);
-  routePredicate(Route<dynamic> route) => predict;
+  bool routePredicate(Route<dynamic> route) => predict;
 
   navigator.pushAndRemoveUntil(
     MaterialPageRoute(builder: (context) => destination),
@@ -91,7 +90,7 @@ Widget displayCircleImage(String picUrl, double size, hasBorder) =>
         placeholder: (context, url) =>
             _getPlaceholderOrErrorImage(size, hasBorder),
         errorWidget: (context, url, error) =>
-            _getPlaceholderOrErrorImage(size, hasBorder));
+            _getPlaceholderOrErrorImage(size, hasBorder),);
 
 Widget _getPlaceholderOrErrorImage(double size, hasBorder) => Container(
       width: size,
@@ -106,15 +105,15 @@ Widget _getPlaceholderOrErrorImage(double size, hasBorder) => Container(
       ),
       child: ClipOval(
           child: Image.asset(
-        'assets/images/placeholder.jpg',
+        "assets/images/placeholder.jpg",
         fit: BoxFit.cover,
         height: size,
         width: size,
-      )),
+      ),),
     );
 
 Widget _getCircularImageProvider(
-    ImageProvider provider, double size, bool hasBorder) {
+    ImageProvider provider, double size, bool hasBorder,) {
   return ClipOval(
       child: Container(
     width: size,
@@ -124,13 +123,12 @@ Widget _getCircularImageProvider(
         border: Border.all(
           color: Colors.white,
           style: hasBorder ? BorderStyle.solid : BorderStyle.none,
-          width: 1.0,
         ),
         image: DecorationImage(
           image: provider,
           fit: BoxFit.cover,
-        )),
-  ));
+        ),),
+  ),);
 }
 
 bool isDarkMode(BuildContext context) {
@@ -142,7 +140,7 @@ bool isDarkMode(BuildContext context) {
 }
 
 InputDecoration getInputDecoration(
-    {required String hint, required bool darkMode, required Color errorColor}) {
+    {required String hint, required bool darkMode, required Color errorColor,}) {
   return InputDecoration(
     constraints: const BoxConstraints(maxWidth: 720, minWidth: 200),
     contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -150,7 +148,7 @@ InputDecoration getInputDecoration(
     hintText: hint,
     focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(25.0),
-        borderSide: const BorderSide(color: Color(colorPrimary), width: 2.0)),
+        borderSide: const BorderSide(color: Color(colorPrimary), width: 2.0),),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: errorColor),
       borderRadius: BorderRadius.circular(25.0),
