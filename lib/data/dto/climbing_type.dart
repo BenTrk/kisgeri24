@@ -1,20 +1,17 @@
 enum ClimbingType {
   lead("L"),
-  topRope("T"),
-  clean("C");
+  topRope("T");
 
   final String shorthand;
 
   const ClimbingType(this.shorthand);
 
-  ClimbingType fromString(String type) {
+  static ClimbingType fromString(String type) {
     switch (type) {
       case "L":
         return ClimbingType.lead;
       case "T":
         return ClimbingType.topRope;
-      case "C":
-        return ClimbingType.clean;
       default:
         throw Exception("Unknown climbing type: $type");
     }

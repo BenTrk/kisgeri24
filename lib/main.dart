@@ -1,3 +1,5 @@
+import "dart:async";
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +9,9 @@ import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/firebase_options.dart';
 import 'package:kisgeri24/logging.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/screens/overview/overview_screen.dart';
 import 'package:kisgeri24/services/firebase_service.dart';
-import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
+import 'package:kisgeri24/ui/figma_design.dart' as kisgeri_design;
 import 'package:kisgeri24/ui/loading_cubit.dart';
 import 'package:flutter/foundation.dart';
 
@@ -54,6 +57,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
       setState(() {
         setUpEmulatorIfNeeded();
+        FirebaseSingletonProvider.instance;
+        logger.i(
+          "Firebase init succeeded, instance: ${FirebaseSingletonProvider.instance}",
+        );
         _initialized = true;
       });
     } catch (e) {
@@ -68,69 +75,65 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // Show error message if initialization failed
     if (_error) {
-      return MaterialApp(
-          home: Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: const Center(
-              child: Column(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 25,
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Failed to initialise firebase!',
-                style: TextStyle(color: Colors.red, fontSize: 25),
-              ),
-            ],
-          )),
+      return const MaterialApp(
+        home: Scaffold(
+          body: ColoredBox(
+            color: Colors.white,
+            child: Center(
+                child: Column(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 25,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "Failed to initialise firebase!",
+                  style: TextStyle(color: Colors.red, fontSize: 25),
+                ),
+              ],
+            )),
+          ),
         ),
-      ));
+      );
     }
 
     // Show a loader until FlutterFire is initialized
     if (!_initialized) {
-      return Container(
+      return const ColoredBox(
         color: Colors.white,
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator.adaptive(),
         ),
       );
     }
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    unawaited(
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]),
+    );
 
     return MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme:
-              const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
-          snackBarTheme: const SnackBarThemeData(
-              contentTextStyle: TextStyle(color: Colors.white)),
-          colorScheme: ColorScheme.fromSwatch().copyWith(
-              secondary: const Color(colorPrimary),
-              brightness: Brightness.light),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: kisgeri_design.Figma.colors.backgroundColor,
+        appBarTheme:
+            const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+        snackBarTheme: SnackBarThemeData(
+            contentTextStyle:
+                TextStyle(color: kisgeri_design.Figma.colors.secondaryColor)),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: kisgeri_design.Figma.colors.primaryColor,
+          brightness: Brightness.dark,
         ),
-        darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Colors.grey.shade800,
-            appBarTheme: const AppBarTheme(
-                systemOverlayStyle: SystemUiOverlayStyle.light),
-            snackBarTheme: const SnackBarThemeData(
-                contentTextStyle: TextStyle(color: Colors.white)),
-            colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color(colorPrimary),
-                brightness: Brightness.dark)),
-        debugShowCheckedModeBanner: const bool.fromEnvironment("DEBUG_MODE"),
-        color: const Color(colorPrimary),
-        home: const LauncherScreen());
+      ),
+      debugShowCheckedModeBanner: const bool.fromEnvironment("DEBUG_MODE"),
+      color: const Color(colorPrimary),
+      home: const OverviewScreen(key: Key("overview_screen")),
+    );
   }
 
   @override

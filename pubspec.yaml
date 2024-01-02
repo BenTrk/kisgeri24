@@ -11,6 +11,10 @@ dependencies:
   cloud_firestore: ^4.14.0
   firebase_storage: ^11.6.0
 
+  auto_size_text: ^3.0.0
+
+  custom_sliding_segmented_control: ^1.8.1
+
   email_validator: ^2.1.16
 
   logger: ^2.0.1
@@ -34,6 +38,8 @@ dependencies:
     sdk: flutter
   background_fetch: ^1.2.0
   equatable: ^2.0.3
+  timer_count_down: ^2.2.0
+  responsive_sizer: ^3.3.0
 
   cupertino_icons: ^1.0.5
   firebase_database: ^10.4.0

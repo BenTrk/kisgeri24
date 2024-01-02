@@ -1,5 +1,5 @@
 import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/init_values.dart';
+import 'package:kisgeri24/misc/init_values.dart';
 import 'package:kisgeri24/logging.dart';
 
 class Event extends Entity {

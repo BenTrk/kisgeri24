@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/init_values.dart';
+import 'package:kisgeri24/misc/init_values.dart';
 
 class User extends Entity {
   String email;

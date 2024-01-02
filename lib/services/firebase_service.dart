@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseSingletonProvider {
@@ -23,4 +23,9 @@ class FirebaseSingletonProvider {
   FirebaseDatabase get database => _database;
 
   static FirebaseSingletonProvider get instance => _instance;
+
+  @override
+  String toString() {
+    return 'FirebaseSingletonProvider{_auth: $_auth, _firestore: $_firestore, _database: $_database}';
+  }
 }
