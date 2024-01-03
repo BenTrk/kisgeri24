@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/firebase_options.dart';
+import 'package:kisgeri24/logging.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
+import 'package:kisgeri24/services/firebase_service.dart';
 import 'package:kisgeri24/ui/auth/launcherScreen/launcher_screen.dart';
 import 'package:kisgeri24/ui/loading_cubit.dart';
 import 'package:flutter/foundation.dart';
@@ -51,6 +53,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         await Firebase.initializeApp();
       }
       setState(() {
+        setUpEmulatorIfNeeded();
         _initialized = true;
       });
     } catch (e) {
@@ -134,5 +137,44 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     initializeFlutterFire();
+  }
+
+  void setUpEmulatorIfNeeded() {
+    setUpDbEmulatorIfPossible();
+    setUpAuthEmulatorIfPossible();
+    setUpFirestoreEmulatorIfPossible();
+  }
+
+  void setUpDbEmulatorIfPossible() {
+    String localDbHost = const String.fromEnvironment("FIREBASE_DB_HOST");
+    int localDbPort = const int.fromEnvironment("FIREBASE_DB_PORT");
+    if (localDbHost.isNotEmpty && localDbPort != 0) {
+      logger.d(
+          "Local database is about to set up to: host: $localDbHost, port: $localDbPort");
+      FirebaseSingletonProvider.instance.database
+          .useDatabaseEmulator(localDbHost, localDbPort);
+    }
+  }
+
+  void setUpAuthEmulatorIfPossible() {
+    String localAuthHost = const String.fromEnvironment("FIREBASE_AUTH_HOST");
+    int localAuthPort = const int.fromEnvironment("FIREBASE_AUTH_PORT");
+    if (localAuthHost.isNotEmpty && localAuthPort != 0) {
+      logger.d(
+          "Local auth is about to set up to: host: $localAuthHost, port: $localAuthPort");
+      FirebaseSingletonProvider.instance.authInstance
+          .useAuthEmulator(localAuthHost, localAuthPort);
+    }
+  }
+
+  void setUpFirestoreEmulatorIfPossible() {
+    String localFsHost = const String.fromEnvironment("FIREBASE_FSTORE_HOST");
+    int localFsPort = const int.fromEnvironment("FIREBASE_FSTORE_PORT");
+    if (localFsHost.isNotEmpty && localFsPort != 0) {
+      logger.d(
+          "Local firestore is about to set up to: host: $localFsHost, port: $localFsPort");
+      FirebaseSingletonProvider.instance.firestoreInstance
+          .useFirestoreEmulator(localFsHost, localFsPort, sslEnabled: false);
+    }
   }
 }
