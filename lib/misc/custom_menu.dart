@@ -31,7 +31,7 @@ class _CustomMenuState extends State<CustomMenu> {
   @override
   void initState() {
     user = widget.user;
-    isStartTimeSet = user.isStartDateSet;
+    isStartTimeSet = user.startTime > 0;
     super.initState();
   }
 

@@ -93,10 +93,10 @@ class MockYearRepository extends _i1.Mock implements _i3.YearRepository {
       ) as _i4.Future<void>);
 
   @override
-  _i4.Future<void> update(_i5.Year? event) => (super.noSuchMethod(
+  _i4.Future<void> update(_i5.Year? entity) => (super.noSuchMethod(
         Invocation.method(
           #update,
-          [event],
+          [entity],
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),

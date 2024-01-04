@@ -1,4 +1,5 @@
 import 'package:kisgeri24/data/models/entity.dart';
+import 'package:kisgeri24/data/models/init_values.dart';
 import 'package:kisgeri24/logging.dart';
 
 class Year extends Entity {
@@ -19,9 +20,9 @@ class Year extends Entity {
   factory Year.fromJson(Map<String, dynamic> parsedJson) {
     logger.d('Creating Year instance based on the input JSON: $parsedJson');
     return Year.all(
-        parsedJson['id'] ?? '',
-        parsedJson['year'] ?? '',
-        parsedJson['tenantId'] ?? '',
+        parsedJson['id'] ?? unsetString,
+        parsedJson['year'] ?? unsetString,
+        parsedJson['tenantId'] ?? unsetString,
         parsedJson['compStart'],
         parsedJson['compEnd']);
   }

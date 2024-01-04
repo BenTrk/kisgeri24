@@ -15,7 +15,8 @@ class DateTimePickerModel {
     await firestore
         .collection(usersCollection)
         .doc(user.userID)
-        .update({'isStartDateSet': true}).then(
+        .update({'startTime': -1}).then(
+            //dummy fill since this functionality will be removed from here
             (document) => showSnackBar(context, 'Start date is set!'));
 
     await ref.child(user.userID).set({

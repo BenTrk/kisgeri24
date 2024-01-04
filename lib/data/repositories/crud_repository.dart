@@ -9,5 +9,5 @@ abstract class CrudRepository<T> {
 
   Future<void> delete(String id);
 
-  Future<void> update(T event);
+  Future<void> update(T entity);
 }

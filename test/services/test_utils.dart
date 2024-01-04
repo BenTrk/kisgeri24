@@ -2,7 +2,6 @@ import 'package:kisgeri24/data/models/user.dart';
 
 final User testUser = User(
     email: "someUser@email.com",
-    isStartDateSet: true,
     category: "24H",
     firstClimberName: "First Test Climber",
     secondClimberName: "Second Test Climber",

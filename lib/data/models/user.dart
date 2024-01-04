@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:kisgeri24/data/models/entity.dart';
+import 'package:kisgeri24/data/models/init_values.dart';
 
 class User extends Entity {
   String email;
@@ -18,7 +19,7 @@ class User extends Entity {
 
   String appIdentifier;
 
-  bool isStartDateSet;
+  int startTime;
 
   String? tenantId;
 
@@ -26,19 +27,19 @@ class User extends Entity {
 
   bool enabled;
 
-  User({
-    this.email = '',
-    this.firstClimberName = '',
-    this.secondClimberName = '',
-    this.userID = '',
-    this.teamName = '',
-    this.category = '',
-    this.isStartDateSet = false,
-    this.tenantId,
-    this.yearId = '',
-    this.enabled = false,
-  }) : appIdentifier =
-            'Flutter Login Screen ${kIsWeb ? 'Web' : Platform.operatingSystem}';
+  User(
+      {this.email = unsetString,
+      this.firstClimberName = unsetString,
+      this.secondClimberName = unsetString,
+      this.userID = unsetString,
+      this.teamName = unsetString,
+      this.category = unsetString,
+      this.tenantId,
+      this.yearId = unsetString,
+      this.enabled = false,
+      this.startTime = unsetInt})
+      : appIdentifier =
+            'KisGeri24 - ${kIsWeb ? 'Web' : Platform.operatingSystem}';
 
   String getTeamName() => teamName;
 
@@ -46,16 +47,16 @@ class User extends Entity {
 
   factory User.fromJson(Map<String, dynamic> parsedJson) {
     return User(
-        email: parsedJson['email'] ?? '',
-        firstClimberName: parsedJson['firstClimberName'] ?? '',
-        secondClimberName: parsedJson['secondClimberName'] ?? '',
-        userID: parsedJson['id'] ?? parsedJson['userID'] ?? '',
-        teamName: parsedJson['teamName'] ?? '',
-        category: parsedJson['category'] ?? '',
+        email: parsedJson['email'] ?? unsetString,
+        firstClimberName: parsedJson['firstClimberName'] ?? unsetString,
+        secondClimberName: parsedJson['secondClimberName'] ?? unsetString,
+        userID: parsedJson['id'] ?? parsedJson['userID'] ?? unsetString,
+        teamName: parsedJson['teamName'] ?? unsetString,
+        category: parsedJson['category'] ?? unsetString,
         tenantId: parsedJson['tenantId'],
-        yearId: parsedJson['yearId'] ?? '',
+        yearId: parsedJson['yearId'] ?? unsetString,
         enabled: parsedJson['isEnabled'],
-        isStartDateSet: parsedJson['isStartDateSet'] ?? false);
+        startTime: parsedJson['startTime'] ?? unsetInt);
   }
 
   Map<String, dynamic> toJson() {
@@ -67,10 +68,10 @@ class User extends Entity {
       'teamName': teamName,
       'category': category,
       'appIdentifier': appIdentifier,
-      'isStartDateSet': isStartDateSet,
       'tenantId': tenantId,
       'isEnabled': enabled,
-      'yearId': yearId
+      'yearId': yearId,
+      'startTime': startTime,
     };
   }
 
@@ -82,7 +83,7 @@ class User extends Entity {
 
   @override
   String toString() {
-    return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "appIdentifier": "$appIdentifier", "isStartDateSet": "$isStartDateSet"}';
+    return '{"email": "$email", "firstClimberName": "$firstClimberName", "secondClimberName": "$secondClimberName", "id": "$userID", "teamName": "$teamName", "category": "$category", "appIdentifier": "$appIdentifier", "startTime": "$startTime"}';
   }
 
   void updateFromMap(Map<String, dynamic> userData) {
@@ -106,8 +107,8 @@ class User extends Entity {
     if (userData.containsKey('category')) {
       category = userData['category'];
     }
-    if (userData.containsKey('startDate')) {
-      isStartDateSet = userData['isStartDateSet'] ?? false;
+    if (userData.containsKey('startTime')) {
+      startTime = userData['startTime'] ?? unsetInt;
     }
     if (userData.containsKey('tenantId')) {
       tenantId = userData['tenantId'];

@@ -39,7 +39,7 @@ class YearRepository extends CrudRepository<Year> {
   }
 
   @override
-  Future<void> update(Year event) {
+  Future<void> update(Year entity) {
     throw UnsupportedError("Updating year is not supported for clients.");
   }
 

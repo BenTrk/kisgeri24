@@ -1,4 +1,5 @@
 import 'package:kisgeri24/data/models/entity.dart';
+import 'package:kisgeri24/data/models/init_values.dart';
 import 'package:kisgeri24/logging.dart';
 
 class Event extends Entity {
@@ -30,12 +31,12 @@ class Event extends Entity {
   factory Event.fromJson(Map<String, dynamic> parsedJson) {
     logger.d('Creating Event instance based on the input JSON: $parsedJson');
     return Event(
-        parsedJson['id'] ?? '',
-        parsedJson['yearId'] ?? '',
-        parsedJson['name'] ?? '',
-        parsedJson['startTime'],
-        parsedJson['endTime'],
-        parsedJson['details'] ?? '');
+        parsedJson['id'] ?? unsetString,
+        parsedJson['yearId'] ?? unsetString,
+        parsedJson['name'] ?? unsetString,
+        parsedJson['startTime'] ?? unsetInt,
+        parsedJson['endTime'] ?? unsetInt,
+        parsedJson['details'] ?? unsetString);
   }
 
   Map<String, dynamic> toJson() {
