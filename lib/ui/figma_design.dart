@@ -26,67 +26,59 @@ class Colors {
 class Typography {
   Typography();
 
-  final header2 = TextStyle(
+  final header2 = const TextStyle(
     fontFamily: "Oswald",
     fontSize: 40,
     fontWeight: FontWeight.bold,
     letterSpacing: -0.2,
-    color: Figma.colors.primaryColor,
   );
 
-  final header3 = TextStyle(
+  final header3 = const TextStyle(
     fontFamily: "Oswald",
     fontWeight: FontWeight.bold,
     fontSize: 24,
     letterSpacing: -0.2,
-    color: Figma.colors.primaryColor,
   );
 
-  final body = TextStyle(
+  final body = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.normal,
     fontSize: 16,
     height: 1.4,
-    color: Figma.colors.primaryColor,
   );
 
-  final bold = TextStyle(
+  final bold = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.bold,
     fontSize: 16,
     height: 1.4,
-    color: Figma.colors.primaryColor,
   );
 
-  final smallerText = TextStyle(
+  final smallerText = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.normal,
     fontSize: 14,
-    color: Figma.colors.primaryColor,
   );
 
-  final preTitle = TextStyle(
+  final preTitle = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.bold,
     fontSize: 10,
     letterSpacing: 0.3,
-    color: Figma.colors.primaryColor,
   );
 
-  final primaryButton = TextStyle(
+  final primaryButton = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.bold,
     fontSize: 10,
     letterSpacing: 0.3,
-    color: Figma.colors.primaryColor,
   );
 
-  final secondaryButton = TextStyle(
+  final secondaryButton = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.bold,
     fontSize: 10,
     letterSpacing: 0.3,
-    color: Figma.colors.secondaryColor,
     // TODO, Secondary button's colour will vary based on button state
   );
 }
@@ -97,29 +89,54 @@ class Buttons {
   final ButtonStyle primaryButtonStyle = ButtonStyle(
     textStyle: MaterialStateProperty.all(Figma.typo.primaryButton),
     fixedSize: MaterialStateProperty.all(const Size(203, 35)),
-    foregroundColor: MaterialStateProperty.all(Figma.colors.errorColor),
-    // foregrColor will be figma.typo.button, so this is only red if something is wrong
-    backgroundColor: MaterialStateProperty.all(Figma.colors.secondaryColor),
-    // TODO move some MaterialState here
-    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+    // TODO fixedSize is from the Figma design, but should be calculated
+    foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+      // Typically the color of the text on the button
       (Set<MaterialState> states) {
-        if (states.contains(MaterialState.focused)) {
-          return Figma.colors.secondaryColor;
+        if (states.contains(MaterialState.disabled)) {
+          return Figma.colors.primaryColor;
         }
-        if (states.contains(MaterialState.hovered)) {
-          return const Color(0xffFFDA76);
+        if (states.contains(MaterialState.selected)) {
+          return Figma.colors.primaryColor;
         }
         if (states.contains(MaterialState.pressed)) {
-          return Figma.colors.secondaryColor;
+          return Figma.colors.primaryColor;
         }
+        if (states.contains(MaterialState.error)) {
+          return Figma.colors.errorColor;
+        }
+        return Figma.colors.primaryColor;
+      },
+    ),
+    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+      // The color of the button itself
+      (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
           return Figma.colors.disabledColor;
         }
         if (states.contains(MaterialState.selected)) {
           return Figma.colors.secondaryColor;
         }
+        if (states.contains(MaterialState.pressed)) {
+          return Figma.colors.secondaryColor;
+        }
         if (states.contains(MaterialState.error)) {
           return Figma.colors.errorColor;
+        }
+        return Figma.colors.secondaryColor;
+      },
+    ),
+    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+      // A subtle color change to provide visual feedback
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.focused)) {
+          return Figma.colors.secondaryColor;
+        }
+        if (states.contains(MaterialState.hovered)) {
+          return Figma.colors.hoverColor;
+        }
+        if (states.contains(MaterialState.pressed)) {
+          return Figma.colors.secondaryColor;
         }
         return null;
       },
@@ -127,18 +144,67 @@ class Buttons {
     padding: MaterialStateProperty.all(
         const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
     shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
   );
 
   final ButtonStyle secondaryButtonStyle = ButtonStyle(
     textStyle: MaterialStateProperty.all(Figma.typo.secondaryButton),
     fixedSize: MaterialStateProperty.all(const Size(203, 35)),
-    foregroundColor: MaterialStateProperty.all(Figma.colors.errorColor),
-    backgroundColor: MaterialStateProperty.all(Figma.colors.transparentColor),
-    overlayColor: MaterialStateProperty.all(Figma.colors.transparentColor),
+    // TODO fixedSize is from Figma design, but should be calculated
+    foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+      // Typically the color of the text on the button
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Figma.colors.disabledColor;
+        }
+        if (states.contains(MaterialState.selected)) {
+          return Figma.colors.secondaryColor;
+        }
+        if (states.contains(MaterialState.pressed)) {
+          return Figma.colors.secondaryColor;
+        }
+        if (states.contains(MaterialState.error)) {
+          return Figma.colors.errorColor;
+        }
+        return Figma.colors.secondaryColor; //Default to secondary color
+      },
+    ),
+    backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+      // The color of the button itself
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Figma.colors.disabledColor;
+        }
+        if (states.contains(MaterialState.error)) {
+          return Figma.colors.errorColor;
+        }
+        return Figma.colors.transparentColor; //Default to transparent
+      },
+    ),
+    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+      // A subtle color change to provide visual feedback
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.focused)) {
+          return Figma.colors.secondaryColor;
+        }
+        if (states.contains(MaterialState.hovered)) {
+          return Figma.colors.secondaryColor.withOpacity(0.37);
+        }
+        if (states.contains(MaterialState.pressed)) {
+          return Figma.colors.secondaryColor;
+        }
+        return null;
+      },
+    ),
     padding: MaterialStateProperty.all(
         const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
     shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
   );
 }
