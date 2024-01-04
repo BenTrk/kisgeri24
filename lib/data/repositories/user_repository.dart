@@ -29,8 +29,11 @@ class UserRepository extends CrudRepository<User> {
   }
 
   @override
-  Future<void> update(User event) {
-    throw UnimplementedError();
+  Future<void> update(User entity) async {
+    await firestore
+        .collection(usersCollection)
+        .doc(entity.userID)
+        .set(entity.toJson());
   }
 
   @override

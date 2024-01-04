@@ -33,10 +33,10 @@ class EventRepository extends CrudRepository<Event> {
   }
 
   @override
-  Future<void> update(Event event) async {
-    logger.d("Event update operation requested for event: $event");
+  Future<void> update(Event entity) async {
+    logger.d("Event update operation requested for event: $entity");
     CollectionReference eventsCollection = firestore.collection('events');
-    Map<String, dynamic> eventMap = event.toJson();
+    Map<String, dynamic> eventMap = entity.toJson();
     await eventsCollection.add(eventMap);
     logger.i("Event successfully updated in database!");
   }

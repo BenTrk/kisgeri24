@@ -22,4 +22,21 @@ class UserService {
       return null;
     }
   }
+
+  Future<void> updateUser(kisgeri.User user) async {
+    repository.getById(user.userID).then((value) {
+      if (value != null) {
+        logger.i(
+            'Updating User from: ${value.toString()}, to: ${user.toString()}');
+        repository.update(user);
+      } else {
+        logger.w(
+            'User with ID [${user.userID}] cannot be found, therefore cannot be updated!');
+      }
+    });
+  }
+
+  int getRemainingTime(int compEnd) {
+    return compEnd - DateTime.now().millisecondsSinceEpoch;
+  }
 }

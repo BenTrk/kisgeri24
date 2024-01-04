@@ -111,8 +111,7 @@ class Auth {
           secondClimberName: secondClimberName,
           category: category,
           tenantId: calculateTenantId(tenantId),
-          isStartDateSet:
-              const bool.fromEnvironment("REGISTER_WITH_START_DATE_SET"));
+          startTime: const int.fromEnvironment("START_TIME_EPOCH"));
       log.logger
           .i("About to request user creation using the following data: $user");
       String? errorMessage = await _createNewUser(user);

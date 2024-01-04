@@ -180,10 +180,10 @@ class MockUserRepository extends _i1.Mock implements _i6.UserRepository {
       ) as _i7.Future<void>);
 
   @override
-  _i7.Future<void> update(_i8.User? event) => (super.noSuchMethod(
+  _i7.Future<void> update(_i8.User? entity) => (super.noSuchMethod(
         Invocation.method(
           #update,
-          [event],
+          [entity],
         ),
         returnValue: _i7.Future<void>.value(),
         returnValueForMissingStub: _i7.Future<void>.value(),

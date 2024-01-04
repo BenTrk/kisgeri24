@@ -19,7 +19,7 @@ class AuthenticationBloc
       user = await authenticator.getAuthUser();
       if (user == null) {
         emit(const AuthenticationState.unauthenticated());
-      } else if (!user!.isStartDateSet) {
+      } else if (!(user!.startTime > 0)) {
         emit(AuthenticationState.didNotSetTime(
             user: user!, message: 'You need to set the startdate first.'));
       } else if (!await Init.checkDateTime(user!)) {
@@ -41,11 +41,11 @@ class AuthenticationBloc
         user = result;
         emit(AuthenticationState.didNotPayYet(
             user: user!, message: 'You did not pay the entry fee yet.'));
-      } else if (result != null && result is User && !result.isStartDateSet) {
+      } else if (result != null && result is User && !(result.startTime > 0)) {
         user = result;
         emit(AuthenticationState.didNotSetTime(
             user: user!, message: 'You need to set the startdate first.'));
-      } else if (result != null && result is User && result.isStartDateSet) {
+      } else if (result != null && result is User && result.startTime > 0) {
         user = result;
         emit(AuthenticationState.outOfDateTimeRange(user: user!));
       } else {
@@ -71,11 +71,11 @@ class AuthenticationBloc
         user = result;
         emit(AuthenticationState.didNotPayYet(
             user: user!, message: 'You did not pay the entry fee yet.'));
-      } else if (result != null && result is User && !result.isStartDateSet) {
+      } else if (result != null && result is User && !(result.startTime > 0)) {
         user = result;
         emit(AuthenticationState.didNotSetTime(
             user: user!, message: 'You need to set the startdate first.'));
-      } else if (result != null && result is User && result.isStartDateSet) {
+      } else if (result != null && result is User && result.startTime > 0) {
         user = result;
         emit(AuthenticationState.outOfDateTimeRange(user: user!));
       } else if (result != null && result is String) {

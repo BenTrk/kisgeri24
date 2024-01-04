@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kisgeri24/misc/custom_menu.dart';
 import 'package:kisgeri24/publics.dart';
+import 'package:kisgeri24/ui/home/home_screen_utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:kisgeri24/constants.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
@@ -202,7 +203,7 @@ class _DateTimePickerState extends State<DateTimePickerScreen> {
               child: const Text('Yes'),
               onPressed: () {
                 //Move to the HomePage! Disable database writes while not in competition
-                user.isStartDateSet = true;
+                user.startTime = HomeScreenUtils.getEpochFromDateTime(dateTime);
                 Navigator.of(dialogContext).pop();
                 DateTimePickerModel()
                     .writeDateToDatabase(context, dateTime, user);
