@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/ui/figma_design.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -10,69 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Welcome screen',
-      theme: ThemeData(
-        // This needs to be moved to a separate file
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: const MaterialColor(0xffFFBA00, <int, Color>{
-            50: Color(0xffFFBA00),
-            100: Color(0xffFFBA00),
-            200: Color(0xffFFBA00),
-            300: Color(0xffFFBA00),
-            400: Color(0xffFFBA00),
-            500: Color(0xffFFBA00),
-            600: Color(0xffFFBA00),
-            700: Color(0xffFFBA00),
-            800: Color(0xffFFBA00),
-            900: Color(0xffFFBA00),
-          }),
-          backgroundColor: const Color(0xff181305),
-          brightness: Brightness.dark,
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(
-            // Figma: Bold (strong)
-            fontFamily: "Lato",
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: Color(0xffF9F2E0),
-          ),
-          bodyMedium: TextStyle(
-            // Figma: Body
-            fontFamily: "Lato",
-            fontWeight: FontWeight.normal,
-            fontSize: 16,
-            height: 1.4,
-            color: Color(0xffF9F2E0),
-          ),
-          bodySmall: TextStyle(
-            // Figma: Smaller text
-            fontFamily: "Lato",
-            fontWeight: FontWeight.normal,
-            fontSize: 14,
-            color: Color(0xffF9F2E0),
-          ),
-          displayLarge: TextStyle(
-            // Figma: Header 1
-            fontFamily: "Oswald",
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-            letterSpacing: -0.2,
-            color: Color(0xffF9F2E0),
-          ),
-          displayMedium: TextStyle(
-            // Figma: Header 3
-            fontFamily: "Oswald",
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            letterSpacing: -0.2,
-            color: Color(0xffF9F2E0),
-          ),
-        ),
-      ),
-      home: const MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
+      home: MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
     );
   }
 }
@@ -87,17 +28,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Figma.colors.primaryColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Készen álltok egy újabb kihívásra?',
-              style: Theme.of(context).textTheme.displayMedium,
+              style: Figma.typo.header2.copyWith(color: Figma.colors.accentColor),
               textAlign: TextAlign.center,
             ),
             const Image(
@@ -110,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               'Kövessétek nyomon csapatotok teljesítményét!',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Figma.typo.body.copyWith(color: Figma.colors.accentColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 25), // TODO noob padding
@@ -122,16 +63,10 @@ class _MyHomePageState extends State<MyHomePage> {
         width: 200,
         height: 50,
         child: TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xff181305),
-            backgroundColor: const Color(0xffFFBA00),
-            disabledForegroundColor: Colors.grey,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          onPressed: () { // TODO navigate to login screen
-            Navigator.pushNamed(context, '/'); 
+          style: Figma.buttons.primaryButtonStyle,
+          onPressed: () {
+            // TODO navigate to login screen
+            Navigator.pushNamed(context, '/');
           },
           child: const Text(
             "Belépés",
