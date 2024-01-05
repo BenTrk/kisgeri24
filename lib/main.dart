@@ -174,7 +174,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       logger.d(
           "Local firestore is about to set up to: host: $localFsHost, port: $localFsPort");
       FirebaseSingletonProvider.instance.firestoreInstance
-          .useFirestoreEmulator(localFsHost, localFsPort, sslEnabled: false);
+          .useFirestoreEmulator(localFsHost, localFsPort);
     }
   }
 }
