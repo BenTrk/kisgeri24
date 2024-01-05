@@ -26,14 +26,14 @@ class Colors {
 class Typography {
   Typography();
 
-  final header2 = const TextStyle(
+  final header1 = const TextStyle(
     fontFamily: "Oswald",
-    fontSize: 40,
     fontWeight: FontWeight.bold,
+    fontSize: 40,
     letterSpacing: -0.2,
   );
 
-  final header3 = const TextStyle(
+  final header2 = const TextStyle(
     fontFamily: "Oswald",
     fontWeight: FontWeight.bold,
     fontSize: 24,
@@ -67,19 +67,11 @@ class Typography {
     letterSpacing: 0.3,
   );
 
-  final primaryButton = const TextStyle(
+  final button = const TextStyle(
     fontFamily: "Lato",
     fontWeight: FontWeight.bold,
     fontSize: 10,
     letterSpacing: 0.3,
-  );
-
-  final secondaryButton = const TextStyle(
-    fontFamily: "Lato",
-    fontWeight: FontWeight.bold,
-    fontSize: 10,
-    letterSpacing: 0.3,
-    // TODO, Secondary button's colour will vary based on button state
   );
 }
 
@@ -87,7 +79,7 @@ class Buttons {
   Buttons();
 
   final ButtonStyle primaryButtonStyle = ButtonStyle(
-    textStyle: MaterialStateProperty.all(Figma.typo.primaryButton),
+    textStyle: MaterialStateProperty.all(Figma.typo.button),
     fixedSize: MaterialStateProperty.all(const Size(203, 35)),
     // TODO fixedSize is from the Figma design, but should be calculated
     foregroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -151,7 +143,7 @@ class Buttons {
   );
 
   final ButtonStyle secondaryButtonStyle = ButtonStyle(
-    textStyle: MaterialStateProperty.all(Figma.typo.secondaryButton),
+    textStyle: MaterialStateProperty.all(Figma.typo.button),
     fixedSize: MaterialStateProperty.all(const Size(203, 35)),
     // TODO fixedSize is from Figma design, but should be calculated
     foregroundColor: MaterialStateProperty.resolveWith<Color?>(
