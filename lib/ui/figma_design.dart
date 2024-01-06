@@ -9,6 +9,9 @@ class Figma {
 
   // Buttons
   static Buttons buttons = Buttons();
+
+  // Icons
+  static Icons icons = Icons();
 }
 
 class Colors {
@@ -199,4 +202,28 @@ class Buttons {
       ),
     ),
   );
+}
+
+class Icons {
+  Icons();
+
+  final String arrowLeft = 'assets/icons/arrowLeft.svg';
+  final String bell = 'assets/icons/bell.svg';
+  final String calendar = 'assets/icons/calendar.svg';
+  final String checkCircle = 'assets/icons/check-circle.svg';
+  final String checkSquare = 'assets/icons/check-square.svg';
+  final String chevronDown = 'assets/icons/chevron-down.svg';
+  final String edit = 'assets/icons/edit.svg';
+  final String filter = 'assets/icons/filter.svg';
+  final String home = 'assets/icons/home.svg';
+  final String image = 'assets/icons/image.svg';
+  final String menu = 'assets/icons/menu.svg';
+  final String moreHorizontal = 'assets/icons/more-horizontal.svg';
+  final String pieChart = 'assets/icons/pie-chart.svg';
+  final String plusCircle = 'assets/icons/plus-circle.svg';
+  final String plusSquare = 'assets/icons/plus-square.svg';
+  final String repeat = 'assets/icons/repeat.svg';
+  final String search = 'assets/icons/search.svg';
+  final String settings = 'assets/icons/settings.svg';
+  final String user = 'assets/icons/user.svg';
 }
