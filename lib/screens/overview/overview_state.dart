@@ -15,7 +15,7 @@ class LoadingState extends OverviewState {
 }
 
 class LoadedState extends OverviewState {
-  final OverviewDataBundle data;
+  final OverviewDto data;
 
   const LoadedState(this.data);
 
