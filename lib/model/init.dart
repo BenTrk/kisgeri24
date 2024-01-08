@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kisgeri24/classes/acivities.dart';
-import 'package:kisgeri24/classes/place.dart';
+import 'package:kisgeri24/data/models/sector.dart';
 import 'package:kisgeri24/classes/places.dart';
 import 'package:kisgeri24/classes/results.dart';
 import 'package:kisgeri24/data/models/user.dart';
@@ -283,7 +283,7 @@ class Init {
   }
 
   static Future<Places> getPlacesWithRoutes() async {
-    List<Place> placesList = [];
+    List<Sector> placesList = [];
     DatabaseReference routesRef = FirebaseDatabase.instance.ref('Routes');
 
     try {
@@ -292,7 +292,7 @@ class Init {
       final Map data = snapshot.value as Map<dynamic, dynamic>;
 
       data.forEach((key, value) {
-        final Place place = Place.fromSnapshot(key as String, value);
+        final Sector place = Sector.fromSnapshot(key as String, value);
         placesList.add(place);
       });
     } catch (error) {
