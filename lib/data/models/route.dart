@@ -1,4 +1,6 @@
-class RockRoute {
+import 'package:kisgeri24/data/models/entity.dart';
+
+class Route extends Entity {
   String name;
   double points;
   int length;
@@ -6,7 +8,7 @@ class RockRoute {
   int difficulty;
   String diffchanger;
 
-  RockRoute({
+  Route({
     String? name,
     double? points,
     int? length,
@@ -20,7 +22,7 @@ class RockRoute {
         difficulty = difficulty ?? 0,
         diffchanger = diffchanger ?? '';
 
-  static RockRoute fromSnapshot(value) {
+  static Route fromSnapshot(value) {
     Map routeMap = value as Map<dynamic, dynamic>;
     String name = '';
     double points = 0;
@@ -45,7 +47,7 @@ class RockRoute {
       }
     });
 
-    RockRoute route = RockRoute(
+    Route route = Route(
         name: name,
         points: points,
         length: length,
@@ -59,7 +61,7 @@ class RockRoute {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is RockRoute &&
+    return other is Route &&
         other.name == name &&
         other.points == points &&
         other.length == length &&
@@ -71,4 +73,9 @@ class RockRoute {
   @override
   int get hashCode =>
       Object.hash(name, points, length, key, difficulty, diffchanger);
+
+  @override
+  String toString() {
+    return 'Route{name: $name}';
+  }
 }
