@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kisgeri24/classes/results.dart';
-import 'package:kisgeri24/classes/rockroute.dart';
+import 'package:kisgeri24/data/models/route.dart' as kisgeri;
 import 'package:kisgeri24/services/helper.dart';
 import 'package:intl/intl.dart';
 
@@ -189,7 +189,7 @@ int compareStyles(String style1, String style2) {
 }
 
 num calculateRoutePoints(String route, String style) {
-  RockRoute routeHere = places.getRoute(route);
+  kisgeri.Route routeHere = places.getRoute(route);
   num pointsHere = routeHere.points;
 
   switch (style) {

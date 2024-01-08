@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:kisgeri24/classes/place.dart';
-import 'package:kisgeri24/classes/rockroute.dart';
+import 'package:kisgeri24/data/models/sector.dart';
+import 'package:kisgeri24/data/models/route.dart';
 
 class Places {
-  List<Place> placeList;
+  List<Sector> placeList;
 
   Places({
-    List<Place>? placeList,
+    List<Sector>? placeList,
   }) : placeList = placeList ?? [];
 
   @override
@@ -24,9 +24,9 @@ class Places {
   }
 
   getRoute(String routeName) {
-    RockRoute route = RockRoute();
+    Route route = Route();
     for (var element in placeList) {
-      for (var element in element.routeList) {
+      for (var element in element.routes) {
         if (element.name == routeName) {
           route = element;
         }
@@ -39,7 +39,7 @@ class Places {
     String placeName = '';
     for (var element in placeList) {
       String placeNameNow = element.name;
-      for (var element in element.routeList) {
+      for (var element in element.routes) {
         if (element.name == routeName) {
           placeName = placeNameNow;
         }
