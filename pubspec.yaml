@@ -3,7 +3,7 @@ description: Kisgeri24 Climbing Competition Application
 version: 1.0.0+1
 publish_to: 'none'
 environment:
-  sdk: ">=2.18.4 <3.0.0"
+  sdk: "3.2.3"
 
 dependencies:
   firebase_core: ^2.24.2

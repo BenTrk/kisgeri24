@@ -15,9 +15,9 @@ import 'package:kisgeri24/services/helper.dart';
 import 'package:kisgeri24/model/authentication_bloc.dart';
 import 'package:kisgeri24/ui/auth/welcome/welcome_screen.dart';
 import 'package:kisgeri24/ui/home/model/home_model.dart';
-import 'package:kisgeri24/classes/place.dart';
+import 'package:kisgeri24/data/models/sector.dart';
 import 'package:kisgeri24/classes/places.dart';
-import 'package:kisgeri24/classes/rockroute.dart';
+import 'package:kisgeri24/data/models/route.dart' as kisgeri;
 import 'package:kisgeri24/misc/background_task.dart';
 import 'package:kisgeri24/misc/cards/card.dart';
 import 'package:kisgeri24/publics.dart';
@@ -40,7 +40,7 @@ class _HomeState extends State<HomeScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   //Places state vars
-  Place? selectedPlace;
+  Sector? selectedPlace;
   bool isPlaceSelected = false;
 
   //Activities state vars
@@ -57,7 +57,7 @@ class _HomeState extends State<HomeScreen> {
   SelectedItem selectedItem = SelectedItem.places;
 
   //State handler for places
-  void handlePlaceSelected(Place place) {
+  void handlePlaceSelected(Sector place) {
     setState(() {
       selectedPlace = place;
       isPlaceSelected = true;
@@ -387,9 +387,9 @@ class DisplayActivitiesWidget extends StatelessWidget {
 }
 
 class DisplayPlacesAndRoutesWidget extends StatelessWidget {
-  final Place? selectedPlace;
+  final Sector? selectedPlace;
   final bool isPlaceSelected;
-  final Function(Place) onPlaceSelected;
+  final Function(Sector) onPlaceSelected;
   final VoidCallback onBackButtonPressed;
   final User user;
 
@@ -418,7 +418,7 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.placeList.length,
               itemBuilder: (context, index) {
-                Place place = snapshot.data!.placeList[index];
+                Sector place = snapshot.data!.placeList[index];
                 return GestureDetector(
                   onTap: () => onPlaceSelected(place),
                   child: Card(
@@ -453,9 +453,9 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
     } else {
       // Display the list of routes for the selected Place here
       return ListView.builder(
-        itemCount: selectedPlace!.routeList.length,
+        itemCount: selectedPlace!.routes.length,
         itemBuilder: (context, index) {
-          RockRoute route = selectedPlace!.routeList[index];
+          kisgeri.Route route = selectedPlace!.routes[index];
           return CustomCard(
             title: route.name,
             diffchanger: route.diffchanger,
