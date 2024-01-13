@@ -34,27 +34,17 @@ class EventRepository extends CrudRepository<Event> {
 
   @override
   Future<void> update(Event entity) async {
-    logger.d("Event update operation requested for event: $entity");
-    CollectionReference eventsCollection = firestore.collection('events');
-    Map<String, dynamic> eventMap = entity.toJson();
-    await eventsCollection.add(eventMap);
-    logger.i("Event successfully updated in database!");
+    throw UnsupportedError("Updating event(s) is not supported by client.");
   }
 
   @override
   Future<void> save(Event entity) async {
-    logger.d("Event save operation requested for event: $entity");
-    CollectionReference eventsCollection = firestore.collection('events');
-    Map<String, dynamic> eventMap = entity.toJson();
-    await eventsCollection.add(eventMap);
-    logger.i("Event successfully created in database!");
+    throw UnsupportedError("Creating event(s) is not supported by client.");
   }
 
   @override
   Future<void> delete(String id) async {
-    logger.i("About to try to delete event with ID: $id");
-    await firestore.collection('events').doc(id).delete();
-    logger.d('Event with id [$id] deleted successfully');
+    throw UnsupportedError("Deleting event(s) is not supported by client.");
   }
 
   @override
