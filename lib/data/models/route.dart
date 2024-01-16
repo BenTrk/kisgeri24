@@ -1,7 +1,9 @@
 import 'package:kisgeri24/data/models/entity.dart';
+import 'package:kisgeri24/data/models/init_values.dart';
 
 class Route extends Entity {
   String name;
+  String id;
   double points;
   int length;
   int key;
@@ -10,32 +12,37 @@ class Route extends Entity {
 
   Route({
     String? name,
+    String? id,
     double? points,
     int? length,
     int? key,
     int? difficulty,
     String? diffchanger,
-  })  : name = name ?? '',
+  })  : name = name ?? unsetString,
+        id = id ?? unsetString,
         points = points ?? 0,
         length = length ?? 0,
         key = key ?? 0,
         difficulty = difficulty ?? 0,
-        diffchanger = diffchanger ?? '';
+        diffchanger = diffchanger ?? unsetString;
 
   static Route fromSnapshot(value) {
     Map routeMap = value as Map<dynamic, dynamic>;
-    String name = '';
-    double points = 0;
+    String name = unsetString;
+    String id = unsetString;
+    double points = 0.0;
     int length = 0;
     int keyHere = 0;
     int difficulty = 0;
-    String diffchanger = '';
+    String diffchanger = unsetString;
 
     routeMap.forEach((key, value) {
       if (key == 'name') {
         name = value;
+      } else if (key == 'id') {
+        id = value;
       } else if (key == 'points') {
-        points = double.parse(value.toString());
+        points = (value as int).toDouble();
       } else if (key == 'length') {
         length = value;
       } else if (key == 'key') {
@@ -49,6 +56,7 @@ class Route extends Entity {
 
     Route route = Route(
         name: name,
+        id: id,
         points: points,
         length: length,
         key: keyHere,
@@ -58,21 +66,27 @@ class Route extends Entity {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Route &&
-        other.name == name &&
-        other.points == points &&
-        other.length == length &&
-        other.key == key &&
-        other.difficulty == difficulty &&
-        other.diffchanger == diffchanger;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Route &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          id == other.id &&
+          points == other.points &&
+          length == other.length &&
+          key == other.key &&
+          difficulty == other.difficulty &&
+          diffchanger == other.diffchanger;
 
   @override
   int get hashCode =>
-      Object.hash(name, points, length, key, difficulty, diffchanger);
+      name.hashCode ^
+      id.hashCode ^
+      points.hashCode ^
+      length.hashCode ^
+      key.hashCode ^
+      difficulty.hashCode ^
+      diffchanger.hashCode;
 
   @override
   String toString() {

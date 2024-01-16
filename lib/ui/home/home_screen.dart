@@ -453,9 +453,9 @@ class DisplayPlacesAndRoutesWidget extends StatelessWidget {
     } else {
       // Display the list of routes for the selected Place here
       return ListView.builder(
-        itemCount: selectedPlace!.routes.length,
+        itemCount: selectedPlace!.routes!.length,
         itemBuilder: (context, index) {
-          kisgeri.Route route = selectedPlace!.routes[index];
+          kisgeri.Route route = selectedPlace!.routes![index];
           return CustomCard(
             title: route.name,
             diffchanger: route.diffchanger,
