@@ -1,13 +1,13 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kisgeri24/data/models/sector.dart';
 import 'package:kisgeri24/data/repositories/crud_repository.dart';
 import 'package:kisgeri24/logging.dart';
 import 'package:kisgeri24/utils/log_utils.dart';
 
 class SectorRepository extends CrudRepository<Sector> {
-  final FirebaseDatabase database;
+  final FirebaseFirestore firestore;
 
-  SectorRepository(this.database);
+  SectorRepository(this.firestore);
 
   @override
   Future<void> delete(String id) {
@@ -20,18 +20,17 @@ class SectorRepository extends CrudRepository<Sector> {
     List<Sector> placesList = [];
     try {
       logger.d('Trying to fetch data from Routes table');
-      DatabaseEvent event = await database.ref('Routes').once();
-      DataSnapshot snapshot = event.snapshot;
-      final Map data = snapshot.value as Map<dynamic, dynamic>;
+      var routes = await firestore.collection('routes').get();
       logger.d('Fetching data from Routes table is done');
-      data.forEach((key, value) {
-        final Sector place = Sector.fromSnapshot(key as String, value);
+      for (var element in routes.docs) {
+        final Sector place = Sector.fromSnapshot(element.id, element.data());
         placesList.add(place);
-      });
+      }
     } catch (error) {
       logger.w('Error happened during Sector fetch: ${error.toString()}');
     }
     LogUtils.logEnd(start, prefixMsg: 'Fetching Sectors from DB');
+    logger.d('Fetched Sectors from DB: $placesList');
     return placesList;
   }
 

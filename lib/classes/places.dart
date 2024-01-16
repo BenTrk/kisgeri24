@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kisgeri24/data/models/sector.dart';
 import 'package:kisgeri24/data/models/route.dart';
 
+@Deprecated('Places got replaced by Sectors')
 class Places {
   List<Sector> placeList;
 
@@ -26,9 +27,11 @@ class Places {
   getRoute(String routeName) {
     Route route = Route();
     for (var element in placeList) {
-      for (var element in element.routes) {
-        if (element.name == routeName) {
-          route = element;
+      if (element.routes != null) {
+        for (var element in element.routes!) {
+          if (element.name == routeName) {
+            route = element;
+          }
         }
       }
     }
@@ -39,9 +42,11 @@ class Places {
     String placeName = '';
     for (var element in placeList) {
       String placeNameNow = element.name;
-      for (var element in element.routes) {
-        if (element.name == routeName) {
-          placeName = placeNameNow;
+      if (element.routes != null) {
+        for (var element in element.routes!) {
+          if (element.name == routeName) {
+            placeName = placeNameNow;
+          }
         }
       }
     }

@@ -40,7 +40,7 @@ void testGetSectorNamesWhenSingleSectorComingBackFromDatabase() {
   test('Test sector name fetch when a single sector can be fetched from DB',
       () async {
     List<Sector> sectorFromDb = [
-      new Sector(name: 'testSectorName', routes: List.empty())
+      new Sector('testSectorName', List.empty(), List.empty())
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
@@ -58,8 +58,8 @@ void testGetSectorNamesWhenMultipleSectorComingBackFromDatabase() {
   test('Test sector name fetch when a single sector can be fetched from DB',
       () async {
     List<Sector> sectorFromDb = [
-      new Sector(name: 'testSectorName-1', routes: List.empty()),
-      new Sector(name: 'testSectorName-2', routes: List.empty())
+      new Sector('testSectorName-1', List.empty(), List.empty()),
+      new Sector('testSectorName-2', List.empty(), List.empty())
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
@@ -92,7 +92,7 @@ void testGetSectorsWithRoutesSingleSector() {
       'Test getSectorsWithRoutes when a single Sector can be fetched from the DB',
       () async {
     List<Sector> sectorsFromDb = [
-      new Sector(name: 'testSectorName', routes: List.empty())
+      new Sector('testSectorName', List.empty(), List.empty())
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(List.empty()));
@@ -110,8 +110,8 @@ void testGetSectorsWithRoutesMultipleSector() {
   test('Test sector name fetch when a single sector can be fetched from DB',
       () async {
     List<Sector> sectorFromDb = [
-      new Sector(name: 'testSectorName-1', routes: createRoute()),
-      new Sector(name: 'testSectorName-2', routes: createRoute(quantity: 2))
+      new Sector('testSectorName-1', List.empty(), createRoute()),
+      new Sector('testSectorName-2', List.empty(), createRoute(quantity: 2))
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
