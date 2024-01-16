@@ -31,47 +31,51 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Figma.colors.primaryColor,
+      backgroundColor: Figma.colors.backgroundColor,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 80),
+              child: Text(
+                'Készen álltok\n egy újabb kihívásra?',
+                style: Figma.typo.header2
+                    .copyWith(color: Figma.colors.secondaryColor),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width - 64,
+              height: MediaQuery.sizeOf(context).width - 64,
+              child: const Image(
+                image: AssetImage('assets/images/kisgeri_logo.png'),
+                semanticLabel: "Kisgeri logo",
+                isAntiAlias: true,
+                fit: BoxFit.contain,
+              ),
+            ),
             Text(
-              'Készen álltok egy újabb kihívásra?',
-              style: Figma.typo.header2.copyWith(color: Figma.colors.accentColor),
+              'Kövessétek nyomon\ncsapatotok teljesítményét!',
+              style:
+                  Figma.typo.body.copyWith(color: Figma.colors.secondaryColor),
               textAlign: TextAlign.center,
             ),
-            const Image(
-              image: AssetImage('assets/images/kisgeri_logo.png'),
-              semanticLabel: "Kisgeri logo",
-              isAntiAlias: true,
-              fit: BoxFit.contain,
-              width: 400,
-              height: 400,
-            ),
-            Text(
-              'Kövessétek nyomon csapatotok teljesítményét!',
-              style: Figma.typo.body.copyWith(color: Figma.colors.accentColor),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 25), // TODO noob padding
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: SizedBox(
-        width: 200,
-        height: 50,
-        child: TextButton(
-          style: Figma.buttons.primaryButtonStyle,
-          onPressed: () {
-            // TODO navigate to login screen
-            Navigator.pushNamed(context, '/');
-          },
-          child: const Text(
-            "Belépés",
-            style: TextStyle(
-              color: Color(0xff181305),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: SizedBox(
+          width: MediaQuery.sizeOf(context).width - 64,
+          child: OutlinedButton(
+            style: Figma.buttons.secondaryButtonStyle,
+            onPressed: () {
+              // Respond to button press
+            },
+            child: const Text(
+              "Enter",
             ),
           ),
         ),
