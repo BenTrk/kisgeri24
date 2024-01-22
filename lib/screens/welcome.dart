@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '/ui/figma_design.dart';
 import 'package:kisgeri24/logging.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -13,9 +13,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Welcome screen',
-      home: MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType) {
+        return const MaterialApp(
+          title: 'Welcome screen',
+          home: MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
+        );
+      },
     );
   }
 }
@@ -39,7 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 80),
+              // previously (top: 80),
+              padding: EdgeInsets.only(top: 10.h),
               child: Text(
                 'Készen álltok\n egy újabb kihívásra?',
                 style: Figma.typo.header2
@@ -48,8 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SizedBox(
-              width: MediaQuery.sizeOf(context).width - 64,
-              height: MediaQuery.sizeOf(context).width - 64,
+              // previously width: MediaQuery.sizeOf(context).width - 64
+              width: 85.w,
+              // previously width: MediaQuery.sizeOf(context).width - 64
+              height: 85.w,
               child: const Image(
                 image: AssetImage('assets/images/kisgeri_logo.png'),
                 semanticLabel: "Kisgeri logo",
@@ -68,16 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 32),
+        padding: EdgeInsets.only(bottom: 10.5.h),
         child: SizedBox(
-          width: MediaQuery.sizeOf(context).width - 64,
+          width: 56.w,
           child: OutlinedButton(
-            style: Figma.buttons.secondaryButtonStyle,
+            style: Figma.buttons.primaryButtonStyle,
             onPressed: () {
               logger.i('Enter button is pressed.');
             },
             child: const Text(
-              "Enter",
+              "Belépés",
             ),
           ),
         ),
