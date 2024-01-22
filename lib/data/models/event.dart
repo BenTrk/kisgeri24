@@ -61,6 +61,27 @@ class Event extends Entity {
     return 'Event{id: $id, yearId: $yearId, name: $name, startTime: $startTime, endTime: $endTime, details: $details}';
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Event &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          yearId == other.yearId &&
+          name == other.name &&
+          startTime == other.startTime &&
+          endTime == other.endTime &&
+          details == other.details;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      yearId.hashCode ^
+      name.hashCode ^
+      startTime.hashCode ^
+      endTime.hashCode ^
+      details.hashCode;
+
   static Event createWithExtraIdField(Map<String, dynamic> data, String id) {
     Event event = Event.fromJson(data);
     event.id = id;
