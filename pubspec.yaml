@@ -48,6 +48,8 @@ dependencies:
   star_menu: ^3.1.4
   flutter_local_notifications: ^15.1.0+1
   flutter_feather_icons: ^2.0.0+1
+  sizer: ^2.0.15
+
 
 dev_dependencies:
   build_runner: ^2.4.6

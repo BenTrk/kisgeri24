@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '/ui/figma_design.dart';
+import 'package:kisgeri24/logging.dart';
+import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -72,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: OutlinedButton(
             style: Figma.buttons.secondaryButtonStyle,
             onPressed: () {
-              // Respond to button press
+              logger.i('Enter button is pressed.');
             },
             child: const Text(
               "Enter",
