@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kisgeri24/data/error/multiple_element_error.dart';
+import 'package:kisgeri24/data/exception/multiple_element_error.dart';
 import 'package:kisgeri24/data/models/year.dart';
 import 'package:kisgeri24/data/repositories/crud_repository.dart';
 import 'package:kisgeri24/logging.dart';
@@ -54,7 +54,27 @@ class YearRepository extends CrudRepository<Year> {
         return Year.fromJson(data);
       }).toList();
       if (yearList.length > 1) {
-        throw MultipleElementError("Multiple Year found with id: $id");
+        throw MultipleElementException("Multiple Year found with id: $id");
+      }
+      return yearList.first;
+    }
+    return null;
+  }
+
+  Future<Year?> getByTenant(String tenantId) async {
+    QuerySnapshot<Map<String, dynamic>> yearsSnapshot = await firestore
+        .collection('years')
+        .where('tenantId', isEqualTo: tenantId)
+        .get();
+    if (yearsSnapshot.size > 0) {
+      List<Year> yearList = yearsSnapshot.docs.map((yearDoc) {
+        Map<String, dynamic> data = yearDoc.data();
+        data.putIfAbsent('id', () => yearDoc.id);
+        return Year.fromJson(data);
+      }).toList();
+      if (yearList.length > 1) {
+        throw MultipleElementException(
+            "Multiple Year found with tenantId: $tenantId");
       }
       return yearList.first;
     }
