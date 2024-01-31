@@ -4,19 +4,19 @@
   MockSpec<CollectionReference<Map<String, dynamic>>>(),
   MockSpec<DocumentSnapshot<Map<String, dynamic>>>()
 ])
-import 'package:cloud_firestore/cloud_firestore.dart';
+import "package:cloud_firestore/cloud_firestore.dart";
 @GenerateNiceMocks([MockSpec<FirebaseAuth>(), MockSpec<User>()])
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kisgeri24/data/models/user.dart' as kisgeri;
-import 'package:kisgeri24/services/authenticator.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import "package:firebase_auth/firebase_auth.dart";
+import "package:kisgeri24/data/models/user.dart" as kisgeri;
+import "package:kisgeri24/services/authenticator.dart";
+import "package:mockito/annotations.dart";
+import "package:mockito/mockito.dart";
 import "package:test/test.dart";
 
-import 'authenticator_test.mocks.dart';
-import 'test_utils.dart';
+import "authenticator_test.mocks.dart";
+import "../test_utils/test_utils.dart";
 
-const String usersCollectionName = 'users';
+const String usersCollectionName = "users";
 const int once = 1;
 
 late MockFirebaseAuth mockFirebaseAuth;
@@ -33,13 +33,13 @@ void main() {
   });
 
   testLogout();
-  testGetAuthUser(); // todo: [MAJOR problem] is that if we'd move the execution of this method/test below the ResetPassword test then some of it will fail with a mocking issue therefore the test cases are not independent
+  testGetAuthUser(); // todo: [MAJOR problem] is that if we"d move the execution of this method/test below the ResetPassword test then some of it will fail with a mocking issue therefore the test cases are not independent
   testResetPassword();
   testMessageResolution();
 }
 
 void testLogout() {
-  test('Test when logout calls Firebase signOut()', () {
+  test("Test when logout calls Firebase signOut()", () {
     when(mockFirebaseAuth.signOut()).thenAnswer((_) => Future.value());
 
     underTest.logout();

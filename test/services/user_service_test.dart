@@ -1,27 +1,36 @@
 @GenerateNiceMocks([MockSpec<UserRepository>()])
-import 'package:kisgeri24/data/repositories/user_repository.dart';
-import 'package:kisgeri24/services/user_service.dart';
-import 'package:kisgeri24/data/models/user.dart' as kisgeri;
+import "package:kisgeri24/data/repositories/user_repository.dart";
+import "package:kisgeri24/services/user_service.dart";
+@GenerateNiceMocks(
+    [MockSpec<UserDtoToUserConverter>(), MockSpec<UserToUserDtoConverter>()])
+import "package:kisgeri24/data/converter/user_dto_user_converter.dart";
+import "package:kisgeri24/data/converter/user_user_dto_converter.dart";
+import "package:kisgeri24/data/dto/user_dto.dart";
 @GenerateNiceMocks(
     [MockSpec<firebase.FirebaseAuth>(), MockSpec<firebase.User>()])
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import "package:firebase_auth/firebase_auth.dart" as firebase;
+import "package:mockito/annotations.dart";
+import "package:mockito/mockito.dart";
 import "package:test/test.dart";
 
-import 'user_service_test.mocks.dart';
-import 'test_utils.dart';
+import "user_service_test.mocks.dart";
+import "../test_utils/test_utils.dart";
 
 late MockUserRepository mockUserRepository;
 late MockFirebaseAuth mockFirebaseAuth;
 late MockUser mockFirebaseUser;
+late UserDtoToUserConverter mockUserDtoToUserConverter;
+late UserToUserDtoConverter mockUserToUserDtoConverter;
 late UserService underTest;
 
 void main() {
   mockUserRepository = MockUserRepository();
   mockFirebaseAuth = MockFirebaseAuth();
   mockFirebaseUser = MockUser();
-  underTest = UserService(mockUserRepository, mockFirebaseAuth);
+  mockUserDtoToUserConverter = MockUserDtoToUserConverter();
+  mockUserToUserDtoConverter = MockUserToUserDtoConverter();
+  underTest = UserService(mockUserRepository, mockFirebaseAuth,
+      mockUserToUserDtoConverter, mockUserDtoToUserConverter);
 
   testGetCurrentUser();
 }
@@ -33,13 +42,15 @@ void testGetCurrentUser() {
     String authUid = "someUniqueIdForAuthenticatedUser";
     when(mockFirebaseUser.uid).thenReturn(authUid);
     when(mockFirebaseAuth.currentUser).thenReturn(mockFirebaseUser);
+    when(mockUserToUserDtoConverter.convert(testUser))
+        .thenReturn(testUserAsDto);
     when(mockUserRepository.getById(authUid))
         .thenAnswer((_) async => Future.value(testUser));
 
-    kisgeri.User? result = await underTest.getCurrentUser();
+    UserDto? result = await underTest.getCurrentUser();
 
     expect(result == null, false);
-    expect(result!.equals(testUser), true);
+    expect(result! == testUserAsDto, true);
   });
   test(
       "Test getCurrentUser when logged in user found by firebase Auth but user cannot be found in repository",
@@ -47,10 +58,12 @@ void testGetCurrentUser() {
     String authUid = "someUniqueIdForAuthenticatedUser";
     when(mockFirebaseUser.uid).thenReturn(authUid);
     when(mockFirebaseAuth.currentUser).thenReturn(mockFirebaseUser);
+    when(mockUserToUserDtoConverter.convert(testUser))
+        .thenReturn(testUserAsDto);
     when(mockUserRepository.getById(authUid))
         .thenAnswer((_) async => Future.value(null));
 
-    kisgeri.User? result = await underTest.getCurrentUser();
+    UserDto? result = await underTest.getCurrentUser();
 
     expect(result == null, true);
   });
@@ -58,7 +71,7 @@ void testGetCurrentUser() {
       () async {
     when(mockFirebaseAuth.currentUser).thenReturn(null);
 
-    kisgeri.User? result = await underTest.getCurrentUser();
+    UserDto? result = await underTest.getCurrentUser();
 
     expect(result == null, true);
   });
