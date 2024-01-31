@@ -1,27 +1,41 @@
-import 'package:kisgeri24/data/models/sector.dart';
-import 'package:kisgeri24/data/repositories/sector_repository.dart';
-import 'package:kisgeri24/logging.dart';
+import "dart:convert";
+
+import "package:kisgeri24/data/dto/sector_dto.dart";
+import "package:kisgeri24/data/models/sector.dart";
+import "package:kisgeri24/data/repositories/sector_repository.dart";
+import "package:kisgeri24/logging.dart";
 
 class SectorService {
   final SectorRepository repository;
+  final Converter<Sector, SectorDto> sectorConverter;
 
-  SectorService(this.repository);
+  SectorService(this.repository, this.sectorConverter);
 
   Future<List<String>> getSectorNames() async {
-    logger.i('Collecting sector names');
+    logger.i("Collecting sector names");
     List<String> sectorNames = [];
-    List<Sector> sectors = await getSectorsWithRoutes();
-    for (Sector sector in sectors) {
+    List<SectorDto> sectors = await getSectorsWithRoutes();
+    for (SectorDto sector in sectors) {
       sectorNames.add(sector.name);
     }
-    logger.i('${sectorNames.length} sector name got collected');
+    logger.i("${sectorNames.length} sector name got collected");
     return sectorNames;
   }
 
-  Future<List<Sector>> getSectorsWithRoutes() async {
-    logger.i('Collecting Sectors with their route info.');
-    List<Sector> sectors = await repository.fetchAll();
-    logger.i('${sectors.length} sector(s) got collected.');
-    return sectors;
+  Future<List<SectorDto>> getSectorsWithRoutes() async {
+    logger.i("Collecting Sectors with their route info.");
+    List<Sector> sectorsFromDb = await repository.fetchAll();
+    logger.i("${sectorsFromDb.length} sector(s) got collected.");
+    if (sectorsFromDb.isNotEmpty) {
+      logger.i("Converting ${sectorsFromDb.length} Sector(s) to Sector DTO(s)");
+      List<SectorDto> sectors = [];
+      for (Sector sector in sectorsFromDb) {
+        sectors.add(sectorConverter.convert(sector));
+      }
+      return sectors;
+    } else {
+      logger.i("No sector found in DB");
+      return [];
+    }
   }
 }

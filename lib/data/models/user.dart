@@ -21,7 +21,7 @@ class User extends Entity {
 
   int startTime;
 
-  String? tenantId;
+  String tenantId;
 
   String yearId;
 
@@ -34,7 +34,7 @@ class User extends Entity {
       this.userID = unsetString,
       this.teamName = unsetString,
       this.category = unsetString,
-      this.tenantId,
+      this.tenantId = unsetString,
       this.yearId = unsetString,
       this.enabled = false,
       this.startTime = unsetInt})
