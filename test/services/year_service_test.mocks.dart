@@ -113,4 +113,14 @@ class MockYearRepository extends _i1.Mock implements _i3.YearRepository {
         returnValue: _i4.Future<_i5.Year?>.value(),
         returnValueForMissingStub: _i4.Future<_i5.Year?>.value(),
       ) as _i4.Future<_i5.Year?>);
+
+  @override
+  _i4.Future<_i5.Year?> getByTenant(String? tenantId) => (super.noSuchMethod(
+        Invocation.method(
+          #getByTenant,
+          [tenantId],
+        ),
+        returnValue: _i4.Future<_i5.Year?>.value(),
+        returnValueForMissingStub: _i4.Future<_i5.Year?>.value(),
+      ) as _i4.Future<_i5.Year?>);
 }

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kisgeri24/data/error/multiple_element_error.dart';
+import 'package:kisgeri24/data/exception/multiple_element_error.dart';
 import 'package:kisgeri24/data/models/event.dart';
 import 'package:kisgeri24/logging.dart';
 
@@ -58,7 +58,7 @@ class EventRepository extends CrudRepository<Event> {
         return Event.fromJson(data);
       }).toList();
       if (yearList.length > 1) {
-        throw MultipleElementError("Multiple Event found with id: $id");
+        throw MultipleElementException("Multiple Event found with id: $id");
       }
       return yearList.first;
     }
