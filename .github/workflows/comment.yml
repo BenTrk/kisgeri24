@@ -1,5 +1,7 @@
 name: Comment-triggered workflow
-on: issue_comment
+on: 
+    issue_comment:
+        types: [created, edited]
 jobs:
   pr_commented:
     name: PR comment
