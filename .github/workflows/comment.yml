@@ -1,0 +1,10 @@
+name: Comment-triggered workflow
+on: issue_comment
+jobs:
+  pr_commented:
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Comment
+        run: echo "A comment on PR ${{ github.event.issue.number }}"

@@ -63,13 +63,6 @@ jobs:
           flutter-version: ${{ matrix.flutter-version }}
           channel: 'stable'
       - run: flutter test -r expanded --coverage
-  pr_commented:
-    name: test for PR comment
-    if: ${{ github.event.pull_request && contains(github.event.pull_request.comments.body, '/test') }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo Found comment!
 
 # temporarily disabled until figuring out the org.
 #      - uses: codecov/codecov-action@v1
