@@ -8,5 +8,8 @@ jobs:
     if: ${{ github.event.issue.pull_request }}
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Comment
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Echo
         run: echo "A comment on PR ${{ github.event.issue.number }}"
