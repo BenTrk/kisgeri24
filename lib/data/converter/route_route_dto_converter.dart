@@ -14,8 +14,7 @@ class RouteToRouteDtoConverter extends Converter<Route, RouteDto> {
       input.ordinal,
       input.difficulty.toString() + input.diffchanger,
       input.points,
-      RouteEquipment
-          .bolted, // TODO: the designated collection has to be updated with this value (issue #101)
+      RouteEquipment.fromString(input.equipment),
     );
   }
 }

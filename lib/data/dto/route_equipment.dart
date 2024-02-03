@@ -6,7 +6,7 @@ enum RouteEquipment {
 
   const RouteEquipment(this.shorthand);
 
-  RouteEquipment fromString(String equipment) {
+  static RouteEquipment fromString(String equipment) {
     switch (equipment) {
       case "N":
         return RouteEquipment.bolted;
