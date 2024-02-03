@@ -9,6 +9,7 @@ class Route extends Entity {
   int key;
   int ordinal;
   int difficulty;
+  String equipment;
   String diffchanger;
 
   Route({
@@ -19,6 +20,7 @@ class Route extends Entity {
     int? key,
     int? ordinal,
     int? difficulty,
+    String? equipment,
     String? diffchanger,
   })  : name = name ?? unsetString,
         id = id ?? unsetString,
@@ -27,6 +29,7 @@ class Route extends Entity {
         key = key ?? 0,
         ordinal = ordinal ?? unsetInt,
         difficulty = difficulty ?? 0,
+        equipment = equipment ?? unsetString,
         diffchanger = diffchanger ?? unsetString;
 
   static Route fromSnapshot(value) {
@@ -38,6 +41,7 @@ class Route extends Entity {
     int keyHere = 0;
     int ordinal = unsetInt;
     int difficulty = 0;
+    String equipment = unsetString;
     String diffchanger = unsetString;
 
     routeMap.forEach((key, value) {
@@ -55,8 +59,9 @@ class Route extends Entity {
         ordinal = value as int;
       } else if (key == 'difficulty') {
         difficulty = value;
-      }
-      if (key == 'diffchanger') {
+      } else if (key == 'equipment') {
+        equipment = value;
+      } else if (key == 'diffchanger') {
         diffchanger = value;
       }
     });
@@ -69,6 +74,7 @@ class Route extends Entity {
         key: keyHere,
         ordinal: ordinal,
         difficulty: difficulty,
+        equipment: equipment,
         diffchanger: diffchanger);
     return route;
   }
@@ -84,6 +90,7 @@ class Route extends Entity {
           length == other.length &&
           key == other.key &&
           difficulty == other.difficulty &&
+          equipment == other.equipment &&
           diffchanger == other.diffchanger;
 
   @override
@@ -94,6 +101,7 @@ class Route extends Entity {
       length.hashCode ^
       key.hashCode ^
       difficulty.hashCode ^
+      equipment.hashCode ^
       diffchanger.hashCode;
 
   @override

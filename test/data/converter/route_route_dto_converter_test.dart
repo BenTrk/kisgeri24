@@ -13,27 +13,52 @@ void main() {
 }
 
 void testConvert() {
-  test('Convert', () {
+  test('Convert for bolted route', () {
     underTest = RouteToRouteDtoConverter();
-    Route entity = new Route(
-      name: 'routeName',
-      id: "routeId",
-      points: 123,
-      length: 30,
-      key: 1,
-      ordinal: testOrdinal,
-      difficulty: 6,
-      diffchanger: "+",
-    );
+    Route entity = TestUtils.createRoute(quantity: 1).first;
+    entity.equipment = "N";
+
     RouteDto expected = new RouteDto(
       entity.name,
       entity.ordinal,
       entity.difficulty.toString() + entity.diffchanger,
       entity.points,
-      RouteEquipment
-          .bolted, // this needs to be updated once the issue #101 is resolved
+      RouteEquipment.bolted,
     );
 
     expect(underTest.convert(entity) == expected, true);
+  });
+  test('Convert for clean/trad route', () {
+    underTest = RouteToRouteDtoConverter();
+    Route entity = TestUtils.createRoute(quantity: 1).first;
+    entity.equipment = "C";
+    RouteDto expected = new RouteDto(
+      entity.name,
+      entity.ordinal,
+      entity.difficulty.toString() + entity.diffchanger,
+      entity.points,
+      RouteEquipment.clean,
+    );
+
+    expect(underTest.convert(entity) == expected, true);
+  });
+  test(
+      'Conversion attempt from a Route where the equipment type is not filled properly shall fail.',
+      () {
+    underTest = RouteToRouteDtoConverter();
+    Route entity = TestUtils.createRoute(quantity: 1).first;
+    entity.equipment = "";
+
+    expect(
+      () => underTest.convert(entity),
+      throwsA(predicate((e) {
+        if (e is Exception) {
+          return e
+              .toString()
+              .contains("Unknown route equipment: ${entity.equipment}");
+        }
+        return false;
+      })),
+    );
   });
 }
