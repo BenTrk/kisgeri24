@@ -16,6 +16,7 @@ class WallToWallDtoConverter extends Converter<Wall, WallDto> {
     logger.d("Converting Wall [$input] to its corresponding DTO");
     return WallDto(
       input.name,
+      input.ordinal,
       input.routes.map((route) => routeConverter.convert(route)).toList(),
     );
   }

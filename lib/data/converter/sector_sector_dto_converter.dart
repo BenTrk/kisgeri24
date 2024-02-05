@@ -24,16 +24,16 @@ class SectorToSectorDtoConverter extends Converter<Sector, SectorDto> {
           routes.add(routeConverter.convert(route));
         }
       }
-      walls.add(WallDto(input.name, routes));
+      walls.add(WallDto(input.name, 0, routes));
     } else {
       for (final Wall wall in input.walls!) {
         for (final Route route in wall.routes) {
           routes.add(routeConverter.convert(route));
         }
-        walls.add(WallDto(wall.name, routes));
+        walls.add(WallDto(wall.name, wall.ordinal, routes));
         routes = [];
       }
     }
-    return SectorDto(input.name, walls);
+    return SectorDto(input.name, input.ordinal, walls);
   }
 }

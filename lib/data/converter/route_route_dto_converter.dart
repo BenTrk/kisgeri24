@@ -11,6 +11,7 @@ class RouteToRouteDtoConverter extends Converter<Route, RouteDto> {
     logger.d("Converting Route [$input] to its corresponding DTO");
     return RouteDto(
       input.name,
+      input.ordinal,
       input.difficulty.toString() + input.diffchanger,
       input.points,
       RouteEquipment
