@@ -38,12 +38,15 @@ final User testUser = User(
   userID: "Even More Awesome User ID",
 );
 
+final int testOrdinal = 123;
+
 class TestUtils {
   static List<RouteDto> createRouteDto({int quantity = 1}) {
     List<RouteDto> routes = [];
     for (int i = 0; i < quantity; i++) {
       routes.add(new RouteDto(
         "route-$i",
+        i,
         "6b",
         30,
         RouteEquipment.values[i % RouteEquipment.values.length],
@@ -61,6 +64,7 @@ class TestUtils {
         difficulty: quantity,
         diffchanger: quantity % 2 == 0 ? "+" : "-",
         name: "route-$i",
+        ordinal: i,
         points: quantity * 100,
       ));
     }
@@ -72,6 +76,7 @@ class TestUtils {
     for (int i = 0; i < quantity; i++) {
       walls.add(new Wall(
         name: "wall-$i",
+        ordinal: i,
         routes: createRoute(quantity: 1),
       ));
     }

@@ -7,6 +7,7 @@ class Route extends Entity {
   double points;
   int length;
   int key;
+  int ordinal;
   int difficulty;
   String diffchanger;
 
@@ -16,6 +17,7 @@ class Route extends Entity {
     double? points,
     int? length,
     int? key,
+    int? ordinal,
     int? difficulty,
     String? diffchanger,
   })  : name = name ?? unsetString,
@@ -23,6 +25,7 @@ class Route extends Entity {
         points = points ?? 0,
         length = length ?? 0,
         key = key ?? 0,
+        ordinal = ordinal ?? unsetInt,
         difficulty = difficulty ?? 0,
         diffchanger = diffchanger ?? unsetString;
 
@@ -33,6 +36,7 @@ class Route extends Entity {
     double points = 0.0;
     int length = 0;
     int keyHere = 0;
+    int ordinal = unsetInt;
     int difficulty = 0;
     String diffchanger = unsetString;
 
@@ -47,9 +51,12 @@ class Route extends Entity {
         length = value;
       } else if (key == 'key') {
         keyHere = value;
+      } else if (value == "ordinal") {
+        ordinal = value as int;
       } else if (key == 'difficulty') {
         difficulty = value;
-      } else if (key == 'diffchanger') {
+      }
+      if (key == 'diffchanger') {
         diffchanger = value;
       }
     });
@@ -60,6 +67,7 @@ class Route extends Entity {
         points: points,
         length: length,
         key: keyHere,
+        ordinal: ordinal,
         difficulty: difficulty,
         diffchanger: diffchanger);
     return route;
@@ -90,6 +98,6 @@ class Route extends Entity {
 
   @override
   String toString() {
-    return 'Route{name: $name}';
+    return "Route{name: $name}";
   }
 }

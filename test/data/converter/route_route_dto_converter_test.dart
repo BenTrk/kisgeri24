@@ -4,6 +4,8 @@ import "package:kisgeri24/data/dto/route_equipment.dart";
 import "package:kisgeri24/data/models/route.dart";
 import "package:test/test.dart";
 
+import "../../test_utils/test_utils.dart";
+
 late RouteToRouteDtoConverter underTest;
 
 void main() {
@@ -19,11 +21,13 @@ void testConvert() {
       points: 123,
       length: 30,
       key: 1,
+      ordinal: testOrdinal,
       difficulty: 6,
       diffchanger: "+",
     );
     RouteDto expected = new RouteDto(
       entity.name,
+      entity.ordinal,
       entity.difficulty.toString() + entity.diffchanger,
       entity.points,
       RouteEquipment

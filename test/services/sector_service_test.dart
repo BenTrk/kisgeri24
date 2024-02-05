@@ -45,10 +45,10 @@ void testGetSectorNamesWhenSingleSectorComingBackFromDatabase() {
   test("Test sector name fetch when a single sector can be fetched from DB",
       () async {
     List<Sector> sectorFromDb = [
-      new Sector("testSectorName", List.empty(), List.empty())
+      new Sector("testSectorName", testOrdinal, List.empty(), List.empty())
     ];
     when(mockSectorToSectorDtoConverter.convert(sectorFromDb[0]))
-        .thenReturn(SectorDto(sectorFromDb[0].name, List.empty()));
+        .thenReturn(SectorDto(sectorFromDb[0].name, testOrdinal, List.empty()));
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
 
@@ -65,13 +65,14 @@ void testGetSectorNamesWhenMultipleSectorComingBackFromDatabase() {
   test("Test sector name fetch when a single sector can be fetched from DB",
       () async {
     List<Sector> sectorFromDb = [
-      new Sector("testSectorName-1", List.empty(), List.empty()),
-      new Sector("testSectorName-2", List.empty(), List.empty())
+      new Sector("testSectorName-1", testOrdinal, List.empty(), List.empty()),
+      new Sector(
+          "testSectorName-2", testOrdinal + 1, List.empty(), List.empty())
     ];
     when(mockSectorToSectorDtoConverter.convert(sectorFromDb[0]))
-        .thenReturn(SectorDto(sectorFromDb[0].name, List.empty()));
-    when(mockSectorToSectorDtoConverter.convert(sectorFromDb[1]))
-        .thenReturn(SectorDto(sectorFromDb[1].name, List.empty()));
+        .thenReturn(SectorDto(sectorFromDb[0].name, testOrdinal, List.empty()));
+    when(mockSectorToSectorDtoConverter.convert(sectorFromDb[1])).thenReturn(
+        SectorDto(sectorFromDb[1].name, testOrdinal + 1, List.empty()));
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
 
@@ -103,7 +104,7 @@ void testGetSectorsWithRoutesSingleSector() {
       "Test getSectorsWithRoutes when a single Sector can be fetched from the DB",
       () async {
     List<Sector> sectorsFromDb = [
-      new Sector("testSectorName", List.empty(), List.empty())
+      new Sector("testSectorName", testOrdinal, List.empty(), List.empty())
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(List.empty()));
@@ -121,9 +122,10 @@ void testGetSectorsWithRoutesMultipleSector() {
   test("Test sector name fetch when a single sector can be fetched from DB",
       () async {
     List<Sector> sectorFromDb = [
-      new Sector("testSectorName-1", List.empty(), TestUtils.createRoute()),
-      new Sector(
-          "testSectorName-2", List.empty(), TestUtils.createRoute(quantity: 2))
+      new Sector("testSectorName-1", testOrdinal, List.empty(),
+          TestUtils.createRoute()),
+      new Sector("testSectorName-2", testOrdinal + 1, List.empty(),
+          TestUtils.createRoute(quantity: 2))
     ];
     when(mockSectorRepository.fetchAll())
         .thenAnswer((_) async => Future.value(sectorFromDb));
