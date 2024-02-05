@@ -1,3 +1,10 @@
-import 'package:logger/logger.dart';
+import "package:logger/logger.dart";
 
-final logger = Logger();
+final logger = Logger(
+  printer: PrettyPrinter(
+    methodCount: 3,
+    errorMethodCount: 18,
+    lineLength: 140,
+    printTime: true,
+  ),
+);
