@@ -17,7 +17,7 @@ class SectorToSectorDtoConverter extends Converter<Sector, SectorDto> {
   SectorDto convert(Sector input) {
     logger.d("Converting Sector [$input] to its corresponding DTO");
     final List<WallDto> walls = [];
-    final List<RouteDto> routes = [];
+    List<RouteDto> routes = [];
     if (input.walls == null || input.walls!.isEmpty) {
       if (input.routes != null) {
         for (final Route route in input.routes!) {
@@ -31,6 +31,7 @@ class SectorToSectorDtoConverter extends Converter<Sector, SectorDto> {
           routes.add(routeConverter.convert(route));
         }
         walls.add(WallDto(wall.name, routes));
+        routes = [];
       }
     }
     return SectorDto(input.name, walls);
