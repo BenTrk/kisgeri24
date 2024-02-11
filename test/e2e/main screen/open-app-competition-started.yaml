@@ -1,0 +1,11 @@
+## GIVEN the application in a logged in state and competition  started
+## WHEN user opens app which was closed before
+## THEN the user is logged in
+## AND the main screen is visible
+## AND navbar is visible
+## AND walls are visible
+## AND start competition button is not visible
+## AND remaining time is visible
+## AND total points are visible
+## AND hamburger menu is visible
+## AND notification bell is visible

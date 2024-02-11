@@ -1,0 +1,3 @@
+## GIVEN the application is on the main screen and competition not started
+## WHEN user clicks on competition start
+## THEN the competition popup start screen visible

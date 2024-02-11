@@ -1,0 +1,5 @@
+## GIVEN the application in a logged out state
+## WHEN filling the mandatory fields for a user whose first login
+## AND proceeding by tapping on the 'Log In' button
+## THEN the user is required to change their password
+## AND if user changes it user is logged in
