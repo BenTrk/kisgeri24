@@ -1,0 +1,3 @@
+## GIVEN the application is on the main screen 
+## WHEN user clicks on a sector
+## THEN the walls show up

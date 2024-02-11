@@ -1,0 +1,5 @@
+## GIVEN the application is on the main screen 
+## WHEN user clicks on a wall
+## THEN the route screen shows up
+## THEN user clicks on wall
+## THEN the routes show up 
