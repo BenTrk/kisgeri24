@@ -1,0 +1,4 @@
+## GIVEN the application in a logged out state
+## WHEN filling the mandatory fields for a user who already changed its default password
+## AND proceeding by tapping on the 'Log In' button
+## THEN the main screen is visible
