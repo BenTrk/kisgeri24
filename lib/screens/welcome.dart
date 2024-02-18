@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import '/ui/figma_design.dart';
-import 'package:kisgeri24/logging.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import "package:flutter/material.dart";
+import "package:kisgeri24/logging.dart";
+import "package:kisgeri24/ui/figma_design.dart";
+import "package:responsive_sizer/responsive_sizer.dart";
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return const MaterialApp(
-          title: 'Welcome screen',
-          home: MyHomePage(title: 'Készen álltok egy újabb kihívásra?'),
+          title: "Welcome screen",
+          home: MyHomePage(title: "Készen álltok egy újabb kihívásra?"),
         );
       },
     );
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // previously (top: 80),
               padding: EdgeInsets.only(top: 10.h),
               child: Text(
-                'Készen álltok\n egy újabb kihívásra?',
+                "Készen álltok\n egy újabb kihívásra?",
                 style: Figma.typo.header2
                     .copyWith(color: Figma.colors.secondaryColor),
                 textAlign: TextAlign.center,
@@ -58,14 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
               // previously width: MediaQuery.sizeOf(context).width - 64
               height: 85.w,
               child: const Image(
-                image: AssetImage('assets/images/kisgeri_logo.png'),
+                image: AssetImage("assets/images/kisgeri_logo.png"),
                 semanticLabel: "Kisgeri logo",
                 isAntiAlias: true,
                 fit: BoxFit.contain,
               ),
             ),
             Text(
-              'Kövessétek nyomon\ncsapatotok teljesítményét!',
+              "Kövessétek nyomon\ncsapatotok teljesítményét!",
               style:
                   Figma.typo.body.copyWith(color: Figma.colors.secondaryColor),
               textAlign: TextAlign.center,
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: OutlinedButton(
             style: Figma.buttons.primaryButtonStyle,
             onPressed: () {
-              logger.i('Enter button is pressed.');
+              logger.i("Enter button is pressed.");
             },
             child: const Text(
               "Belépés",
