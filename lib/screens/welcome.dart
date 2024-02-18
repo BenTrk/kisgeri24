@@ -1,16 +1,16 @@
 import "package:flutter/material.dart";
 import "package:kisgeri24/logging.dart";
+import "package:kisgeri24/screens/login.dart";
 import "package:kisgeri24/ui/figma_design.dart";
 import "package:responsive_sizer/responsive_sizer.dart";
 
 Future<void> main() async {
-  runApp(const MyApp());
+  runApp(const WelcomeFigma());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WelcomeFigma extends StatelessWidget {
+  const WelcomeFigma({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(
@@ -80,11 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 56.w,
           child: OutlinedButton(
             style: Figma.buttons.primaryButtonStyle,
-            onPressed: () {
+            onPressed: () async {
+              // Navigate to login.dart
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginFigma(),
+                ),
+              );
               logger.i("Enter button is pressed.");
             },
             child: const Text(
-              "Belépés",
+              "BELÉPÉS",
             ),
           ),
         ),

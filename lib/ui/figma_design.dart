@@ -120,8 +120,8 @@ class Buttons {
         if (states.contains(MaterialState.hovered)) {
           return Figma.colors.primaryButtonHoverColor;
         }
-        if (states.contains(MaterialState.pressed)) {
-          return Figma.colors.primaryColor;
+        if (states.contains(MaterialState.pressed)) { // TODO "Pressed" is different in figma but this is good enough for now, phone does not have "hover" anyway
+          return Figma.colors.primaryButtonHoverColor;
         }
         if (states.contains(MaterialState.error)) {
           return Figma.colors.errorColor;
