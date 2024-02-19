@@ -4,36 +4,14 @@ import "package:kisgeri24/logging.dart";
 import "package:kisgeri24/ui/figma_design.dart";
 import "package:responsive_sizer/responsive_sizer.dart";
 
-Future<void> main() async {
-  runApp(const LoginFigma());
-}
-
-class LoginFigma extends StatelessWidget {
+class LoginFigma extends StatefulWidget {
   const LoginFigma({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      builder: (context, orientation, screenType) {
-        return const MaterialApp(
-          title: "Login screen",
-          home: MyHomePage(title: "Belépés"),
-        );
-      },
-    );
-  }
+  State<LoginFigma> createState() => _LoginFigmaState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _LoginFigmaState extends State<LoginFigma> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,9 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   .copyWith(color: Figma.colors.secondaryColor),
               textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 8.h),
-            ),
+            Gap(8.h),
             SizedBox(
               width: 79.w,
               height: 55,
@@ -68,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Figma.colors.secondaryColor,
+                  floatingLabelBehavior: FloatingLabelBehavior.never, // TODO maybe use hints?
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -75,9 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 5.h),
-            ),
+            Gap(5.h),
             SizedBox(
               width: 79.w,
               height: 55,
@@ -88,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Figma.colors.secondaryColor,
+                  floatingLabelStyle: Figma.typo.smallerText,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -95,23 +72,39 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 10.5.h),
-        child: SizedBox(
-          width: 56.w,
-          child: OutlinedButton(
-            style: Figma.buttons.primaryButtonStyle,
-            onPressed: () {
-              logger.i("Enter button is pressed.");
-            },
-            child: const Text(
-              "BELÉPÉS",
+            TextButton(
+              onPressed: //TODO implement this
+                  () {
+                logger.i("Forgot password button is pressed.");
+              },
+              child: Text(
+                "Elfelejtettem a jelszavam",
+                style: Figma.typo.smallerText
+                    .copyWith(color: Figma.colors.primaryColor),
+              ),
+              // style: Figma.buttons.textButtonStyle, TODO: #129
             ),
-          ),
+            Gap(10.h),
+            SizedBox(
+              width: 56.w,
+              child: OutlinedButton(
+                style: Figma.buttons.primaryButtonStyle,
+                onPressed: () async {
+                  // Navigate to login.dart
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginFigma(),
+                    ),
+                  );
+                  logger.i("Enter button is pressed.");
+                },
+                child: const Text(
+                  "BELÉPÉS",
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -18,7 +18,7 @@ class WelcomeFigma extends StatelessWidget {
       builder: (context, orientation, screenType) {
         return const MaterialApp(
           title: "Welcome screen",
-          home: MyHomePage(title: "Készen álltok egy újabb kihívásra?"),
+          home: MyHomePage(),
         );
       },
     );
@@ -26,9 +26,8 @@ class WelcomeFigma extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
-  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
