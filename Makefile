@@ -21,12 +21,13 @@ check-dart-code-analysis:
 	echo 'Performing Dart code analysis.'
 	dart analyze
 
-test:
-	echo 'About to initiate Dart unit test execution...'
-	dart test
-
 format:
 	dart format --output=write .
+
+test:
+	make generate-unit-test-mocks
+	echo 'About to initiate Dart unit test execution...'
+	dart test
 
 generate-unit-test-mocks:
 	dart run build_runner build --delete-conflicting-outputs
