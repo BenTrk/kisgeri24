@@ -62,6 +62,7 @@ jobs:
         with:
           flutter-version: ${{ matrix.flutter-version }}
           channel: 'stable'
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter test -r expanded --coverage
 
 # temporarily disabled until figuring out the org.
