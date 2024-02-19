@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:gap/gap.dart';
 import "package:kisgeri24/logging.dart";
 import "package:kisgeri24/screens/login.dart";
 import "package:kisgeri24/ui/figma_design.dart";
@@ -40,17 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Figma.colors.backgroundColor,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              // previously (top: 80),
-              padding: EdgeInsets.only(top: 10.h),
-              child: Text(
-                "Készen álltok\n egy újabb kihívásra?",
-                style: Figma.typo.header2
-                    .copyWith(color: Figma.colors.secondaryColor),
-                textAlign: TextAlign.center,
-              ),
+            Gap(9.h), // previously (top: 80)
+            Text(
+              "Készen álltok\n egy újabb kihívásra?",
+              style: Figma.typo.header2
+                  .copyWith(color: Figma.colors.secondaryColor),
+              textAlign: TextAlign.center,
             ),
             SizedBox(
               // previously width: MediaQuery.sizeOf(context).width - 64
@@ -64,36 +61,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: BoxFit.contain,
               ),
             ),
+            Gap(10.h),
             Text(
               "Kövessétek nyomon\ncsapatotok teljesítményét!",
               style:
                   Figma.typo.body.copyWith(color: Figma.colors.secondaryColor),
               textAlign: TextAlign.center,
             ),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 10.5.h),
-        child: SizedBox(
-          width: 56.w,
-          child: OutlinedButton(
-            style: Figma.buttons.primaryButtonStyle,
-            onPressed: () async {
-              // Navigate to login.dart
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginFigma(),
+            Gap(10.h),
+            SizedBox(
+              width: 56.w,
+              child: OutlinedButton(
+                style: Figma.buttons.primaryButtonStyle,
+                onPressed: () async {
+                  // Navigate to login.dart
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginFigma(),
+                    ),
+                  );
+                  logger.i("Enter button is pressed.");
+                },
+                child: const Text(
+                  "BELÉPÉS",
                 ),
-              );
-              logger.i("Enter button is pressed.");
-            },
-            child: const Text(
-              "BELÉPÉS",
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

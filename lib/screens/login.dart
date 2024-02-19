@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:gap/gap.dart';
 import "package:kisgeri24/logging.dart";
 import "package:kisgeri24/ui/figma_design.dart";
 import "package:responsive_sizer/responsive_sizer.dart";
@@ -41,16 +42,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              // previously (top: 80),
-              padding: EdgeInsets.only(top: 10.h, bottom: 8.h),
-              child: Text(
-                "Belépés",
-                style: Figma.typo.header2
-                    .copyWith(color: Figma.colors.secondaryColor),
-                textAlign: TextAlign.center,
-              ),
+            Gap(10.h),
+            Text(
+              "Belépés",
+              style: Figma.typo.header2
+                  .copyWith(color: Figma.colors.secondaryColor),
+              textAlign: TextAlign.center,
             ),
+            Gap(8.h),
             Text(
               "Az első bejelentkezéshez használd a sikeres nevezés\nután kapott ideiglenes jelszavadat.",
               style: Figma.typo.smallerText
@@ -61,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(top: 8.h),
             ),
             SizedBox(
-              width: 65.w,
-              height: 10.w,
+              width: 79.w,
+              height: 55,
               child: TextField(
                 style: Figma.typo.smallerText
                     .copyWith(color: Figma.colors.errorColor),
@@ -77,11 +76,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 2.h),
+              padding: EdgeInsets.only(top: 5.h),
             ),
             SizedBox(
-              width: 65.w,
-              height: 10.w,
+              width: 79.w,
+              height: 55,
               child: TextField(
                 style: Figma.typo.smallerText
                     .copyWith(color: Figma.colors.errorColor),

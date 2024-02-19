@@ -49,6 +49,7 @@ dependencies:
   flutter_local_notifications: ^15.1.0+1
   flutter_feather_icons: ^2.0.0+1
   responsive_sizer: ^3.3.0
+  gap: ^3.0.1
 
 
 dev_dependencies:
