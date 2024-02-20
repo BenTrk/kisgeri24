@@ -42,6 +42,20 @@ void testConvert() {
 
     expect(underTest.convert(entity) == expected, true);
   });
+  test('Convert for top-rope route', () {
+    underTest = RouteToRouteDtoConverter();
+    Route entity = TestUtils.createRoute(quantity: 1).first;
+    entity.equipment = "T";
+    RouteDto expected = new RouteDto(
+      entity.name,
+      entity.ordinal,
+      entity.difficulty.toString() + entity.diffchanger,
+      entity.points,
+      RouteEquipment.topRope,
+    );
+
+    expect(underTest.convert(entity) == expected, true);
+  });
   test(
       'Conversion attempt from a Route where the equipment type is not filled properly shall fail.',
       () {
