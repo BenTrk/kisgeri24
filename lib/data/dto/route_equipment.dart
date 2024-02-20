@@ -1,5 +1,6 @@
 enum RouteEquipment {
   bolted("N"),
+  topRope("T"),
   clean("C");
 
   final String shorthand;
@@ -12,6 +13,8 @@ enum RouteEquipment {
         return RouteEquipment.bolted;
       case "C":
         return RouteEquipment.clean;
+      case "T":
+        return RouteEquipment.topRope;
       default:
         throw Exception("Unknown route equipment: $equipment");
     }
