@@ -1,5 +1,5 @@
-import 'package:kisgeri24/data/models/entity.dart';
-import 'package:kisgeri24/data/models/init_values.dart';
+import "package:kisgeri24/data/models/entity.dart";
+import "package:kisgeri24/data/models/init_values.dart";
 
 class Route extends Entity {
   String name;
@@ -32,51 +32,50 @@ class Route extends Entity {
         equipment = equipment ?? unsetString,
         diffchanger = diffchanger ?? unsetString;
 
-  static Route fromSnapshot(value) {
-    Map routeMap = value as Map<dynamic, dynamic>;
+  static Route fromSnapshot(Map<String, dynamic> value) {
     String name = unsetString;
     String id = unsetString;
     double points = 0.0;
     int length = 0;
-    int keyHere = 0;
+    int routeKey = 0;
     int ordinal = unsetInt;
     int difficulty = 0;
     String equipment = unsetString;
     String diffchanger = unsetString;
 
-    routeMap.forEach((key, value) {
-      if (key == 'name') {
+    value.forEach((key, value) {
+      if (key == "name") {
         name = value;
-      } else if (key == 'id') {
+      } else if (key == "id") {
         id = value;
-      } else if (key == 'points') {
+      } else if (key == "points") {
         points = (value as int).toDouble();
-      } else if (key == 'length') {
+      } else if (key == "length") {
         length = value;
-      } else if (key == 'key') {
-        keyHere = value;
-      } else if (value == "ordinal") {
+      } else if (key == "key") {
+        routeKey = value;
+      } else if (key == "ordinal") {
         ordinal = value as int;
-      } else if (key == 'difficulty') {
+      } else if (key == "difficulty") {
         difficulty = value;
-      } else if (key == 'equipment') {
+      } else if (key == "equipment") {
         equipment = value;
-      } else if (key == 'diffchanger') {
+      } else if (key == "diffchanger") {
         diffchanger = value;
       }
     });
 
-    Route route = Route(
-        name: name,
-        id: id,
-        points: points,
-        length: length,
-        key: keyHere,
-        ordinal: ordinal,
-        difficulty: difficulty,
-        equipment: equipment,
-        diffchanger: diffchanger);
-    return route;
+    return Route(
+      name: name,
+      id: id,
+      points: points,
+      length: length,
+      key: routeKey,
+      ordinal: ordinal,
+      difficulty: difficulty,
+      equipment: equipment,
+      diffchanger: diffchanger,
+    );
   }
 
   @override

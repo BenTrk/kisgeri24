@@ -66,18 +66,20 @@ class TestUtils {
         name: "route-$i",
         ordinal: i,
         points: quantity * 100,
+        equipment:
+            RouteEquipment.values[i % RouteEquipment.values.length].shorthand,
       ));
     }
     return routes;
   }
 
-  static List<Wall> createWall({int quantity = 1}) {
+  static List<Wall> createWall({int quantity = 1, int routeQuantity = 1}) {
     List<Wall> walls = [];
     for (int i = 0; i < quantity; i++) {
       walls.add(new Wall(
         name: "wall-$i",
         ordinal: i,
-        routes: createRoute(quantity: 1),
+        routes: createRoute(quantity: routeQuantity),
       ));
     }
     return walls;
