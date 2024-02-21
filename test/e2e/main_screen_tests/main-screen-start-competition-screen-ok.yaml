@@ -1,6 +1,4 @@
-## GIVEN the application is on the main screen and competition not started
-## WHEN user clicks on competition start
-## THEN the competition popup start screen visible
+## GIVEN competition not started andthe competition popup start screen is visible
 ## WHEN user selects start
 ## THEN popup screen closes
 ## AND timer countdown visible
