@@ -1,0 +1,6 @@
+## GIVEN competition not started and the competition popup start screen is visible
+## WHEN user selects cancel
+## THEN popup screen closes
+## AND timer countdown NOT visible
+## AND total points NOT visible
+## AND competition start button visible
