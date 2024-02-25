@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Gap(10.h),
             SizedBox(
               width: 56.w,
-              child: OutlinedButton(
+              child: TextButton(
                 style: Figma.buttons.primaryButtonStyle,
                 onPressed: () async {
                   // Navigate to login.dart

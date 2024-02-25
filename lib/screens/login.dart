@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import 'package:gap/gap.dart';
 import "package:kisgeri24/logging.dart";
 import "package:kisgeri24/ui/figma_design.dart";
@@ -37,52 +38,61 @@ class _LoginFigmaState extends State<LoginFigma> {
             Gap(8.h),
             SizedBox(
               width: 79.w,
-              height: 55,
-              child: TextField(
-                style: Figma.typo.smallerText
-                    .copyWith(color: Figma.colors.errorColor),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Figma.colors.secondaryColor,
-                  floatingLabelBehavior: FloatingLabelBehavior.never, // TODO maybe use hints?
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0, bottom: 1.0),
+                    child: Text("E-MAIL CÍM",
+                        style: Figma.typo.smallerText
+                            .copyWith(color: Figma.colors.primaryColor)),
                   ),
-                  labelText: "E-MAIL CÍM",
-                ),
+                  TextField(
+                    style: Figma.typo.smallerText
+                        .copyWith(color: Figma.colors.textFieldHintColor),
+                    decoration: Figma.textfieldstyle.textFieldStyle
+                        .copyWith(hintText: "email@address.com"),
+                  ),
+                ],
               ),
             ),
             Gap(5.h),
             SizedBox(
               width: 79.w,
-              height: 55,
-              child: TextField(
-                style: Figma.typo.smallerText
-                    .copyWith(color: Figma.colors.errorColor),
-                obscureText: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Figma.colors.secondaryColor,
-                  floatingLabelStyle: Figma.typo.smallerText,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 2.0, bottom: 1.0),
+                    child: Text("JELSZÓ",
+                        style: Figma.typo.smallerText.copyWith(
+                          color: Figma.colors.primaryColor,
+                        )),
                   ),
-                  labelText: "JELSZÓ",
-                ),
+                  TextField(
+                    style: Figma.typo.smallerText
+                        .copyWith(color: Figma.colors.textFieldHintColor),
+                    obscureText: true,
+                    decoration: Figma.textfieldstyle.textFieldStyle.copyWith(hintText: "••••••"),
+                  ),
+                ],
               ),
             ),
-            TextButton(
-              onPressed: //TODO implement this
-                  () {
-                logger.i("Forgot password button is pressed.");
-              },
-              child: Text(
-                "Elfelejtettem a jelszavam",
-                style: Figma.typo.smallerText
-                    .copyWith(color: Figma.colors.primaryColor),
+            Align(
+              alignment: Alignment.centerRight,
+              widthFactor: 2.25,
+              child: TextButton(
+                onPressed: //TODO implement this
+                    () {
+                  logger.i("Forgot password button is pressed.");
+                },
+                style: Figma.buttons.textButtonStyle, // TODO: #129
+                child: Text(
+                  "Elfelejtetted a jelszavadat?",
+                  style: Figma.typo.smallerText
+                      .copyWith(color: Figma.colors.primaryColor),
+                ),
               ),
-              // style: Figma.buttons.textButtonStyle, TODO: #129
             ),
             Gap(10.h),
             SizedBox(
@@ -100,7 +110,7 @@ class _LoginFigmaState extends State<LoginFigma> {
                   logger.i("Enter button is pressed.");
                 },
                 child: const Text(
-                  "BELÉPÉS",
+                  "BELÉPEK",
                 ),
               ),
             ),
