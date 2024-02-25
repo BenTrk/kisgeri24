@@ -13,6 +13,9 @@ class Figma {
 
   // Icons
   static Icons icons = Icons();
+
+  // TextField
+  static TextFieldStyle textfieldstyle = TextFieldStyle();
 }
 
 class Colors {
@@ -27,6 +30,7 @@ class Colors {
   final Color primaryButtonHoverColor = const Color(0xffFFDA76);
   final Color secondaryButtonHoverColor = const Color(0xff5F490E);
   final Color navbarSelectedBackgroundColor = const Color(0x99745501);
+  final Color textFieldHintColor = const Color(0xff8D8672);
 
   final Color transparentColor = const Color(0x00000000);
 }
@@ -80,6 +84,12 @@ class Typography {
     fontWeight: FontWeight.bold,
     fontSize: 10,
     letterSpacing: 0.3,
+  );
+
+  final TextStyle textField = const TextStyle(
+    fontFamily: "Lato",
+    fontWeight: FontWeight.normal,
+    fontSize: 12,
   );
 }
 
@@ -206,6 +216,58 @@ class Buttons {
       ),
     ),
   );
+
+  final ButtonStyle textButtonStyle = ButtonStyle(
+    textStyle: MaterialStateProperty.resolveWith<TextStyle>((states) {
+      if (states.contains(MaterialState.hovered)) {
+        return Figma.typo.button.copyWith(
+          decoration: TextDecoration.underline,
+          shadows: <Shadow>[
+            Shadow(
+              blurRadius: 3.0,
+              color: Figma.colors.primaryButtonHoverColor,
+            ),
+          ],
+        );
+      }
+      if (states.contains(MaterialState.pressed)) {
+        return Figma.typo.button.copyWith(decoration: TextDecoration.underline);
+      }
+      if (states.contains(MaterialState.focused)) {
+        return Figma.typo.button.copyWith(decoration: TextDecoration.underline);
+      }
+      return Figma.typo.button;
+    }),
+    foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.disabled)) {
+          return Figma.colors.disabledColor;
+        }
+        if (states.contains(MaterialState.pressed)) {
+          return Figma.colors.primaryButtonHoverColor;
+        }
+        if (states.contains(MaterialState.error)) {
+          return Figma.colors.errorColor;
+        }
+        return Figma.colors.primaryColor;
+      },
+    ),
+  ); // TODO #129
+}
+
+class TextFieldStyle {
+  TextFieldStyle();
+
+  final InputDecoration textFieldStyle = InputDecoration(
+    filled: true,
+    fillColor: Figma.colors.secondaryColor,
+    hintText: "DEFAULT HINT TEXT",
+    hintStyle:
+        Figma.typo.smallerText.copyWith(color: Figma.colors.textFieldHintColor),
+    border: const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    ),
+  );
 }
 
 class Icons {
@@ -230,4 +292,6 @@ class Icons {
   final IconData search = FeatherIcons.search;
   final IconData settings = FeatherIcons.settings;
   final IconData user = FeatherIcons.user;
+  final IconData alertCircle = FeatherIcons
+      .alertCircle; // TODO: alertCircle is only a placeholder until we convert Bianka's svg to IconData
 }
