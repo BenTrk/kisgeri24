@@ -1,0 +1,23 @@
+name:
+  Pull Request
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened, ready_for_review] # To trigger jobs when draft is made to non-draft
+jobs:
+  single_commit_check:
+    name: 'Single commit validation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Git fetch # by default, GH Actions only fetches the ref that triggered the workflow, thus we need to fetch all the branches
+        run: git fetch
+      - name: Check number of commits
+        run: |
+          PR_BRANCH=$(jq -r ".pull_request.head.ref" "$GITHUB_EVENT_PATH")
+          NUM_COMMITS=$(git rev-list --count origin/$PR_BRANCH ^origin/main)
+          if [ "$NUM_COMMITS" -ne 1 ]; then
+            echo "Pull request must contain only one commit. Right now it has $NUM_COMMITS commits."
+            exit 1
+          fi
