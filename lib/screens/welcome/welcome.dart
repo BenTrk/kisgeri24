@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:gap/gap.dart';
+import "package:gap/gap.dart";
 import "package:kisgeri24/logging.dart";
-import "package:kisgeri24/screens/login.dart";
+import "package:kisgeri24/screens/login/login.dart";
 import "package:kisgeri24/ui/figma_design.dart";
 import "package:responsive_sizer/responsive_sizer.dart";
 

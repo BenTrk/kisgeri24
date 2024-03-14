@@ -1,10 +1,10 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:kisgeri24/logging.dart';
+import "package:email_validator/email_validator.dart";
+import "package:kisgeri24/logging.dart";
 
 @Deprecated("Not needed anymore since registration won't be a feature.")
 String? validateName(String? value) {
-  String pattern = r'(^[a-zA-Z ]*$)';
-  RegExp regExp = RegExp(pattern);
+  const String pattern = r"(^[a-zA-Z ]*$)";
+  final RegExp regExp = RegExp(pattern);
   if (value?.isEmpty ?? true) {
     return "Name is required";
   } else if (!regExp.hasMatch(value ?? '')) {
@@ -17,9 +17,9 @@ String? validateName(String? value) {
     "This wasn't used but can be later on if we'd decide to make the phone number editable.")
 String? validateMobile(String? value) {
   logger.i("Validating phone number: $value");
-  String pattern =
-      r'((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})';
-  RegExp regExp = RegExp(pattern);
+  const String pattern =
+      r"((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})";
+  final RegExp regExp = RegExp(pattern);
   if (value == null || value.isEmpty) {
     logger.i(
         "The given input for phone number validation is either null or empty thus no validation can be done!");
@@ -34,7 +34,7 @@ String? validateMobile(String? value) {
 
 String? validatePassword(String? value) {
   if ((value?.length ?? 0) < 6) {
-    return 'Password must be more than 5 characters';
+    return "Password must be more than 5 characters";
   } else {
     return null;
   }
@@ -44,16 +44,16 @@ String? validateEmail(String? value) {
   if (value != null && EmailValidator.validate(value)) {
     return null;
   }
-  return 'Not a valid email address';
+  return "Not a valid email address";
 }
 
 @Deprecated(
     "Ever since the registration feature is not necessary anymore, this validation is also not necessary.")
 String? validateConfirmPassword(String? password, String? confirmPassword) {
   if (password != confirmPassword) {
-    return 'Password doesn\'t match';
+    return "Password doesn't match";
   } else if (confirmPassword?.isEmpty ?? true) {
-    return 'Confirm password is required';
+    return "Confirm password is required";
   } else {
     return null;
   }
