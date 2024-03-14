@@ -82,7 +82,7 @@ class _ResetPasswordFigmaState extends State<ResetPasswordFigma> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 2.0, bottom: 1.0),
-                    child: Text("JELSZÓ MEGERŐSÍTÉSE",
+                    child: Text("JELSZÓ MEGERŐSÍTÉSE",      // TODO check if they match
                         style: Figma.typo.smallerText.copyWith(
                           color: Figma.colors.primaryColor,
                         )),

@@ -33,7 +33,7 @@ class _LoginFigmaState extends State<LoginFigma> {
             ),
             Gap(8.h),
             Text(
-              "Az első bejelentkezéshez használd a sikeres nevezés\nután kapott ideiglenes jelszavadat.",
+              "Az első bejelentkezéshez használd a sikeres nevezés\nután kapott ideiglenes jelszavadat.", // This should appear/disappear based on isFistTimeLogin state?
               style: Figma.typo.smallerText
                   .copyWith(color: Figma.colors.secondaryColor),
               textAlign: TextAlign.center,
