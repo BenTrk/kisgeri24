@@ -61,7 +61,7 @@ class _ForgotPasswordFigmaState extends State<ForgotPasswordFigma> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 2.0, bottom: 1.0),
-                    child: Text("JELSZÓ",
+                    child: Text("E-MAIL CÍM",
                         style: Figma.typo.smallerText.copyWith(
                           color: Figma.colors.primaryColor,
                         )),
@@ -69,9 +69,8 @@ class _ForgotPasswordFigmaState extends State<ForgotPasswordFigma> {
                   TextField(
                     style: Figma.typo.smallerText
                         .copyWith(color: Figma.colors.textFieldHintColor),
-                    obscureText: true,
                     decoration: Figma.textfieldstyle.textFieldStyle
-                        .copyWith(hintText: "••••••"),
+                        .copyWith(hintText: "email@address.com"),
                   ),
                 ],
               ),
