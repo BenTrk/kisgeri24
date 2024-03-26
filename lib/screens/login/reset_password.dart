@@ -5,6 +5,8 @@ import "package:kisgeri24/screens/login/login.dart";
 import "package:kisgeri24/ui/figma_design.dart";
 import "package:responsive_sizer/responsive_sizer.dart";
 
+var confirmPass;
+
 class ResetPasswordFigma extends StatefulWidget {
   const ResetPasswordFigma({super.key});
 
@@ -64,12 +66,22 @@ class _ResetPasswordFigmaState extends State<ResetPasswordFigma> {
                           color: Figma.colors.primaryColor,
                         )),
                   ),
-                  TextField(
+                  TextFormField(
                     style: Figma.typo.smallerText
                         .copyWith(color: Figma.colors.textFieldHintColor),
                     obscureText: true,
                     decoration: Figma.textfieldstyle.textFieldStyle
                         .copyWith(hintText: "••••••"),
+                    validator: (String? value) {
+                      confirmPass = value;
+                      if (value!.isEmpty) {
+                        return "A mező kitöltése kötelező!";
+                      } else if (value.length < 6) {
+                        return "A jelszónak legalább 6 karakter hosszúnak kell lennie!";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                 ],
               ),
@@ -82,17 +94,25 @@ class _ResetPasswordFigmaState extends State<ResetPasswordFigma> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 2.0, bottom: 1.0),
-                    child: Text("JELSZÓ MEGERŐSÍTÉSE",      // TODO check if they match
-                        style: Figma.typo.smallerText.copyWith(
-                          color: Figma.colors.primaryColor,
-                        )),
+                    child:
+                        Text("JELSZÓ MEGERŐSÍTÉSE", // TODO check if they match
+                            style: Figma.typo.smallerText.copyWith(
+                              color: Figma.colors.primaryColor,
+                            )),
                   ),
-                  TextField(
+                  TextFormField(
                     style: Figma.typo.smallerText
                         .copyWith(color: Figma.colors.textFieldHintColor),
                     obscureText: true,
                     decoration: Figma.textfieldstyle.textFieldStyle
                         .copyWith(hintText: "••••••"),
+                    validator: (String? value) {
+                      if (value != confirmPass) {
+                        return "A két jelszó nem egyezik meg";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                 ],
               ),
